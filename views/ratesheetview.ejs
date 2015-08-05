@@ -1,0 +1,39 @@
+<% layout( 'layout') -%>
+
+<div class="well">
+  <h2> View </h2>
+  <form action="/rsshow" method="post" accept-charset="utf-8" class="form-horizontal" role="form" id="rsshow">
+    <div class="form-group">
+      <label class="control-label col-sm-2" for="search">Ratesheet</label>
+      <div class="col-sm-9">
+	<select class="" name="ratesheet" form="rsshow">
+	  <% ratesheets.forEach(function(rs){ %>
+	  <option value="<%= rs.name  %>"><%= rs.name  %></option> 
+	  <% }); %>
+	</select>
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="col-sm-offset-2 col-sm-10">
+	<button type="submit" class="btn btn-default">Check</button>
+      </div>
+    </div>
+  </form>
+</div>
+
+<div class="well">
+  <h2>...Or Create new</h2>
+  <form action="/rscreate" method="post" accept-charset="utf-8" class="form-horizontal" role="form" id="rscreate">
+    <div class="form-group">
+      <label class="control-label col-sm-2" for="search">Ratesheet name</label>
+      <div class="col-sm-9">
+	<input type="text" name="rsname" id="rsname" class="form-control" placeholder="Ratesheet name"/>
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="col-sm-offset-2 col-sm-10">
+	<button type="submit" class="btn btn-default">Create</button>
+      </div>
+    </div>
+  </form>
+</div>

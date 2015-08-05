@@ -1,0 +1,103 @@
+<% layout( 'layout') -%>
+
+<div class="wall">
+  <div class="page-header">
+    <h2><%= ratesheet.name  %> <small>ratesheet</small></h2>
+  </div>
+  <table class="table .table-condensed" style="height:100%;overflow:scroll">
+    <thead>
+      <tr>
+	<th>CC</th>
+	<th>Number</th>
+	<th>Rate type</th>
+	<th>Peak</th>
+	<th>Off-Peak</th>
+	<th>Wknd</th>
+	<th>Flat</th>
+	<th>Zone</th>
+	<th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% ratesheet.rs.forEach(function(rs){ %>
+      <tr>
+	<th><%= rs.cc %></th>
+	<th><%= rs.number %></th>
+	<th><%= rs.rate_type %></th>
+	<th><%= rs.flatcharge %></th>
+	<th><%= rs.peak %></th>
+	<th><%= rs.offpeak %></th>
+	<th><%= rs.wknd %></th>
+	<th><%= rs.zone %></th>
+	<th><a href="/rsdelrate/<%= ratesheet._id %>:<%= rs._id %>">Delete</a></th>
+      </tr>
+      <% }); %>
+    </tbody>
+  </table>
+</div><!-- end wall -->
+
+<div class="wall">
+  <div class="page-header">
+    <h2>Add rate <small>for a one destination</small></h2>
+  </div>
+  <form action="/rsaddrate/<%= ratesheet._id %>" method="post" accept-charset="utf-8" class="form-horizontal" role="form">
+    <div class="form-group">
+      <label class="control-label col-sm-2" for="cc">CC</label>
+      <div class="col-sm-9">
+	<input type="text" name="cc" id="cc" class="form-control" placeholder="Country code prefix"/>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-sm-2" for="number">Number</label>
+      <div class="col-sm-9">
+	<input type="text" name="number" id="number" class="form-control" placeholder="Destination phone number"/>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-sm-2" for="ratetype">Rate type</label>
+      <div class="col-sm-9">
+	<select class="form-control" name="ratetype">
+	  <option value="">Select rate type</option>
+	  <option value="f">Flat rate</option>
+	  <option value="s">Special</option>
+	  <option value="t">Time banded</option>
+	</select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-sm-2" for="peak">Peak</label>
+      <div class="col-sm-9">
+	<input type="text" name="peak" id="peak" class="form-control" placeholder="Peak call charge"/>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-sm-2" for="offpeak">Off-Peak</label>
+      <div class="col-sm-9">
+	<input type="text" name="offpeak" id="offpeak" class="form-control" placeholder="Off-Peak call charge"/>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-sm-2" for="wknd">Weekend</label>
+      <div class="col-sm-9">
+	<input type="text" name="wknd" id="wknd" class="form-control" placeholder="Weekend call charge"/>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-sm-2" for="flat">Flat</label>
+      <div class="col-sm-9">
+	<input type="text" name="flat" id="flat" class="form-control" placeholder="Flat call charge"/>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-sm-2" for="zone">Zone</label>
+      <div class="col-sm-9">
+	<input type="text" name="zone" id="zone" class="form-control" placeholder="Destination zone"/>
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="col-sm-offset-2 col-sm-10">
+	<button type="submit" class="btn btn-default">Add rate</button>
+      </div>
+    </div>
+  </form>
+</div>
