@@ -29,7 +29,9 @@
 	<th><%= rs.offpeak %></th>
 	<th><%= rs.wknd %></th>
 	<th><%= rs.zone %></th>
-	<th><a href="/rsdelrate/<%= ratesheet._id %>:<%= rs._id %>">Delete</a></th>
+	<th>
+	  <a href="/rsdelrate/<%= ratesheet._id %>:<%= rs._id %>" class="btn btn-danger">Delete</a>
+	</th>
       </tr>
       <% }); %>
     </tbody>
@@ -101,3 +103,4 @@
     </div>
   </form>
 </div>
+

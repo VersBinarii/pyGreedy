@@ -1,63 +1,70 @@
 <% layout( 'layout') -%>
 
-<div class="well">
-  <div class="page-header">
-    <h3>Account<small>create</small></h3>
+<div class="row">
+  <div class="col-sm-10">
+    <div class="col-sm-4">
+      <div class="well">
+	<div class="page-header">
+	  <h3>Accounts<small>existing</small></h3>
+	</div>
+	<% accounts.forEach(function(acc){ %>
+	<p>
+	  <span>
+	    <a href="/accedit/<%= acc._id %>" title="Edit"><%= acc.name %></a>
+	  </span>
+	</p>
+	<% }); %>
+      </div>
+    </div><!-- end of well div -->
+    <div class="col-sm-6">
+      <div class="well">
+	<div class="page-header">
+	  <h3>Account<small>create</small></h3>
+	</div>
+	<form action="/acccreate" method="post" accept-charset="utf-8" class="form-horizontal" role="form">
+	  <div class="form-group">
+	    <label class="control-label col-sm-2" for="id">Id</label>
+	    <div class="col-sm-5">
+	      <input type="text" name="id" class="form-control" placeholder="Account ID"/>
+	    </div>
+	  </div>
+	  <div class="form-group">
+	    <label class="control-label col-sm-2">Name</label>
+	    <div class="col-sm-5">
+	      <input type="text" name="name" class="form-control" placeholder="Unique account Name"/>
+	    </div>
+	  </div>
+	  <div class="form-group">
+	    <label class="control-label col-sm-2">SAP ID</label>
+	    <div class="col-sm-5">
+	      <input type="text" name="sapid" class="form-control" placeholder="SAP ID"/>
+	    </div>
+	  </div>
+	  <div class="form-group">
+	    <label class="control-label col-sm-2">Trunk(s)</label>
+	    <div class="col-sm-5">
+	      <input type="text" name="trunk" class="form-control" placeholder='Trunk(s) - i.e. trunk1,trunk2,trunkN'/>
+	    </div>
+	  </div>
+	  <div class="form-group">
+	    <label class="control-label col-sm-2">Ratesheet</label>
+	    <div class="col-sm-5">
+	      <select class="form-control" name="ratesheet">
+		<option value="" selected >Select ratesheet</option>
+		<% ratesheets.forEach(function(rs){ %>
+		<option value="<%= rs.name  %>"><%= rs.name  %></option> 
+		<% }); %>
+	      </select>
+	    </div>
+	  </div>
+	  <div class="form-group">
+	    <div class="col-sm-offset-2 col-sm-6">
+	      <button type="submit" class="btn btn-default">Create</button>
+	    </div>
+	  </div>
+	</form>
+      </div><!-- well end -->
+    </div>
   </div>
-  <form action="/acccreate" method="post" accept-charset="utf-8" class="form-horizontal" role="form">
-    <div class="form-group">
-      <label class="control-label col-sm-2" for="id">Id</label>
-      <div class="col-sm-9">
-	<input type="text" name="id" class="form-control" placeholder="Account ID"/>
-      </div>
-    </div>
-    <div class="form-group">
-      <label class="control-label col-sm-2">Name</label>
-      <div class="col-sm-9">
-	<input type="text" name="name" class="form-control" placeholder="Unique account Name"/>
-      </div>
-    </div>
-    <div class="form-group">
-      <label class="control-label col-sm-2">SAP ID</label>
-      <div class="col-sm-9">
-	<input type="text" name="sapid" class="form-control" placeholder="SAP ID"/>
-      </div>
-    </div>
-    <div class="form-group">
-      <label class="control-label col-sm-2">Trunk(s)</label>
-      <div class="col-sm-9">
-	<input type="text" name="trunk" class="form-control" placeholder='Trunk(s) - i.e. trunk1,trunk2,trunkN'/>
-      </div>
-    </div>
-    <div class="form-group">
-      <label class="control-label col-sm-2">Ratesheet</label>
-      <div class="col-sm-9">
-	<select class="form-control" name="ratesheet">
-	  <option value="" selected >Select ratesheet</option>
-	  <% ratesheets.forEach(function(rs){ %>
-	  <option value="<%= rs.name  %>"><%= rs.name  %></option> 
-	  <% }); %>
-	</select>
-      </div>
-    </div>
-    <div class="form-group">
-      <div class="col-sm-offset-2 col-sm-10">
-	<button type="submit" class="btn btn-default">Create</button>
-      </div>
-    </div>
-  </form>
-</div><!-- well end -->
-<div class="well">
-  <div class="page-header">
-    <h3>Accounts<small>existing</small></h3>
-  </div>
-  <% accounts.forEach(function(acc){ %>
-  <p>
-    <span>
-      <a href="/accedit/<%= acc._id %>" title="Edit"><%= acc.name %></a>
-    </span>
-  </p>
-  <% }); %>
 </div>
-
 

@@ -1,7 +1,7 @@
 /**
  * Module dependencies.
  */
-require('./routes/db');//must be called before routes
+require('./models/db');//must be called before routes
 
 var express = require('express');
 var engine = require( 'ejs-locals' );
@@ -28,7 +28,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(methodOverride());
 app.use(cookieParser('your secret here'));
 app.use(session());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, '/public')));
 
 // development only
 if ('development' == app.get('env')) {
