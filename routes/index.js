@@ -31,6 +31,7 @@ exports.acc_create = function(req, res){
 	sapid : req.body.sapid,
 	trunk : req.body.trunk,
 	ratesheet : req.body.ratesheet,
+	discount: "",
 	created : Date.now(),
 	updated : Date.now()
     }).save(function(err, account, count){
@@ -50,11 +51,14 @@ exports.acc_destroy = function(req, res ){
 /* GET edit */
 exports.acc_edit = function(req, res){
     Account.findById(req.params.id, function(err, account){
-	RatesheetList.find(function (err, ratesheets){
-	    res.render('accedit', {
-		title: 'pyGreedy',
-		account : account,
-		ratesheets: ratesheets
+	RatesheetList.find({rstype: 'ratesheet'},function (err, ratesheets){
+	    RatesheetList.find({rstype: 'discount'}, function (err, discounts){
+		res.render('accedit', {
+		    title: 'pyGreedy',
+		    account : account,
+		    ratesheets: ratesheets,
+		    discounts: discounts
+		});
 	    });
 	});
     });
@@ -67,6 +71,7 @@ exports.acc_update = function(req, res){
 	acc.sapid = req.body.sapid;
 	acc.trunk = req.body.trunk;
 	acc.ratesheet = req.body.ratesheet;
+	acc.discount = req.body.discount;
 	acc.updated = Date.now();
 	acc.save(function(err, acc, count){
 	    res.redirect('/accountpage');
@@ -91,7 +96,13 @@ exports.num_create = function(req, res){
 	number: req.body.number,
 	account : req.body.account
     }).save(function(err, number, count){
-	res.redirect('/numberpage');
+	Number.find({account: req.body.account},function(err, num, count){
+	    res.render('numberview', {
+		title: "pyGreedy",
+		numbers: num,
+		lastsearch: req.body.account
+	    });
+	});
     });
 };
 
@@ -104,7 +115,8 @@ exports.num_find = function(req, res){
     },function(err, num, count){
 	res.render('numberview', {
 	    title: "pyGreedy",
-	    numbers: num
+	    numbers: num,
+	    lastsearch: req.body.search
 	});
     });
 };
@@ -113,7 +125,16 @@ exports.num_find = function(req, res){
 exports.num_destroy = function(req, res ){
     Number.findById(req.params.id, function(err, num){
 	num.remove( function(err, num){
-	    res.redirect('/numberpage');
+	    /* repeat original query */
+	    Number.find({
+		$or: [{number: new RegExp(req.params.last, 'i')}, {account: req.params.last}]
+	    },function(err, num, count){
+		res.render('numberview', {
+		    title: "pyGreedy",
+		    numbers: num,
+		    lastsearch: req.params.last
+		});
+	    });
 	});
     });
 };
@@ -138,8 +159,12 @@ exports.rs_mainpage = function(req, res){
 exports.rs_rscreate = function(req, res){
     new RatesheetList({
 	name : req.body.rsname,
+	rstype: req.body.ratesheettype,
 	rs: []
     }).save(function(err, rsl, count){
+	if(err){
+	    console.log(err);
+	}
 	res.redirect('/ratesheetpage');
     });
 };
@@ -194,3 +219,15 @@ exports.rs_delrate = function(req, res){
 					});
 				    });
 };
+
+
+exports.rs_delratesheet = function(req, res){
+
+    RatesheetList.findById(req.body.rsid, function(err, rsl){
+	rsl.remove( function(err, rsl){
+	    res.redirect('/ratesheetpage');
+	});
+    });
+};
+
+

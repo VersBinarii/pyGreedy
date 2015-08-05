@@ -1,39 +1,95 @@
 <% layout( 'layout') -%>
 
-<div class="well">
-  <h2> View </h2>
-  <form action="/rsshow" method="post" accept-charset="utf-8" class="form-horizontal" role="form" id="rsshow">
-    <div class="form-group">
-      <label class="control-label col-sm-2" for="search">Ratesheet</label>
-      <div class="col-sm-9">
-	<select class="" name="ratesheet" form="rsshow">
-	  <% ratesheets.forEach(function(rs){ %>
-	  <option value="<%= rs.name  %>"><%= rs.name  %></option> 
-	  <% }); %>
-	</select>
+<div class="row">
+  <div class="col-sm-12">
+    <div class="col-sm-4">
+      <div class="well">
+	<div class="page-header">
+	  <h3>Ratesheet<small> show</small></h3>
+	</div>
+	<form action="/rsshow" method="post" accept-charset="utf-8" class="form-horizontal" role="form" id="rsshow">
+	  <div class="form-group">
+	    <label class="control-label col-sm-2" for="ratesheet">Ratesheet</label>
+	    <div class="col-sm-9">
+	      <select class="form-control" name="ratesheet" id="ratesheet" form="rsshow">
+		<option value="">Select ratesheet</option>
+		<% ratesheets.forEach(function(rs){ %>
+		<option value="<%= rs.name  %>"><%= rs.name  %></option> 
+		<% }); %>
+	      </select>
+	    </div>
+	  </div>
+	  <div class="form-group">
+	    <div class="col-sm-offset-2 col-sm-10">
+	      <button type="submit" class="btn btn-default">Check</button>
+	    </div>
+	  </div>
+	</form>
       </div>
     </div>
-    <div class="form-group">
-      <div class="col-sm-offset-2 col-sm-10">
-	<button type="submit" class="btn btn-default">Check</button>
+    <div class="col-sm-4">
+      <div class="well">
+	<div class="page-header">
+	  <h3>...Or create<small> new</small></h3>
+	</div>
+	<form action="/rscreate" method="post" accept-charset="utf-8" class="form-horizontal" role="form" id="rscreate">
+	  <div class="form-group">
+	    <label class="control-label col-sm-2" for="search">Ratesheet name</label>
+	    <div class="col-sm-6">
+	      <input type="text" name="rsname" id="rsname" class="form-control" placeholder="Ratesheet name"/>
+	    </div>
+	  </div>
+	  <div class="form-group">
+	    <label class="control-label col-sm-2" for="search">Ratesheet type</label>
+	    <div class="col-sm-6">
+	      <select class="form-control" name="ratesheettype" id="ratesheettype" form="rscreate">
+		<option value="ratesheet">Ratesheet</option>
+		<option value="discount">Discount</option>
+	      </select>
+	    </div>
+	  </div>
+	  <div class="form-group">
+	    <div class="col-sm-offset-2 col-sm-10">
+	      <button type="submit" class="btn btn-default">Create</button>
+	    </div>
+	  </div>
+	</form>
       </div>
     </div>
-  </form>
-</div>
 
-<div class="well">
-  <h2>...Or Create new</h2>
-  <form action="/rscreate" method="post" accept-charset="utf-8" class="form-horizontal" role="form" id="rscreate">
-    <div class="form-group">
-      <label class="control-label col-sm-2" for="search">Ratesheet name</label>
-      <div class="col-sm-9">
-	<input type="text" name="rsname" id="rsname" class="form-control" placeholder="Ratesheet name"/>
+    <div class="col-sm-4">
+      <div class="well">
+	<div class="page-header">
+	  <h3>Danger<small> zone</small></h3>
+	</div>
+	<form action="/rsdelratesheet" method="post" accept-charset="utf-8" class="form-horizontal" role="form" id="delratesheet">
+	  <div class="form-group">
+	    <label class="control-label col-sm-2" for="rsid">Ratesheet</label>
+	    <div class="col-sm-9">
+	      <select class="form-control" name="rsid" id="rsid" form="delratesheet">
+		<option value="">Select ratesheet</option>
+		<% ratesheets.forEach(function(rs){ %>
+		<option value="<%= rs._id  %>"><%= rs.name  %></option> 
+		<% }); %>
+	      </select>
+	    </div>
+	  </div>
+	  <div class="form-group">
+	    <div class="col-sm-offset-2 col-sm-10">
+	      <button type="submit" class="btn btn-danger disabled" id="del_ratesheet_btn">Delete</button>
+	      <input type="checkbox" id="del_ratesheet_checkbox" >I'm sure
+	    </div>
+	  </div>
+	</form>
       </div>
     </div>
-    <div class="form-group">
-      <div class="col-sm-offset-2 col-sm-10">
-	<button type="submit" class="btn btn-default">Create</button>
-      </div>
-    </div>
-  </form>
-</div>
+  </div>
+</div> <!-- row div -->
+
+<script>
+  $(document).ready(function(e){
+  
+  safe_del_button($('#del_ratesheet_checkbox'), $('#del_ratesheet_btn'));
+  
+  });
+</script>

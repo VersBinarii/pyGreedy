@@ -6,6 +6,10 @@ exports.RatesheetList = new Schema({
 	required: true,
 	unique: true
     },
+    rstype: {
+	type: String,
+	required: true
+    },
     rs: [{
 	cc: {
 	    type: String,
@@ -13,6 +17,7 @@ exports.RatesheetList = new Schema({
 	},
 	number: {
 	    type: String,
+	   // unique: true,
 	    required: true
 	},
 	zone: {

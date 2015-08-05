@@ -19,6 +19,11 @@ exports.Account = new Schema({
 	type: String,
 	required: true
     },
+    discount: {
+	type: String,
+	required: false,
+	default: ""
+    },
     created : Date,
     updated : Date
 });

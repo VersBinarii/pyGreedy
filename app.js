@@ -22,12 +22,14 @@ app.set('port', process.env.PORT || 3000);
 app.engine('ejs', engine);
 app.set('views', path.join(__dirname, '/views'));
 app.set('view engine', 'ejs');
-app.use(logger());
+app.use(logger('combined'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(methodOverride());
 app.use(cookieParser('your secret here'));
-app.use(session());
+app.use(session({secret: 'superdupersecretstuffnobodycancrack',
+		 saveUninitialized: true,
+		 resave: true}));
 app.use(express.static(path.join(__dirname, '/public')));
 
 // development only
@@ -47,7 +49,7 @@ app.post('/accupdate/:id', routes.acc_update);
 
 /* numbers */
 app.get('/numberpage', routes.num_mainpage);
-app.get('/numdestroy/:id', routes.num_destroy);
+app.get('/numdestroy/:id/:last', routes.num_destroy);
 app.post('/numbercreate', routes.num_create);
 app.post('/numfind', routes.num_find);
 
@@ -57,8 +59,8 @@ app.post('/rsshow', routes.rs_rsshow);
 app.post('/rscreate', routes.rs_rscreate);
 app.post('/rsaddrate/:id', routes.rs_addrate);
 app.get('/rsdelrate/:id', routes.rs_delrate);
-/* discounts */
-//app.get('/discountpage', routes.index);
+app.post('/rsdelratesheet', routes.rs_delratesheet);
+
 /* region/zones */
 //app.get('/regionpage', routes.index);
 /* system */

@@ -2,7 +2,7 @@ var Schema = require('mongoose').Schema;
 
 exports.Region = new Schema({
     region_id: {
-	type: String,
+	type: Number,
 	unique: true,
 	required: true
     },
@@ -22,6 +22,9 @@ exports.Zone = new Schema({
 	type: String,
 	required: true
     },
-    region: [{ type: Schema.Types.ObjectId, ref: 'Region' }] 
+    region: {
+	type: Number,
+	required: true
+    }
 });
 

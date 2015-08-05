@@ -1,59 +1,71 @@
 <% layout( 'layout') -%>
 
-<div class="well">
-  <h2>Find...</h2>
-  <form action="/numfind" method="post" accept-charset="utf-8" class="form-horizontal" role="form">
-    <div class="form-group">
-      <label class="control-label col-sm-2" for="search">Number</label>
-      <div class="col-sm-9">
-	<input type="text" name="search" id="search" class="form-control" placeholder="Account ID or number"/>
+<div class="row">
+  <div class="col-md-12">
+    <div class="col-md-4">
+      <div class="well">
+	<div class="page-header">
+	  <h2>Find<small>...</small></h2>
+	</div>
+	<form action="/numfind" method="post" accept-charset="utf-8" class="form-horizontal" role="form">
+	  <div class="form-group">
+	    <label class="control-label col-sm-2" for="search">Number</label>
+	    <div class="col-sm-9">
+	      <input type="text" name="search" id="search" class="form-control" placeholder="Account ID or number"/>
+	    </div>
+	  </div>
+	  <div class="form-group">
+	    <div class="col-sm-offset-2 col-sm-10">
+	      <button type="submit" class="btn btn-default">Check</button>
+	    </div>
+	  </div>
+	</form>
+	<table class="table table-condensed" style="height:100%;overflow:scroll">
+	  <thead>
+	    <tr>
+	      <th>Number</th>
+	      <th>Account</th>
+	      <th>Action</th>
+	    </tr>
+	  </thead>
+	  <%
+	     if(numbers){
+	     numbers.forEach(function(num){
+	     %>
+	  <tr>
+	    <th><%= num.number %></th>
+	    <th><%= num.account %></th>
+	    <th><a class="btn btn-danger" href="/numdestroy/<%= num._id %>/<%= lastsearch %>">Delete</a></th>
+	  </tr>
+	  <% }); }; %>
+	</table>
       </div>
     </div>
-    <div class="form-group">
-      <div class="col-sm-offset-2 col-sm-10">
-	<button type="submit" class="btn btn-default">Check</button>
+    <div class="col-md-8">
+      <div class="well">
+	<div class="page-header">
+	  <h2>...or add<small> number</small></h2>
+	</div>
+	<form action="/numbercreate" method="post" accept-charset="utf-8" class="form-horizontal" role="form">
+	  <div class="form-group">
+	    <label class="control-label col-sm-2" for="number">Number</label>
+	    <div class="col-sm-9">
+	      <input type="text" name="number" id="number" class="form-control" placeholder="Specyfy  range as 1234500-99"/>
+	    </div>
+	  </div>
+	  <div class="form-group">
+	    <label class="control-label col-sm-2" for="account">Account</label>
+	    <div class="col-sm-9">
+	      <input type="text" name="account" id="account" class="form-control" placeholder="ID of an account"/>
+	    </div>
+	  </div>
+	  <div class="form-group">
+	    <div class="col-sm-offset-2 col-sm-10">
+	      <button type="submit" class="btn btn-default">Add</button>
+	    </div>
+	  </div>
+	</form>
       </div>
-    </div>
-  </form>
-  <ul>
-    <%
-       if(numbers){
-       numbers.forEach(function(num){
-       %>
-    <li>
-      <p>
-	<span>
-	  <%= num.number %> - <%= num.account %>
-	</span>
-	<span>
-	  <a href="/numdestroy/<%= num._id %>">Delete</a>
-	</span>
-      </p>
-    </li>
-    <% }); }; %>
-  </ul>
+    </div><!-- well div -->
+  </div>
 </div>
-
-
-<div class="well">
-  <h2>...or add number</h2>
-  <form action="/numbercreate" method="post" accept-charset="utf-8" class="form-horizontal" role="form">
-    <div class="form-group">
-      <label class="control-label col-sm-2" for="number">Number</label>
-      <div class="col-sm-9">
-	<input type="text" name="number" id="number" class="form-control" placeholder="Specyfy  range as 1234500-99"/>
-      </div>
-    </div>
-    <div class="form-group">
-      <label class="control-label col-sm-2" for="account">Account</label>
-      <div class="col-sm-9">
-	<input type="text" name="account" id="account" class="form-control" placeholder="ID of an account"/>
-      </div>
-    </div>
-    <div class="form-group">
-      <div class="col-sm-offset-2 col-sm-10">
-	<button type="submit" class="btn btn-default">Add</button>
-      </div>
-    </div>
-  </form>
-</div><!-- well div -->

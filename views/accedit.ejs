@@ -57,6 +57,21 @@
 	    </div>
 	  </div>
 	  <div class="form-group">
+	    <label class="control-label col-sm-2">Discount</label>
+	    <div class="col-sm-9">
+	      <select class="form-control" name="discount" form="accupdate">
+		<option value="">None</option>
+		<% discounts.forEach(function(dis){
+		   if(dis.name === account.discount){
+		   %>
+		<option value="<%= dis.name  %>" selected ><%= dis.name  %></option>
+		<% }else{ %>
+	      <option value="<%= dis.name  %>"><%= dis.name  %></option>
+	      <% }}); %>
+	      </select>
+	    </div>
+	  </div>
+	  <div class="form-group">
 	    <div class="col-sm-offset-2 col-sm-10">
 	      <button type="submit" class="btn btn-default">Edit</button>
 	    </div>
