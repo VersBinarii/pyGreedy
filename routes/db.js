@@ -27,7 +27,6 @@ var Account = new Schema({
 var Number = new Schema({
     number: {
 	type: String,
-	unique: true,
 	required: true
     },
     account: {

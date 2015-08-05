@@ -39,24 +39,24 @@ if ('development' == app.get('env')) {
 app.get('/', routes.index);
 
 /* account */
-app.get('/accountpage', routes.accountpage);
-app.get('/accdestroy/:id', routes.accdestroy);
-app.get('/accedit/:id', routes.accedit);
-app.post('/acccreate', routes.acccreate);
-app.post('/accupdate/:id', routes.accupdate);
+app.get('/accountpage', routes.acc_mainpage);
+app.get('/accdestroy/:id', routes.acc_destroy);
+app.get('/accedit/:id', routes.acc_edit);
+app.post('/acccreate', routes.acc_create);
+app.post('/accupdate/:id', routes.acc_update);
 
 /* numbers */
-app.get('/numberpage', routes.numpage);
-app.get('/numdestroy/:id', routes.numdestroy);
-app.post('/numbercreate', routes.numcreate);
-app.post('/numfind', routes.numfind);
+app.get('/numberpage', routes.num_mainpage);
+app.get('/numdestroy/:id', routes.num_destroy);
+app.post('/numbercreate', routes.num_create);
+app.post('/numfind', routes.num_find);
 
 /* ratesheets */
-app.get('/ratesheetpage', routes.rspage);
-app.post('/rsshow', routes.rsshow);
-app.post('/rscreate', routes.rscreate);
-app.post('/rsaddrate/:id', routes.rsaddrate);
-app.get('/rsdelrate/:id', routes.rsdelrate);
+app.get('/ratesheetpage', routes.rs_mainpage);
+app.post('/rsshow', routes.rs_rsshow);
+app.post('/rscreate', routes.rs_rscreate);
+app.post('/rsaddrate/:id', routes.rs_addrate);
+app.get('/rsdelrate/:id', routes.rs_delrate);
 /* discounts */
 //app.get('/discountpage', routes.index);
 /* region/zones */

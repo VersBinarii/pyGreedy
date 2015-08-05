@@ -11,7 +11,7 @@ exports.index = function(req, res){
     });
 };
 
-exports.accountpage = function(req, res){
+exports.acc_mainpage = function(req, res){
     Account.find(function(err, accounts, count ){
 	RatesheetList.find({}, 'name', function (err, ratesheets){
 	    res.render('accountview', {
@@ -24,7 +24,7 @@ exports.accountpage = function(req, res){
 };
 
 /* POST for creation */
-exports.acccreate = function(req, res){
+exports.acc_create = function(req, res){
     new Account({
 	id : req.body.id,
 	name : req.body.name,
@@ -39,7 +39,7 @@ exports.acccreate = function(req, res){
 };
 
 /* GET destroy */
-exports.accdestroy = function(req, res ){
+exports.acc_destroy = function(req, res ){
     Account.findById(req.params.id, function(err, acc){
 	acc.remove( function(err, acc){
 	    res.redirect('/accountpage');
@@ -48,7 +48,7 @@ exports.accdestroy = function(req, res ){
 };
 
 /* GET edit */
-exports.accedit = function(req, res){
+exports.acc_edit = function(req, res){
     Account.findById(req.params.id, function(err, account){
 	RatesheetList.find(function (err, ratesheets){
 	    res.render('accedit', {
@@ -61,7 +61,7 @@ exports.accedit = function(req, res){
 };
 
 /* POST update */
-exports.accupdate = function(req, res){
+exports.acc_update = function(req, res){
     Account.findById(req.params.id, function(err, acc){
 	acc.name = req.body.name;
 	acc.sapid = req.body.sapid;
@@ -78,7 +78,7 @@ exports.accupdate = function(req, res){
   ###############  Number Schema functions ################
 */
     
-exports.numpage = function(req, res){
+exports.num_mainpage = function(req, res){
     res.render('numberview', {
 	title: "pyGreedy",
 	numbers: null
@@ -86,12 +86,10 @@ exports.numpage = function(req, res){
 };
 
 /* POST for creation */
-exports.numcreate = function(req, res){
+exports.num_create = function(req, res){
     new Number({
 	number: req.body.number,
-	account : req.body.account,
-	created : Date.now(),
-	updated : Date.now()
+	account : req.body.account
     }).save(function(err, number, count){
 	res.redirect('/numberpage');
     });
@@ -100,7 +98,7 @@ exports.numcreate = function(req, res){
 /*
   find by number or by account
 */
-exports.numfind = function(req, res){
+exports.num_find = function(req, res){
     Number.find({
 	$or: [{number: new RegExp(req.body.search, 'i')}, {account: req.body.search}]
     },function(err, num, count){
@@ -112,7 +110,7 @@ exports.numfind = function(req, res){
 };
 
 /* GET destroy */
-exports.numdestroy = function(req, res ){
+exports.num_destroy = function(req, res ){
     Number.findById(req.params.id, function(err, num){
 	num.remove( function(err, num){
 	    res.redirect('/numberpage');
@@ -126,9 +124,9 @@ exports.numdestroy = function(req, res ){
 */
 
 /* GET for main ratesheet page */
-exports.rspage = function(req, res){
+exports.rs_mainpage = function(req, res){
     
-    RatesheetList.find({}, 'name', function (err, ratesheets){
+    RatesheetList.find({}, 'name', {sort: {name: -1}}, function (err, ratesheets){
 	res.render('ratesheetview', {
 	    title: "pyGreedy",
 	    ratesheets: ratesheets
@@ -137,7 +135,7 @@ exports.rspage = function(req, res){
 };
 
 /* POST to create a new ratesheet */
-exports.rscreate = function(req, res){
+exports.rs_rscreate = function(req, res){
     new RatesheetList({
 	name : req.body.rsname,
 	rs: []
@@ -147,7 +145,7 @@ exports.rscreate = function(req, res){
 };
 
 /* POST to redirect to view where new destination rates can be set or deleted */
-exports.rsshow = function(req, res){
+exports.rs_rsshow = function(req, res){
     RatesheetList.findOne({name: req.body.ratesheet },function(err, ratesheet, count){
 	res.render('ratesheetedit', {
 	    title: "pyGreedy",
@@ -156,7 +154,7 @@ exports.rsshow = function(req, res){
     });
 };
 
-exports.rsaddrate = function(req, res){
+exports.rs_addrate = function(req, res){
     var rs = {
 	cc: req.body.cc,
 	number: req.body.number,
@@ -179,7 +177,7 @@ exports.rsaddrate = function(req, res){
 				    });
 };
 
-exports.rsdelrate = function(req, res){
+exports.rs_delrate = function(req, res){
     
     var id = req.params.id.split(":");
     RatesheetList.findByIdAndUpdate(id[0],
