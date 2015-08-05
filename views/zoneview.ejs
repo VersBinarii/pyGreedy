@@ -1,0 +1,86 @@
+<% layout( 'layout') -%>
+
+<div class="row-fluid">
+  <div class="col-sm-12">
+
+    <div class="col-sm-7">
+      <div class="well">
+	<form action="/zonecreate" method="post" accept-charset="utf-8" class="form-inline" role="form" id="zonecreate">
+	  <input type="text" class="form-control" name="zoneid" placeholder="Zone ID"/>
+	  <input type="text" class="form-control" name="zonename" placeholder="Zone name"/>
+	  <input type="text" class="form-control" name="regionid" placeholder="Region ID"/>  
+	  <input type="submit" class="btn btn-default" value="Create"/>
+	</form>
+      </div>
+      <div class="well">
+	<div class="">
+	  <h3>Zone</h3>
+	</div>
+	  <table class="table table-condensed" style="height:100%;overflow:scroll">
+	    <theader>
+	      <tr>
+		<th>Zone ID</th>
+		<th>Name</th>
+		<th>Region ID</th>
+		<th>Action</th>
+	      </tr>
+	    </theader>
+	    <tbody>
+	      <% zones.forEach(function(zone){ %>
+	      <form action="/zoneupdate/<%= zone._id %>" method="post" accept-charset="utf-8" class="form-inline" role="form" id="zoneupdate">
+		<tr>
+		  <th class="col-sm-1"><input type="text" class="form-control" name="zoneid" value="<%= zone.zone_id %>"/></th>
+		  <th class="col-sm-3"><input type="text" class="form-control" name="zonename" value="<%= zone.name %>"/></th>
+		  <th class="col-sm-1"><input type="text" class="form-control" name="regionid" value="<%= zone.region %>"/></th>
+		  <th class="col-sm-2">
+		    <input type="submit" class="btn btn-default" value="Update"/>
+		    <a href="/zonedestroy/<%= zone._id %>" class="btn btn-danger">Delete</a>
+		  </th>
+		</tr>
+	      </form>
+	      <% }); %>
+	    </tbody>
+	  </table>
+      </div>
+    </div>
+    
+    <div class="col-sm-5">
+      <div class="well">
+	<form action="/regioncreate" method="post" accept-charset="utf-8" class="form-inline" role="form" id="regioncreate">
+	  <input type="text" class="form-control" name="regionid" placeholder="Region ID"/>
+	  <input type="text" class="form-control" name="regionname" placeholder="Region name"/>
+	  <input type="submit" class="btn btn-default" value="Create"/>
+	</form>
+      </div>
+      <div class="well">
+	<div class="">
+	  <h3>Region</h3>
+	</div>
+	<table class="table table-condensed" style="height:100%;overflow:scroll">
+	    <theader>
+	      <tr>
+		<th>Region ID</th>
+		<th>Name</th>
+		<th>Action</th>
+	      </tr>
+	    </theader>
+	    <tbody>
+	      <% regions.forEach(function(region){ %>
+	      <form action="/regionupdate/<%= region._id %>" method="post" accept-charset="utf-8" class="form-inline" role="form" id="regionupdate">
+		<tr>
+		  <th class="col-sm-1"><input type="text" class="form-control" name="regionid" value="<%= region.region_id %>"/></th>
+		  <th class="col-sm-2"><input type="text" class="form-control" name="regionname" value="<%= region.name %>"/></th>
+		  <th class="col-sm-2">
+		    <input type="submit" class="btn btn-default" value="Update"/>
+		    <a href="/regiondestroy/<%= region._id %>" class="btn btn-danger">Delete</a>
+		  </th>
+		</tr>
+	      </form>
+	      <% }); %>
+	    </tbody>
+	  </table>
+      </div>
+    </div>
+    
+  </div> <!-- main column --> 
+</div> <!-- row div  -->

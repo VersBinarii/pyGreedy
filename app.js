@@ -62,7 +62,14 @@ app.get('/rsdelrate/:id', routes.rs_delrate);
 app.post('/rsdelratesheet', routes.rs_delratesheet);
 
 /* region/zones */
-//app.get('/regionpage', routes.index);
+app.get('/zoneview', routes.zone_view);
+app.post('/zonecreate', routes.zone_create);
+app.post('/zoneupdate/:id', routes.zone_update);
+app.get('/zonedestroy/:id', routes.zone_destroy);
+app.post('/regioncreate', routes.region_create);
+app.post('/regionupdate/:id', routes.region_update);
+app.get('/regiondestroy/:id', routes.region_destroy);
+
 /* system */
 //app.get('/settingspage', routes.index);
 

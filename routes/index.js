@@ -2,7 +2,8 @@ var mongoose = require('mongoose');
 var Account = mongoose.model('Account');
 var Number = mongoose.model('Number');
 var RatesheetList = mongoose.model('RatesheetList');
-
+var Zone = mongoose.model('Zone');
+var Region = mongoose.model('Region');
     
 /* GET home page */
 exports.index = function(req, res){
@@ -92,18 +93,50 @@ exports.num_mainpage = function(req, res){
 
 /* POST for creation */
 exports.num_create = function(req, res){
-    new Number({
-	number: req.body.number,
-	account : req.body.account
-    }).save(function(err, number, count){
-	Number.find({account: req.body.account},function(err, num, count){
-	    res.render('numberview', {
-		title: "pyGreedy",
-		numbers: num,
-		lastsearch: req.body.account
+    var NumberList = [];
+    var arg = req.body.number;
+    if(arg.indexOf("-") > -1){
+	arg = arg.split("-");
+	/* create start and end number range from request */
+	var sNumber = arg[0];
+	var eNumber = sNumber.substring(0, sNumber.length - arg[1].length);
+	eNumber = eNumber.concat(arg[1]);
+	var i = sNumber;
+	/* make array of objects */
+	while(i <= eNumber){
+	    /* has to be a plain object not Number */
+	    NumberList.push({
+		number: (i++).toString(),
+		account: req.body.account
+	    });
+	}
+	/* and bulk insert */
+	Number.collection.insert(NumberList, function(err, num){
+	    if(err){
+		console.log(err);
+	    }
+	    Number.find({account: req.body.account},function(err, num, count){
+		res.render('numberview', {
+		    title: "pyGreedy",
+		    numbers: num,
+		    lastsearch: req.body.account
+		});
 	    });
 	});
-    });
+    }else{
+	new Number({
+	    number: req.body.number,
+	    account : req.body.account
+	}).save(function(err, number, count){
+	    Number.find({account: req.body.account},function(err, num, count){
+		res.render('numberview', {
+		    title: "pyGreedy",
+		    numbers: num,
+		    lastsearch: req.body.account
+		});
+	    });
+	});
+    }
 };
 
 /*
@@ -111,8 +144,11 @@ exports.num_create = function(req, res){
 */
 exports.num_find = function(req, res){
     Number.find({
-	$or: [{number: new RegExp(req.body.search, 'i')}, {account: req.body.search}]
+	$or: [{number: new RegExp(req.body.search, "i")}, {account: req.body.search}]
     },function(err, num, count){
+	if(err){
+	    console.log(err);
+	}
 	res.render('numberview', {
 	    title: "pyGreedy",
 	    numbers: num,
@@ -209,10 +245,6 @@ exports.rs_delrate = function(req, res){
 				    {$pull: {'rs': {'_id': id[1]}}},
 				    {safe: true, new: true},
 				    function(err, ratesheet){
-					console.log(id[0]);
-					console.log(id[1]);
-					console.log(err);
-					console.log(ratesheet);
 					res.render('ratesheetedit', {
 					    title: "pyGreedy",
 					    ratesheet : ratesheet
@@ -230,4 +262,74 @@ exports.rs_delratesheet = function(req, res){
     });
 };
 
+/*
+############# Zone/Region handling ######################
+*/
 
+exports.zone_view = function(req, res){
+    Zone.find({}, function(err, zones){
+	Region.find({}, function(err, regions){
+	    res.render('zoneview', {
+		title: "pyGreedy",
+		zones: zones,
+		regions: regions
+	    });
+	}); 
+    });
+}
+
+exports.zone_create = function(req, res){
+    new Zone({
+	zone_id: req.body.zoneid,
+	name: req.body.zonename,
+	region: req.body.regionid
+    }).save(function(err, zone){
+	res.redirect('/zoneview');
+    });
+};
+
+exports.zone_update = function(req, res){
+    Zone.findById(req.params.id, function(err, zone){
+	zone.zone_id = req.body.zoneid;
+	zone.name = req.body.zonename;
+	zone.region = req.body.regionid;
+	zone.save(function(err, zone){
+	    res.redirect('/zoneview');
+	});
+    });
+};
+
+exports.zone_destroy = function(req, res){
+    Zone.findById(req.params.id,function(err, zone){
+	zone.remove(function(err, zone){
+	    res.redirect('/zoneview');
+	});
+    });
+};
+
+exports.region_create = function(req, res){
+    new Region({
+	region_id: req.body.regionid,
+	name: req.body.regionname,
+    }).save(function(err, region){
+	res.redirect('/zoneview');
+    });
+};
+
+exports.region_update = function(req, res){
+    Region.findById(req.params.id,function(err, region){
+	region.region_id = req.body.regionid;
+	region.name = req.body.regionname;
+	region.save(function(err, region){
+	    res.redirect('/zoneview');
+	});
+    });
+};
+
+exports.region_destroy = function(req, res){
+    Region.findById(req.params.id,function(err, region){
+	region.remove(function(err, reg){
+	    res.redirect('/zoneview');
+	});
+    });
+};
