@@ -16,7 +16,7 @@ exports.acc_mainpage = function(req, res){
     Account.find(function(err, accounts, count ){
 	RatesheetList.find({}, 'name', function (err, ratesheets){
 	    res.render('accountview', {
-		title: "pyGreedy",
+		title: "pyGreedy - account",
 		accounts: accounts,
 		ratesheets: ratesheets
 	    });
@@ -55,7 +55,7 @@ exports.acc_edit = function(req, res){
 	RatesheetList.find({rstype: 'ratesheet'},function (err, ratesheets){
 	    RatesheetList.find({rstype: 'discount'}, function (err, discounts){
 		res.render('accedit', {
-		    title: 'pyGreedy',
+		    title: 'pyGreedy - account edit',
 		    account : account,
 		    ratesheets: ratesheets,
 		    discounts: discounts
@@ -86,7 +86,7 @@ exports.acc_update = function(req, res){
     
 exports.num_mainpage = function(req, res){
     res.render('numberview', {
-	title: "pyGreedy",
+	title: "pyGreedy - numbers",
 	numbers: null
     });
 };
@@ -117,7 +117,7 @@ exports.num_create = function(req, res){
 	    }
 	    Number.find({account: req.body.account},function(err, num, count){
 		res.render('numberview', {
-		    title: "pyGreedy",
+		    title: "pyGreedy - numbers",
 		    numbers: num,
 		    lastsearch: req.body.account
 		});
@@ -130,7 +130,7 @@ exports.num_create = function(req, res){
 	}).save(function(err, number, count){
 	    Number.find({account: req.body.account},function(err, num, count){
 		res.render('numberview', {
-		    title: "pyGreedy",
+		    title: "pyGreedy - numbers",
 		    numbers: num,
 		    lastsearch: req.body.account
 		});
@@ -150,7 +150,7 @@ exports.num_find = function(req, res){
 	    console.log(err);
 	}
 	res.render('numberview', {
-	    title: "pyGreedy",
+	    title: "pyGreedy - numbers",
 	    numbers: num,
 	    lastsearch: req.body.search
 	});
@@ -166,7 +166,7 @@ exports.num_destroy = function(req, res ){
 		$or: [{number: new RegExp(req.params.last, 'i')}, {account: req.params.last}]
 	    },function(err, num, count){
 		res.render('numberview', {
-		    title: "pyGreedy",
+		    title: "pyGreedy - numbers",
 		    numbers: num,
 		    lastsearch: req.params.last
 		});
@@ -185,7 +185,7 @@ exports.rs_mainpage = function(req, res){
     
     RatesheetList.find({}, 'name', {sort: {name: -1}}, function (err, ratesheets){
 	res.render('ratesheetview', {
-	    title: "pyGreedy",
+	    title: "pyGreedy - ratesheet",
 	    ratesheets: ratesheets
 	});
     });  
@@ -209,7 +209,7 @@ exports.rs_rscreate = function(req, res){
 exports.rs_rsshow = function(req, res){
     RatesheetList.findOne({name: req.body.ratesheet },function(err, ratesheet, count){
 	res.render('ratesheetedit', {
-	    title: "pyGreedy",
+	    title: "pyGreedy - edit",
 	    ratesheet : ratesheet
 	});
     });
@@ -232,7 +232,7 @@ exports.rs_addrate = function(req, res){
 				    {safe: true, new: true},
 				    function(err, ratesheet){
 					res.render('ratesheetedit', {
-					    title: "pyGreedy",
+					    title: "pyGreedy - edit",
 					    ratesheet : ratesheet
 					});
 				    });
@@ -246,7 +246,7 @@ exports.rs_delrate = function(req, res){
 				    {safe: true, new: true},
 				    function(err, ratesheet){
 					res.render('ratesheetedit', {
-					    title: "pyGreedy",
+					    title: "pyGreedy - edit",
 					    ratesheet : ratesheet
 					});
 				    });
@@ -270,7 +270,7 @@ exports.zone_view = function(req, res){
     Zone.find({}, function(err, zones){
 	Region.find({}, function(err, regions){
 	    res.render('zoneview', {
-		title: "pyGreedy",
+		title: "pyGreedy - regions",
 		zones: zones,
 		regions: regions
 	    });
@@ -331,5 +331,26 @@ exports.region_destroy = function(req, res){
 	region.remove(function(err, reg){
 	    res.redirect('/zoneview');
 	});
+    });
+};
+
+
+/* ############### mediation #################*/
+
+exports.mediation_page = function(req, res){
+    res.render('mediation', {
+	title: "pyGreedy - mediation",
+	mediatedcalls: [],
+	perPage: 50,
+	numPage: 1
+    });
+};
+
+
+/* ############## calls ################## */
+
+exports.calls_page = function(req, res){
+    res.render('calls', {
+	title: "pyGreedy - calls"
     });
 };

@@ -1,0 +1,97 @@
+<% layout( 'layout') -%>
+
+<div class="row-fluid">
+  <div class="col-md-12">
+    <div class="col-md-offset-1 col-md-10">
+      <div class="well-sm">
+	<form action="/showmediated/<%= perPage %>/<%= numPage %>" method="post" accept-charset="utf-8" class="form-inline" role="form">
+	  <div class="form-group">
+	    <label class="control-label col-md-offset-1 col-md-5" for="stime">Start of billing</label>
+	    <div class="col-md-6">
+	      <input type="text" name="stime" id="stime" class="form-control" placeholder="YYYY-MM-DD"/>
+	    </div>
+	  </div>
+	  <div class="form-group">
+	    <label class="control-label col-md-offset-1 col-md-5" for="etime">End of billing</label>
+	    <div class="col-md-6">
+	      <input type="text" name="etime" id="etime" class="form-control" placeholder="YYYY-MM-DD"/>
+	    </div>
+	  </div>
+	  <div class="form-group">
+	    <div class="col-md-offset-5 col-md-3">
+	      <button type="submit" class="btn btn-default">Show</button>
+	    </div>
+	  </div>
+	</form>
+      </div><!-- well div -->
+
+      <div class="well-sm">
+	<div class="page-header">
+	  <h3> Calls </h3>
+	</div>
+      
+	
+	<table class="table">
+	  <theader>
+	    <tr>
+	      <th>#</th>
+	      <th>Date</th>
+	      <th>Length</th>
+	      <th>Calling</th>
+	      <th>Direction</th>
+	      <th>Called</th>
+	      <th>Type</th>
+	      <th>Account</th>
+	      <th>State</th>
+	      <th>Comments</th>
+	    <tr>
+	  </theader>
+	  <tbody>
+	    <%
+	       mediatedcalls.forEach(function(mc, index){
+	       if(mc.valid){
+	       %>
+	    <tr class="success">
+	      <% }else{ %>
+	    <tr class="danger">
+	      <% } %>
+	      <th><%= index %></th>
+	      <th><%= mc.date %></th>
+	      <th><%= mc.length %></th>
+	      <th><%= mc.calling_num %></th>
+	      <th><%= mc.direction %></th>
+	      <th><%= mc.called_num %></th>
+	      <th><%= mc.calltype %></th>
+	      <th><%= mc.account %></th>
+	      <th><%= mc.valid %></th>
+	      <th><%= mc.note %></th>
+	    </tr>
+	    
+	    <% }); %>
+	  </tbody>
+	</table>
+	
+	<nav>
+	  <ul class="pagination">
+	    <li>
+	      <a href="#" aria-label="Previous">
+		<span aria-hidden="true">&laquo;</span>
+	      </a>
+	    </li>
+	    <li><a href="#">1</a></li>
+	    <li><a href="#">2</a></li>
+	    <li><a href="#">3</a></li>
+	    <li><a href="#">4</a></li>
+	    <li><a href="#">5</a></li>
+	  <li>
+	    <a href="#" aria-label="Next">
+	      <span aria-hidden="true">&raquo;</span>
+	    </a>
+	  </li>
+	  </ul>
+	</nav>
+      </div><!-- end of well div -->
+      
+    </div>
+  </div>
+</div>

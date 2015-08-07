@@ -9,7 +9,7 @@
 	</div>
 	<form action="/rsshow" method="post" accept-charset="utf-8" class="form-horizontal" role="form" id="rsshow">
 	  <div class="form-group">
-	    <label class="control-label col-sm-2" for="ratesheet">Ratesheet</label>
+	    <label class="control-label col-sm-3" for="ratesheet">Ratesheet</label>
 	    <div class="col-sm-9">
 	      <select class="form-control" name="ratesheet" id="ratesheet" form="rsshow">
 		<option value="">Select ratesheet</option>
@@ -20,7 +20,7 @@
 	    </div>
 	  </div>
 	  <div class="form-group">
-	    <div class="col-sm-offset-2 col-sm-10">
+	    <div class="col-sm-offset-3 col-sm-1">
 	      <button type="submit" class="btn btn-default">Check</button>
 	    </div>
 	  </div>
@@ -34,14 +34,14 @@
 	</div>
 	<form action="/rscreate" method="post" accept-charset="utf-8" class="form-horizontal" role="form" id="rscreate">
 	  <div class="form-group">
-	    <label class="control-label col-sm-2" for="search">Ratesheet name</label>
-	    <div class="col-sm-6">
+	    <label class="control-label col-sm-3" for="search">Ratesheet name</label>
+	    <div class="col-sm-9">
 	      <input type="text" name="rsname" id="rsname" class="form-control" placeholder="Ratesheet name"/>
 	    </div>
 	  </div>
 	  <div class="form-group">
-	    <label class="control-label col-sm-2" for="search">Ratesheet type</label>
-	    <div class="col-sm-6">
+	    <label class="control-label col-sm-3" for="search">Ratesheet type</label>
+	    <div class="col-sm-9">
 	      <select class="form-control" name="ratesheettype" id="ratesheettype" form="rscreate">
 		<option value="ratesheet">Ratesheet</option>
 		<option value="discount">Discount</option>
@@ -49,7 +49,7 @@
 	    </div>
 	  </div>
 	  <div class="form-group">
-	    <div class="col-sm-offset-2 col-sm-10">
+	    <div class="col-sm-offset-3 col-sm-1">
 	      <button type="submit" class="btn btn-default">Create</button>
 	    </div>
 	  </div>
@@ -64,7 +64,7 @@
 	</div>
 	<form action="/rsdelratesheet" method="post" accept-charset="utf-8" class="form-horizontal" role="form" id="delratesheet">
 	  <div class="form-group">
-	    <label class="control-label col-sm-2" for="rsid">Ratesheet</label>
+	    <label class="control-label col-sm-3" for="rsid">Ratesheet</label>
 	    <div class="col-sm-9">
 	      <select class="form-control" name="rsid" id="rsid" form="delratesheet">
 		<option value="">Select ratesheet</option>
@@ -75,9 +75,9 @@
 	    </div>
 	  </div>
 	  <div class="form-group">
-	    <div class="col-sm-offset-2 col-sm-10">
+	    <label class="control-label col-sm-3"><input type="checkbox" id="del_ratesheet_checkbox" >I'm sure</label>
+	    <div class="col-sm-1">
 	      <button type="submit" class="btn btn-danger disabled" id="del_ratesheet_btn">Delete</button>
-	      <input type="checkbox" id="del_ratesheet_checkbox" >I'm sure
 	    </div>
 	  </div>
 	</form>

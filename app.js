@@ -70,6 +70,13 @@ app.post('/regioncreate', routes.region_create);
 app.post('/regionupdate/:id', routes.region_update);
 app.get('/regiondestroy/:id', routes.region_destroy);
 
+/* mediation */
+app.get('/mediation', routes.mediation_page);
+
+/* calls */
+app.get('/calls', routes.calls_page);
+
+
 /* system */
 //app.get('/settingspage', routes.index);
 
