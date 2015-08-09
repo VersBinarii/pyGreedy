@@ -1,7 +1,9 @@
 """This will parse specified raw call data, 
 normalize them and load them to the mongo database"""
-import sys
-from grnti_parser import parse_line
+import sys, signal
+from Queue import Queue
+
+from  call_resolver import prepare_raw_calls, find_call_type
 
 def main(argv):
     """Main entry point for the script."""
@@ -9,40 +11,22 @@ def main(argv):
         print "Need to give the filename"
         return
 
-    bucket = {}
-    queue = []
-    with open(argv[1], 'r') as grnti_file:
-        for line in grnti_file:
-            
-            cdr = parse_line(line)
-            if cdr['d-pkg'] in bucket:
-                # Ensure that TR cdr is always first.
-                if cdr['cdr_type'] == 'TR':
-                    cdr_pair = (cdr, bucket[cdr['d-pkg']])
-                else:
-                    cdr_pair = (bucket[cdr['d-pkg']], cdr)
+    # Registar SIGINT handler
+    signal.signal(signal.SIGTERM, handler)
 
-                del bucket[cdr['d-pkg']]
-                queue.append(cdr_pair)
+    # Main stuff starts here
+    queue = Queue()
+    
+    prepare_raw_calls(argv[1], queue);
 
-            else:
-                bucket[cdr['d-pkg']] = cdr
+    find_call_type(queue)
+    
+    queue.join()
+    signal.pause()
 
+def handler(signum, frame):
+        print 'Signal handler called with signal', signum
+        sys.exit(0)
 
-    # Now empty the buckets with "no-pairs" to queue
-    for nopair in bucket.values():
-        # Ensure that TR cdr is always first.
-        if nopair['cdr_type'] == 'TR':
-            cdr_pair = (nopair, None)
-        else:
-            cdr_pair = (None, nopair)
-            
-        queue.append(cdr_pair)
-        
-    print queue            
-
-                    
-            
 if __name__ == '__main__':
     main(sys.argv)
-
