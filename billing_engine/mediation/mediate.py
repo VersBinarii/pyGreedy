@@ -1,9 +1,11 @@
-"""This will parse specified raw call data, 
+"""This will parse specified raw call data,
 normalize them and load them to the mongo database"""
-import sys, signal
+import sys
 from Queue import Queue
 
-from  call_resolver import prepare_raw_calls, find_call_type
+import CallMediation
+from grnti_parser import prepare_raw_calls
+
 
 def main(argv):
     """Main entry point for the script."""
@@ -11,22 +13,20 @@ def main(argv):
         print "Need to give the filename"
         return
 
-    # Registar SIGINT handler
-    signal.signal(signal.SIGTERM, handler)
-
     # Main stuff starts here
     queue = Queue()
-    
-    prepare_raw_calls(argv[1], queue);
+    for i in range(20):
+        t = CallMediation.CallMediation(queue)
+        t.setDaemon(True)
+        t.start()
 
-    find_call_type(queue)
-    
+    prepare_raw_calls(argv[1], queue)
+
+    print "Joining queue"
     queue.join()
-    signal.pause()
-
-def handler(signum, frame):
-        print 'Signal handler called with signal', signum
-        sys.exit(0)
+    print"#################################################################"
+    print "queue has just joined"
+    print "##################################################################"
 
 if __name__ == '__main__':
     main(sys.argv)

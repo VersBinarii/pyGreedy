@@ -31,3 +31,37 @@ def line_to_cdr(l):
 
     # All done here.
     return cdr_line
+
+def prepare_raw_calls(filename, queue):
+    # Temp container for raw CDRs.
+    bucket = {}
+    with open(filename, 'r') as grnti_file:
+        print "Found file: [%s]\n" % filename
+        for line in grnti_file:
+            cdr = line_to_cdr(line)
+            if cdr['d-pkg'] in bucket:
+                # Ensure that TR cdr is always first.
+                if cdr['cdr_type'] == 'TR':
+                    cdr_pair = (cdr, bucket[cdr['d-pkg']])
+                else:
+                    cdr_pair = (bucket[cdr['d-pkg']], cdr)
+                    # Keep the bucket tidy.
+                del bucket[cdr['d-pkg']]
+                queue.put(cdr_pair)
+                print "putting cdr_pair\n"
+
+            else:
+                bucket[cdr['d-pkg']] = cdr
+
+    # Now empty the buckets with "no-pairs" to queue.
+    for nopair in bucket.values():
+        # But still maintain the order.
+        if nopair['cdr_type'] == 'TR':
+            cdr_pair = (nopair, None)
+        else:
+            cdr_pair = (None, nopair)
+            
+        queue.put(cdr_pair)
+    # Let the consumer know we done.
+    print "Putting NULL tuple\n"
+    queue.put((None, None))
