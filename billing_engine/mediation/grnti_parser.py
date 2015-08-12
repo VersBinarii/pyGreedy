@@ -1,12 +1,16 @@
+from datetime import datetime, date, time
 
 
 def line_to_cdr(l):
     line = l.rstrip("\n").split(" ")
 
     # Extract interesting bits from line.
+    d = date(int(line[4][:4]), int(line[4][4:6]), int(line[4][6:]))
+    t = time(int(line[5][:2]), int(line[5][2:4]), int(line[5][4:]))
+
     cdr_line = {
-        'cdr_type': line[0].split("$")[0], 'account': line[2],
-        'direction': line[3], 'call_date': ' '.join([line[4], line[5]]),
+        'cdr_type': line[0].split("$")[0], 'account_id': line[2],
+        'direction': line[3], 'call_date': datetime.combine(d, t),
         'call_length': line[6], 'calling_num_1': line[15],
         'calling_num_2': line[17], 'called_num_1': line[21],
         'called_num_2': line[25], 'operator_id': line[29],

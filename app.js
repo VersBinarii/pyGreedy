@@ -62,16 +62,18 @@ app.get('/rsdelrate/:id', routes.rs_delrate);
 app.post('/rsdelratesheet', routes.rs_delratesheet);
 
 /* region/zones */
-app.get('/zoneview', routes.zone_view);
-app.post('/zonecreate', routes.zone_create);
-app.post('/zoneupdate/:id', routes.zone_update);
-app.get('/zonedestroy/:id', routes.zone_destroy);
-app.post('/regioncreate', routes.region_create);
-app.post('/regionupdate/:id', routes.region_update);
-app.get('/regiondestroy/:id', routes.region_destroy);
+app.get('/zoneview', routes.zone_view)
+app.post('/zonecreate', routes.zone_create)
+app.post('/zoneupdate/:id', routes.zone_update)
+app.get('/zonedestroy/:id', routes.zone_destroy)
+app.post('/regioncreate', routes.region_create)
+app.post('/regionupdate/:id', routes.region_update)
+app.get('/regiondestroy/:id', routes.region_destroy)
 
 /* mediation */
-app.get('/mediation', routes.mediation_page);
+app.get('/mediation', routes.mediation_page)
+app.post('/mediation_show/:perPage/:numPage', routes.mediation_show)
+app.post('/mediation_update/:perPage/:numPage/:id/:sdate/:edate', routes.mediation_update)
 
 /* calls */
 app.get('/calls', routes.calls_page);

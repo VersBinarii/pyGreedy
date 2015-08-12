@@ -4,17 +4,17 @@
   <div class="col-md-12">
     <div class="col-md-offset-1 col-md-10">
       <div class="well-sm">
-	<form action="/showmediated/<%= perPage %>/<%= numPage %>" method="post" accept-charset="utf-8" class="form-inline" role="form">
+	<form action="/mediation_show/<%= perPage %>/<%= numPage %>" method="post" accept-charset="utf-8" class="form-inline" role="form">
 	  <div class="form-group">
-	    <label class="control-label col-md-offset-1 col-md-5" for="stime">Start of billing</label>
+	    <label class="control-label col-md-offset-1 col-md-5" for="sdate">Start of billing</label>
 	    <div class="col-md-6">
-	      <input type="text" name="stime" id="stime" class="form-control" placeholder="YYYY-MM-DD"/>
+	      <input type="text" name="sdate" id="sdate" class="form-control" placeholder="YYYY-MM-DD"/>
 	    </div>
 	  </div>
 	  <div class="form-group">
-	    <label class="control-label col-md-offset-1 col-md-5" for="etime">End of billing</label>
+	    <label class="control-label col-md-offset-1 col-md-5" for="edate">End of billing</label>
 	    <div class="col-md-6">
-	      <input type="text" name="etime" id="etime" class="form-control" placeholder="YYYY-MM-DD"/>
+	      <input type="text" name="edate" id="edate" class="form-control" placeholder="YYYY-MM-DD"/>
 	    </div>
 	  </div>
 	  <div class="form-group">
@@ -44,6 +44,7 @@
 	      <th>Account</th>
 	      <th>State</th>
 	      <th>Comments</th>
+              <th>Action</th>
 	    <tr>
 	  </theader>
 	  <tbody>
@@ -55,16 +56,24 @@
 	      <% }else{ %>
 	    <tr class="danger">
 	      <% } %>
-	      <th><%= index %></th>
-	      <th><%= mc.date %></th>
-	      <th><%= mc.length %></th>
-	      <th><%= mc.calling_num %></th>
-	      <th><%= mc.direction %></th>
-	      <th><%= mc.called_num %></th>
-	      <th><%= mc.calltype %></th>
-	      <th><%= mc.account %></th>
-	      <th><%= mc.valid %></th>
-	      <th><%= mc.note %></th>
+              <form action="/mediation_update/<%= perPage %>/<%= numPage %>/<%= mc._id %>/<%= sdate %>/<%= edate %>" method="post">
+	        <th><%= index+1 %></th>
+	        <th><%=
+                       mc.call_date
+                       .toISOString()
+                       .replace(/T/, ' ')
+                       .replace(/\..+/, '')
+                       %></th>
+	        <th><%= mc.length %></th>
+	        <th><%= mc.calling_num %></th>
+	        <th><%= mc.direction %></th>
+	        <th><%= mc.called_num %></th>
+	        <th><input type="text" name="calltype" value="<%= mc.calltype %>"></th>
+	        <th><input type="text" name="accountid" value="<%= mc.account_id %>"></th>
+	        <th><input type="text" name="valid" value="<%= mc.valid %>"></th>
+	        <th><input type="text" name="note" value="<%= mc.note %>"></th>
+                <th><input type="submit" value="Update"></th>
+                </form>
 	    </tr>
 	    
 	    <% }); %>

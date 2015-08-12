@@ -1,7 +1,7 @@
 var Schema = require('mongoose').Schema;
 
 exports.MediatedCall = new Schema({
-    date: {
+    call_date: {
 	type: Date,
 	required: true
     },
