@@ -4,7 +4,7 @@
   <div class="col-md-12">
     <div class="col-md-offset-1 col-md-10">
       <div class="well-sm">
-	<form action="/mediation_show/<%= perPage %>/<%= numPage %>" method="post" accept-charset="utf-8" class="form-inline" role="form">
+	<form action="/mediation_show/<%= perpage %>/<%= numpage %>" method="post" accept-charset="utf-8" class="form-inline" role="form">
 	  <div class="form-group">
 	    <label class="control-label col-md-offset-1 col-md-5" for="sdate">Start of billing</label>
 	    <div class="col-md-6">
@@ -24,83 +24,80 @@
 	  </div>
 	</form>
       </div><!-- well div -->
-
-      <div class="well-sm">
-	<div class="page-header">
-	  <h3> Calls </h3>
-	</div>
-      
-	
-	<table class="table">
-	  <theader>
-	    <tr>
-	      <th>#</th>
-	      <th>Date</th>
-	      <th>Length</th>
-	      <th>Calling</th>
-	      <th>Direction</th>
-	      <th>Called</th>
-	      <th>Type</th>
-	      <th>Account</th>
-	      <th>State</th>
-	      <th>Comments</th>
-              <th>Action</th>
-	    <tr>
-	  </theader>
-	  <tbody>
-	    <%
-	       mediatedcalls.forEach(function(mc, index){
-	       if(mc.valid){
-	       %>
-	    <tr class="success">
-	      <% }else{ %>
-	    <tr class="danger">
-	      <% } %>
-              <form action="/mediation_update/<%= perPage %>/<%= numPage %>/<%= mc._id %>/<%= sdate %>/<%= edate %>" method="post">
-	        <th><%= index+1 %></th>
-	        <th><%=
-                       mc.call_date
-                       .toISOString()
-                       .replace(/T/, ' ')
-                       .replace(/\..+/, '')
-                       %></th>
-	        <th><%= mc.length %></th>
-	        <th><%= mc.calling_num %></th>
-	        <th><%= mc.direction %></th>
-	        <th><%= mc.called_num %></th>
-	        <th><input type="text" name="calltype" value="<%= mc.calltype %>"></th>
-	        <th><input type="text" name="accountid" value="<%= mc.account_id %>"></th>
-	        <th><input type="text" name="valid" value="<%= mc.valid %>"></th>
-	        <th><input type="text" name="note" value="<%= mc.note %>"></th>
-                <th><input type="submit" value="Update"></th>
-                </form>
-	    </tr>
-	    
-	    <% }); %>
-	  </tbody>
-	</table>
-	
-	<nav>
-	  <ul class="pagination">
-	    <li>
-	      <a href="#" aria-label="Previous">
-		<span aria-hidden="true">&laquo;</span>
-	      </a>
-	    </li>
-	    <li><a href="#">1</a></li>
-	    <li><a href="#">2</a></li>
-	    <li><a href="#">3</a></li>
-	    <li><a href="#">4</a></li>
-	    <li><a href="#">5</a></li>
-	  <li>
-	    <a href="#" aria-label="Next">
-	      <span aria-hidden="true">&raquo;</span>
-	    </a>
-	  </li>
-	  </ul>
-	</nav>
-      </div><!-- end of well div -->
-      
     </div>
+    <div class="col-md-8">  
+      <table class="table table-condensed">
+	<theader>
+	  <tr>
+	    <th>#</th>
+	    <th>Date</th>
+	    <th>Length</th>
+	    <th>Calling</th>
+	    <th>Direction</th>
+	    <th>Called</th>
+	    <th>Type</th>
+	    <th>Account</th>
+	    <th>State</th>
+	    <th>Comments</th>
+            <th>Action</th>
+	  <tr>
+	  </theader>
+	<tbody>
+	  <%
+	     mediatedcalls.forEach(function(mc, index){
+	     if(mc.valid){
+	     %>
+	  <tr class="success">
+	    <% }else{ %>
+	  <tr class="danger">
+	    <% } %>
+            <form action="/mediation_update/<%= perpage %>/<%= numpage %>/<%= mc._id %>/<%= sdate %>/<%= edate %>" \
+                  method="post" class="form-inline" accept-charset="utf-8" role="form">
+	      <th><%= perpage *(numpage-1)+(index+1) %></th>
+	      <th><%=
+                     mc.call_date
+                     .toISOString()
+                     .replace(/T/, ' ')
+                     .replace(/\..+/, '')
+                     %></th>
+	      <th><%= mc.length %></th>
+	      <th><%= mc.calling_num %></th>
+	      <th><%= mc.direction %></th>
+	      <th><%= mc.called_num %></th>
+              <div class="col-md-3">
+	        <th><input type="text" class="" name="calltype" value="<%= mc.calltype %>"></th>
+              </div>
+              <div class="col-md-3">
+	        <th><input type="text" class="" name="accountid" value="<%= mc.account_id %>"></th>
+              </div>
+              <div class="col-md-3">
+	        <th><input type="text" class="" name="valid" value="<%= mc.valid %>"></th>
+              </div>
+              <div class="col-md-3">
+	        <th><input type="text" class="" name="note" value="<%= mc.note %>"></th>
+              </div>
+              <th><input type="submit" class="btn btn-default" value="Update"></th>
+            </form>
+	  </tr>
+	  
+	  <% }); %>
+	</tbody>
+      </table>
+
+      <nav class="mediation-paging">
+	
+      </nav>
+    </div><!-- end of well div -->
+    
   </div>
 </div>
+<script>
+  $(document).ready(function(e){
+  var sd = <%- JSON.stringify(sdate) %>
+  var ed = <%- JSON.stringify(edate) %>
+  /*
+  TODO: Set the upper limit on pagination
+  */
+  generate_paging(<%- numpage %>, <%- perpage %>, sd, ed, $('nav.mediation-paging'));
+  });
+</script>
