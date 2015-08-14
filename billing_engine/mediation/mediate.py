@@ -10,7 +10,7 @@ from grnti_parser import prepare_raw_calls
 def main(argv):
     """Main entry point for the script."""
     if len(argv) < 2:
-        print "Need to give the filename"
+        print "Need to specify the filename"
         return
 
     # Main stuff starts here
@@ -22,11 +22,6 @@ def main(argv):
 
     prepare_raw_calls(argv[1], queue)
 
-    print "Joining queue"
     queue.join()
-    print"#################################################################"
-    print "queue has just joined"
-    print "##################################################################"
-
 if __name__ == '__main__':
     main(sys.argv)

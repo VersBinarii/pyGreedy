@@ -1,6 +1,8 @@
 from datetime import datetime, date, time
 
-
+'''
+Takes raw line from cdr and return a parsed CDR object
+'''
 def line_to_cdr(l):
     line = l.rstrip("\n").split(" ")
 
@@ -28,15 +30,17 @@ def line_to_cdr(l):
         if field2.startswith("H"):
             cdr_line['h-pkg'] = line[idx2+2]
             break
-
     # All done here.
     return cdr_line
 
+'''
+Reads given file, parsees it and resulted
+CDR are put into the queue.
+'''
 def prepare_raw_calls(filename, queue):
     # Temp container for raw CDRs.
     bucket = {}
     with open(filename, 'r') as grnti_file:
-        print "Found file: [%s]\n" % filename
         for line in grnti_file:
             cdr = line_to_cdr(line)
             if cdr['d-pkg'] in bucket:
@@ -48,7 +52,6 @@ def prepare_raw_calls(filename, queue):
                     # Keep the bucket tidy.
                 del bucket[cdr['d-pkg']]
                 queue.put(cdr_pair)
-                print "putting cdr_pair\n"
 
             else:
                 bucket[cdr['d-pkg']] = cdr
@@ -60,8 +63,7 @@ def prepare_raw_calls(filename, queue):
             cdr_pair = (nopair, None)
         else:
             cdr_pair = (None, nopair)
-            
+
         queue.put(cdr_pair)
     # Let the consumer know we done.
-    print "Putting NULL tuple\n"
     queue.put((None, None))

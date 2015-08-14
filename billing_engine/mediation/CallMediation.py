@@ -55,8 +55,8 @@ class CallMediation(threading.Thread):
                 call['valid'] = True
                 call['note'] = "Class 5 outbound call"
             else:
-                call['direction'] = ""
-                call['calltype'] = ""
+                call['direction'] = "?"
+                call['calltype'] = "?"
                 call['valid'] = False
                 call['note'] = "Cannot find call type"
             # Have call so load to db.
@@ -79,12 +79,13 @@ class CallMediation(threading.Thread):
                 call['account_id'] = account
             else:
                 # Unknown account so just store what we have
-                call['account_id'] = ""
-                call['valid'] = True
-                call['note'] = "Transit outbound call"
-            print "saving to db\n"
-            self.db.db_collection_insert(self.mediatedcalls, call)
-            return
+                call['account_id'] = "?"
+                call['valid'] = False
+                call['calltype'] = "?"
+                call['direction'] = "?"
+                call['note'] = "Cannot find account"
+                self.db.db_collection_insert(self.mediatedcalls, call)
+                return
 
             if cdr1['operator_id'].startswith("WTR_"):
                 # Wholesale transit
@@ -100,8 +101,8 @@ class CallMediation(threading.Thread):
                 call['note'] = 'Transit inbound call'
             else:
                 # Something dunno whats with the call
-                call['direction'] = ''
-                call['calltype'] = ""
+                call['direction'] = "?"
+                call['calltype'] = "?"
                 call['valid'] = False
                 call['note'] = 'Could not recognize call'
             # Have call so load to db.
@@ -117,10 +118,7 @@ class CallMediation(threading.Thread):
                     'calling_num': cdr1['calling_num_1'], 'direction': 'OUT',
                     'called_num': cdr1['called_num_2'], 'calltype': "WLR"
                 }
-                '''
-                WLR is tricky, it has to be identified by CLI
-                so need to do a DB query
-                '''
+                # Do number lookup to find account.
                 account = self.db.db_collection_find(self.numbers, {
                     "number": cdr1['calling_num_1']})
                 if account:
@@ -128,11 +126,12 @@ class CallMediation(threading.Thread):
                     call['valid'] = True
                     call['note'] = "WLR call"
                 else:
-                    call['account_id'] = ""
+                    call['account_id'] = "?"
                     call['valid'] = False
                     call['note'] = 'Cannot find the accout'
-                # Unknown or not we have call so load to db.
-                self.db.db_collection_insert(self.mediatedcalls, call)
+                    # Unknown or not we have call so load to db.
+                    self.db.db_collection_insert(self.mediatedcalls, call)
+                    return
 
             if "IN_18xx" in cdr1['operator_id']:
                 # Prepare 2 call objects, one for customer
@@ -158,10 +157,11 @@ class CallMediation(threading.Thread):
                 else:
                     call_customer['calltype'] = "SP_LL"
                     call_carrier['calltype'] = "CR_M"
-                    call_customer['valid'] = True
-                    call_customer['note'] = '18xx Inbound call'
-                    call_carrier['valid'] = True
-                    call_carrier['note'] = '18xx Inbound call'
+                    
+                call_customer['valid'] = True
+                call_customer['note'] = '18xx Inbound call'
+                call_carrier['valid'] = True
+                call_carrier['note'] = '18xx Inbound call'
                 # Finally both to db.
                 self.db.db_collection_insert(self.mediatedcalls, call_carrier)
                 self.db.db_collection_insert(self.mediatedcalls, call_customer)
@@ -171,8 +171,10 @@ class CallMediation(threading.Thread):
                 call = {
                     'call_date': cdr1['call_date'],
                     'length': cdr1['call_length'],
-                    'calling_num': cdr1['calling_num_1'], 'direction': '',
-                    'called_num': cdr1['called_num_2'], 'calltype': ""
+                    'calling_num': cdr1['calling_num_1'], 'direction': "?",
+                    'called_num': cdr1['called_num_2'], 'calltype': "?",
+                    'account_id': "?", 'valid': False,
+                    'note': "Cannot identify call type"
                 }
                 self.db.db_collection_insert(self.mediatedcalls, call)
 

@@ -1,94 +1,94 @@
 <% layout( 'layout') -%>
 
 <div class="row-fluid">
-  <div class="col-md-12">
-    <div class="col-md-offset-1 col-md-10">
-      <div class="well-sm">
-	<form action="/mediation_show/<%= perpage %>/<%= numpage %>" method="post" accept-charset="utf-8" class="form-inline" role="form">
-	  <div class="form-group">
-	    <label class="control-label col-md-offset-1 col-md-5" for="sdate">Start of billing</label>
-	    <div class="col-md-6">
-	      <input type="text" name="sdate" id="sdate" class="form-control" placeholder="YYYY-MM-DD"/>
-	    </div>
-	  </div>
-	  <div class="form-group">
-	    <label class="control-label col-md-offset-1 col-md-5" for="edate">End of billing</label>
-	    <div class="col-md-6">
-	      <input type="text" name="edate" id="edate" class="form-control" placeholder="YYYY-MM-DD"/>
-	    </div>
-	  </div>
-	  <div class="form-group">
-	    <div class="col-md-offset-5 col-md-3">
-	      <button type="submit" class="btn btn-default">Show</button>
-	    </div>
-	  </div>
-	</form>
-      </div><!-- well div -->
-    </div>
-    <div class="col-md-8">  
-      <table class="table table-condensed">
-	<theader>
-	  <tr>
-	    <th>#</th>
-	    <th>Date</th>
-	    <th>Length</th>
-	    <th>Calling</th>
-	    <th>Direction</th>
-	    <th>Called</th>
-	    <th>Type</th>
-	    <th>Account</th>
-	    <th>State</th>
-	    <th>Comments</th>
-            <th>Action</th>
-	  <tr>
-	  </theader>
-	<tbody>
-	  <%
-	     mediatedcalls.forEach(function(mc, index){
-	     if(mc.valid){
-	     %>
-	  <tr class="success">
-	    <% }else{ %>
-	  <tr class="danger">
-	    <% } %>
-            <form action="/mediation_update/<%= perpage %>/<%= numpage %>/<%= mc._id %>/<%= sdate %>/<%= edate %>" \
-                  method="post" class="form-inline" accept-charset="utf-8" role="form">
-	      <th><%= perpage *(numpage-1)+(index+1) %></th>
-	      <th><%=
-                     mc.call_date
-                     .toISOString()
-                     .replace(/T/, ' ')
-                     .replace(/\..+/, '')
-                     %></th>
-	      <th><%= mc.length %></th>
-	      <th><%= mc.calling_num %></th>
-	      <th><%= mc.direction %></th>
-	      <th><%= mc.called_num %></th>
-              <div class="col-md-3">
-	        <th><input type="text" class="" name="calltype" value="<%= mc.calltype %>"></th>
-              </div>
-              <div class="col-md-3">
-	        <th><input type="text" class="" name="accountid" value="<%= mc.account_id %>"></th>
-              </div>
-              <div class="col-md-3">
-	        <th><input type="text" class="" name="valid" value="<%= mc.valid %>"></th>
-              </div>
-              <div class="col-md-3">
-	        <th><input type="text" class="" name="note" value="<%= mc.note %>"></th>
-              </div>
-              <th><input type="submit" class="btn btn-default" value="Update"></th>
-            </form>
-	  </tr>
-	  
-	  <% }); %>
-	</tbody>
-      </table>
+  <div class="col-md-11">
 
-      <nav class="mediation-paging">
-	
-      </nav>
-    </div><!-- end of well div -->
+    <div class="row-fluid">
+      <div class="col-md-offset-1">
+        <div class="well-sm">
+	  <form action="/mediation_show/<%= perpage %>/<%= numpage %>" method="post" accept-charset="utf-8" class="form-inline" role="form">
+	    <div class="form-group">
+	      <label class="control-label col-md-offset-1 col-md-5" for="sdate">Start of billing</label>
+	      <div class="col-md-6">
+	        <input type="text" name="sdate" id="sdate" class="form-control" placeholder="YYYY-MM-DD"/>
+	      </div>
+	    </div>
+	    <div class="form-group">
+	      <label class="control-label col-md-offset-1 col-md-5" for="edate">End of billing</label>
+	      <div class="col-md-6">
+	        <input type="text" name="edate" id="edate" class="form-control" placeholder="YYYY-MM-DD"/>
+	      </div>
+	    </div>
+	    <div class="form-group">
+	      <div class="col-md-offset-5 col-md-3">
+	        <button type="submit" class="btn btn-default">Show</button>
+	      </div>
+	    </div>
+	  </form>
+        </div><!-- well div -->
+      </div>
+    </div><!-- row fluid end -->
     
+    <% if(mediatedcalls.length > 0){ %>
+    <div class="row-fluid">
+      <div class="col-md-10">
+        <table class="table table-condensed">
+	  <theader>
+	    <tr>
+	      <th>#</th><th>Date</th><th>Length</th><th>Calling</th><th>Direction</th><th>Called</th>
+	      <th>Type</th><th>Account</th><th>State</th><th>Comments</th><th>Action</th>
+	    <tr>
+	    </theader>
+	  <tbody>
+	    <%
+	       mediatedcalls.forEach(function(mc, index){
+	       if(mc.valid){
+	       %>
+	    <tr class="success">
+	      <% }else{ %>
+	    <tr class="danger">
+	      <% } %>
+              <form action="/mediation_update/<%= perpage %>/<%= numpage %>/<%= mc._id %>/<%= sdate %>/<%= edate %>" \
+                    method="post" class="form-inline" accept-charset="utf-8" role="form">
+	        <th><%= perpage *(numpage-1)+(index+1) %></th>
+	        <th><%= mc.call_date.toISOString().replace(/T/, ' ').replace(/\..+/, '') %></th>
+	        <th><%= mc.length %></th>
+	        <th><%= mc.calling_num %></th>
+	        <th><%= mc.direction %></th>
+	        <th><%= mc.called_num %></th>
+                <div class="col-md-3">
+	          <th><input type="text" class="" name="calltype" value="<%= mc.calltype %>"></th>
+                </div>
+                <div class="col-md-3">
+	          <th><input type="text" class="" name="accountid" value="<%= mc.account_id %>"></th>
+                </div>
+                <div class="col-md-3">
+	          <th><input type="text" class="" name="valid" value="<%= mc.valid %>"></th>
+                </div>
+                <div class="col-md-3">
+	          <th><input type="text" class="" name="note" value="<%= mc.note %>"></th>
+                </div>
+                <th><input type="submit" class="btn btn-default" value="Update"></th>
+              </form>
+	    </tr>
+	    
+	    <% }); %>
+	  </tbody>
+        </table>
+        
+        <nav class="mediation-paging">	
+        </nav>
+      </div><!-- col-md-size -->
+    </div><!-- row-fluid  end -->
+    <% }else{ %>
+    <div class="row-fluid">
+      <div class="col-md-offset-1">
+        <div class="page-header">
+          <h2> Show and/or edit mediated calls</h2>
+        </div>
+      </div>
+    </div>
+    <%  } %>
   </div>
 </div>
 <script>
