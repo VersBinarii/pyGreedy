@@ -73,8 +73,8 @@ app.get('/regiondestroy/:id', routes.region_destroy)
 /* mediation */
 app.get('/mediation', routes.mediation_main)
 app.post('/mediation_show/:perpage/:numpage', routes.mediation_show)
-app.post('/mediation_update/:perpage/:numpage/:id/:sdate/:edate', routes.mediation_update)
-app.get('/mediation_page/:perpage/:numpage/:sdate/:edate', routes.mediation_page)
+app.post('/mediation_update/:perpage/:numpage/:id/:sdate/:edate/:valid', routes.mediation_update)
+app.get('/mediation_page/:perpage/:numpage/:sdate/:edate/:valid', routes.mediation_page)
 /* calls */
 app.get('/calls', routes.calls_page);
 

@@ -17,7 +17,7 @@ exports.acc_mainpage = function(req, res){
     Account.find(function(err, accounts, count ){
 	RatesheetList.find({}, 'name', function (err, ratesheets){
 	    res.render('accountview', {
-		title: "pyGreedy - account",
+		title: "pyGreedy - Account",
 		accounts: accounts,
 		ratesheets: ratesheets
 	    });
@@ -56,7 +56,7 @@ exports.acc_edit = function(req, res){
 	RatesheetList.find({rstype: 'ratesheet'},function (err, ratesheets){
 	    RatesheetList.find({rstype: 'discount'}, function (err, discounts){
 		res.render('accedit', {
-		    title: 'pyGreedy - account edit',
+		    title: 'pyGreedy - Account Edit',
 		    account : account,
 		    ratesheets: ratesheets,
 		    discounts: discounts
@@ -87,7 +87,7 @@ exports.acc_update = function(req, res){
     
 exports.num_mainpage = function(req, res){
     res.render('numberview', {
-	title: "pyGreedy - numbers",
+	title: "pyGreedy - Numbers",
 	numbers: null
     });
 };
@@ -118,7 +118,7 @@ exports.num_create = function(req, res){
 	    }
 	    Number.find({account: req.body.account},function(err, num, count){
 		res.render('numberview', {
-		    title: "pyGreedy - numbers",
+		    title: "pyGreedy - Numbers",
 		    numbers: num,
 		    lastsearch: req.body.account
 		});
@@ -131,7 +131,7 @@ exports.num_create = function(req, res){
 	}).save(function(err, number, count){
 	    Number.find({account: req.body.account},function(err, num, count){
 		res.render('numberview', {
-		    title: "pyGreedy - numbers",
+		    title: "pyGreedy - Numbers",
 		    numbers: num,
 		    lastsearch: req.body.account
 		});
@@ -151,7 +151,7 @@ exports.num_find = function(req, res){
 	    console.log(err);
 	}
 	res.render('numberview', {
-	    title: "pyGreedy - numbers",
+	    title: "pyGreedy - Numbers",
 	    numbers: num,
 	    lastsearch: req.body.search
 	});
@@ -167,7 +167,7 @@ exports.num_destroy = function(req, res ){
 		$or: [{number: new RegExp(req.params.last, 'i')}, {account: req.params.last}]
 	    },function(err, num, count){
 		res.render('numberview', {
-		    title: "pyGreedy - numbers",
+		    title: "pyGreedy - Numbers",
 		    numbers: num,
 		    lastsearch: req.params.last
 		});
@@ -186,7 +186,7 @@ exports.rs_mainpage = function(req, res){
     
     RatesheetList.find({}, 'name', {sort: {name: -1}}, function (err, ratesheets){
 	res.render('ratesheetview', {
-	    title: "pyGreedy - ratesheet",
+	    title: "pyGreedy - Ratesheet",
 	    ratesheets: ratesheets
 	});
     });  
@@ -210,7 +210,7 @@ exports.rs_rscreate = function(req, res){
 exports.rs_rsshow = function(req, res){
     RatesheetList.findOne({name: req.body.ratesheet },function(err, ratesheet, count){
 	res.render('ratesheetedit', {
-	    title: "pyGreedy - edit",
+	    title: "pyGreedy - Ratesheet Edit",
 	    ratesheet : ratesheet
 	});
     });
@@ -233,7 +233,7 @@ exports.rs_addrate = function(req, res){
 				    {safe: true, new: true},
 				    function(err, ratesheet){
 					res.render('ratesheetedit', {
-					    title: "pyGreedy - edit",
+					    title: "pyGreedy - Ratesheet Edit",
 					    ratesheet : ratesheet
 					});
 				    });
@@ -247,7 +247,7 @@ exports.rs_delrate = function(req, res){
 				    {safe: true, new: true},
 				    function(err, ratesheet){
 					res.render('ratesheetedit', {
-					    title: "pyGreedy - edit",
+					    title: "pyGreedy - Ratesheet Edit",
 					    ratesheet : ratesheet
 					});
 				    });
@@ -271,7 +271,7 @@ exports.zone_view = function(req, res){
     Zone.find({}, function(err, zones){
 	Region.find({}, function(err, regions){
 	    res.render('zoneview', {
-		title: "pyGreedy - regions",
+		title: "pyGreedy - Regions/Zones",
 		zones: zones,
 		regions: regions
 	    });
@@ -342,20 +342,38 @@ exports.mediation_main = function(req, res){
     res.render('mediation', {
 	title: "pyGreedy - Mediation",
 	mediatedcalls: [],
-	perpage: 50,
-	numpage: 1,
-        sdate: "",
-        edate: ""
+        state:{
+	    perpage: 50,
+	    numpage: 1,
+            sdate: "",
+            edate: "",
+            valid: "all"
+        }
     });
 };
 
 exports.mediation_show = function(req, res){
     var numpage = req.params.numpage
     var perpage = req.params.perpage
-    
+    var query = {}
+
+    if(req.body.valid != "all"){
+        query = {
+            'call_date': {
+                '$gte': new Date(req.body.sdate), '$lt': new Date(req.body.edate)
+            },
+            'valid': req.body.valid
+        }
+    }else{
+        query = {
+            'call_date': {
+                '$gte': new Date(req.body.sdate), '$lt': new Date(req.body.edate)
+            }
+        }
+    }
     MediatedCall
-        .find({'call_date': {'$gte': new Date(req.body.sdate), '$lt': new Date(req.body.edate)}},
-              {}, {skip: numpage*perpage, limit: perpage, sort: {call_date: 'asc'}},
+        .find(query, {},
+              {skip: (numpage-1)*perpage, limit: perpage, sort: {call_date: 'asc'}},
               function(err, mc){
                   if(err){
                       console.log(err)
@@ -363,10 +381,13 @@ exports.mediation_show = function(req, res){
                   res.render('mediation', {
 	              title: "pyGreedy - Mediated calls",
 	              mediatedcalls: mc,
-	              perpage: perpage,
-	              numpage: numpage,
-                      sdate: req.body.sdate,
-                      edate: req.body.edate
+                      state:{
+	                  perpage: perpage,
+	                  numpage: numpage,
+                          sdate: req.body.sdate,
+                          edate: req.body.edate,
+                          valid: req.body.valid
+                      }
                   });
               });
 };
@@ -375,56 +396,91 @@ exports.mediation_update = function(req, res){
 
     var perpage = req.params.perpage
     var numpage = req.params.numpage
+    var query = {}
+
+    if(req.params.valid != "all"){
+        query = {
+            'call_date': {
+                '$gte': new Date(req.params.sdate), '$lt': new Date(req.params.edate)
+            },
+            'valid': req.params.valid
+        }
+    }else{
+        query = {
+            'call_date': {
+                '$gte': new Date(req.params.sdate), '$lt': new Date(req.params.edate)
+            }
+        }
+    }
     
     MediatedCall
-        .findByIdAndUpdate(req.params.id,
-                           {
-                               account_id: req.body.accountid,
-                               calltype: req.body.calltype,
-                               valid: req.body.valid,
-                               note: req.body.note
-                           }, function(err, mc){
-                               if(err){
-                                   console.log(err)
-                               }
-                               MediatedCall
-                                   .find({'call_date':
-                                          {'$gte': new Date(req.params.sdate), '$lt': new Date(req.params.edate)}},
-                                         {}, {skip: numpage * perpage, limit: perpage, sort: {call_date: 'asc'}},
-                                         function(err, mc){
-                                             if(err){
-                                                 console.log(err)
-                                             }
-                                             res.render('mediation', {
-	                                         title: "pyGreedy - Mediated calls",
-	                                         mediatedcalls: mc,
-	                                         perpage: perpage,
-	                                         numpage: numpage,
-                                                 sdate: req.params.sdate,
-                                                 edate: req.params.edate
-                                             });
-                                         });
-                           });
+        .findByIdAndUpdate(
+            req.params.id, {
+                account_id: req.body.accountid,
+                calltype: req.body.calltype,
+                valid: req.body.valid,
+                note: req.body.note
+            }, function(err, mc){
+                if(err){
+                    console.log(err)
+                }
+                MediatedCall
+                    .find(query, {},
+                          {skip: (numpage-1) * perpage, limit: perpage, sort: {call_date: 'asc'}},
+                          function(err, mc){
+                              if(err){
+                                  console.log(err)
+                              }
+                              res.render('mediation', {
+	                          title: "pyGreedy - Mediated calls",
+	                          mediatedcalls: mc,
+                                  state: {
+	                              perpage: perpage,
+	                              numpage: numpage,
+                                      sdate: req.params.sdate,
+                                      edate: req.params.edate,
+                                      valid: req.params.valid
+                                  }
+                              });
+                          });
+            });
 };
 
 exports.mediation_page = function(req, res){
 
     var perpage = req.params.perpage
     var numpage = req.params.numpage
-    
-    MediatedCall.find({'call_date':
-                       {'$gte': new Date(req.params.sdate), '$lt': new Date(req.params.edate)}},
-                      {}, {skip: numpage * perpage, limit: perpage, sort: {call_date: 'asc'}}, function(err, mc){
+    var query = {}
+
+    if(req.params.valid != "all"){
+        query = {
+            'call_date': {
+                '$gte': new Date(req.params.sdate), '$lt': new Date(req.params.edate)
+            },
+            'valid': req.params.valid
+        }
+    }else{
+        query = {
+            'call_date': {
+                '$gte': new Date(req.params.sdate), '$lt': new Date(req.params.edate)
+            }
+        }
+    }
+    MediatedCall.find(query, {},
+                      {skip: (numpage-1) * perpage, limit: perpage, sort: {call_date: 'asc'}}, function(err, mc){
                           if(err){
                               console.log(err)
                           }
                           res.render('mediation', {
 	                      title: "pyGreedy - Mediated calls",
 	                      mediatedcalls: mc,
-	                      perpage: perpage,
-	                      numpage: numpage,
-                              sdate: req.params.sdate,
-                              edate: req.params.edate
+                              state: {
+	                          perpage: perpage,
+	                          numpage: numpage,
+                                  sdate: req.params.sdate,
+                                  edate: req.params.edate,
+                                  valid: req.params.valid
+                              }
                           });
                       });
 };
@@ -432,6 +488,6 @@ exports.mediation_page = function(req, res){
 
 exports.calls_page = function(req, res){
     res.render('calls', {
-	title: "pyGreedy - calls"
+	title: "pyGreedy - Rated Calls"
     });
 };

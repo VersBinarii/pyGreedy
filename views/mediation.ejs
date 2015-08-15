@@ -6,22 +6,34 @@
     <div class="row-fluid">
       <div class="col-md-offset-1">
         <div class="well-sm">
-	  <form action="/mediation_show/<%= perpage %>/<%= numpage %>" method="post" accept-charset="utf-8" class="form-inline" role="form">
+	  <form action="/mediation_show/<%= state.perpage %>/<%= state.numpage %>" method="post" accept-charset="utf-8" class="form-inline" role="form">
 	    <div class="form-group">
-	      <label class="control-label col-md-offset-1 col-md-5" for="sdate">Start of billing</label>
-	      <div class="col-md-6">
-	        <input type="text" name="sdate" id="sdate" class="form-control" placeholder="YYYY-MM-DD"/>
+	      <label class="control-label col-md-3" for="sdate">Start of billing</label>
+	      <div class="col-md-3">
+	        <input type="text" name="sdate" id="sdate" class="form-control" value="<%= state.sdate %>" placeholder="YYYY-MM-DD"/>
 	      </div>
 	    </div>
 	    <div class="form-group">
-	      <label class="control-label col-md-offset-1 col-md-5" for="edate">End of billing</label>
-	      <div class="col-md-6">
-	        <input type="text" name="edate" id="edate" class="form-control" placeholder="YYYY-MM-DD"/>
+	      <label class="control-label col-md-3" for="edate">End of billing</label>
+	      <div class="col-md-3">
+	        <input type="text" name="edate" id="edate" class="form-control" value="<%= state.edate %>" placeholder="YYYY-MM-DD"/>
 	      </div>
 	    </div>
+            
+            <div class="form-group">
+	      <label class="control-label col-md-4" for="valid"> Only invalid</label>
+	      <div class="col-md-1">
+                <select class="form-control" name="valid">
+		  <option value="false">Invalid</option>
+		  <option value="true">Valid</option>
+		  <option value="all">All</option>
+                </select>
+	      </div>
+	    </div>
+            
 	    <div class="form-group">
 	      <div class="col-md-offset-5 col-md-3">
-	        <button type="submit" class="btn btn-default">Show</button>
+	        <button type="submit" class="btn btn-default">Show calls</button>
 	      </div>
 	    </div>
 	  </form>
@@ -32,11 +44,11 @@
     <% if(mediatedcalls.length > 0){ %>
     <div class="row-fluid">
       <div class="col-md-10">
-        <table class="table table-condensed">
+        <table class="table table-condensed col-md-offset-1">
 	  <theader>
 	    <tr>
 	      <th>#</th><th>Date</th><th>Length</th><th>Calling</th><th>Direction</th><th>Called</th>
-	      <th>Type</th><th>Account</th><th>State</th><th>Comments</th><th>Action</th>
+	      <th>Type</th><th>Account</th><th>Valid</th><th>Comments</th><th>Action</th>
 	    <tr>
 	    </theader>
 	  <tbody>
@@ -48,26 +60,18 @@
 	      <% }else{ %>
 	    <tr class="danger">
 	      <% } %>
-              <form action="/mediation_update/<%= perpage %>/<%= numpage %>/<%= mc._id %>/<%= sdate %>/<%= edate %>" \
-                    method="post" class="form-inline" accept-charset="utf-8" role="form">
-	        <th><%= perpage *(numpage-1)+(index+1) %></th>
+              <form action="/mediation_update/<%= state.perpage %>/<%= state.numpage %>/<%= mc._id %>/<%= state.sdate %>/<%= state.edate %>/<%= state.valid %>" \
+                    method="post" accept-charset="utf-8" role="form">
+	        <th><%= state.perpage *(state.numpage-1)+(index+1) %></th>
 	        <th><%= mc.call_date.toISOString().replace(/T/, ' ').replace(/\..+/, '') %></th>
 	        <th><%= mc.length %></th>
 	        <th><%= mc.calling_num %></th>
-	        <th><%= mc.direction %></th>
+	        <th><input type="text" class="" style="width:40px;" name="direction" value="<%= mc.direction %>"></th>
 	        <th><%= mc.called_num %></th>
-                <div class="col-md-3">
-	          <th><input type="text" class="" name="calltype" value="<%= mc.calltype %>"></th>
-                </div>
-                <div class="col-md-3">
-	          <th><input type="text" class="" name="accountid" value="<%= mc.account_id %>"></th>
-                </div>
-                <div class="col-md-3">
-	          <th><input type="text" class="" name="valid" value="<%= mc.valid %>"></th>
-                </div>
-                <div class="col-md-3">
-	          <th><input type="text" class="" name="note" value="<%= mc.note %>"></th>
-                </div>
+	        <th><input type="text" class="" style="width:60px;" name="calltype" value="<%= mc.calltype %>"></th>
+	        <th><input type="text" class="" name="accountid" value="<%= mc.account_id %>"></th>
+	        <th><input type="text" class="" style="width:50px;" name="valid" value="<%= mc.valid %>"></th>
+	        <th><input type="text" class="" name="note" value="<%= mc.note %>"></th>
                 <th><input type="submit" class="btn btn-default" value="Update"></th>
               </form>
 	    </tr>
@@ -82,7 +86,7 @@
     </div><!-- row-fluid  end -->
     <% }else{ %>
     <div class="row-fluid">
-      <div class="col-md-offset-1">
+      <div class="col-md-offset-2">
         <div class="page-header">
           <h2> Show and/or edit mediated calls</h2>
         </div>
@@ -93,11 +97,10 @@
 </div>
 <script>
   $(document).ready(function(e){
-  var sd = <%- JSON.stringify(sdate) %>
-  var ed = <%- JSON.stringify(edate) %>
+  var sd = <%- JSON.stringify(state) %>;
   /*
   TODO: Set the upper limit on pagination
   */
-  generate_paging(<%- numpage %>, <%- perpage %>, sd, ed, $('nav.mediation-paging'));
+  generate_paging(sd, $('nav.mediation-paging'));
   });
 </script>

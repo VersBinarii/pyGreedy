@@ -1,8 +1,17 @@
 body {
-  padding-top: 70px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+    padding-top: 70px;
+    padding-bottom: 20px;
+    font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
 a {
   color: #00B7FF;
+}
+
+ul.pagination > .active > a {
+    z-index: 2;
+    color: #00c3c8;
+    cursor: default;
+    background-color: #c8c8c8;
+    border-color: #c8c8c8;
 }
