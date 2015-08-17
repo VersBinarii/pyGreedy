@@ -2,7 +2,7 @@
  * Module dependencies.
  */
 require('./models/db');//must be called before routes
-
+var pdf = require('./lib/pdf.js');
 var express = require('express');
 var engine = require( 'ejs-locals' );
 var http = require('http');
@@ -78,6 +78,10 @@ app.get('/mediation_page/:perpage/:numpage/:sdate/:edate/:valid', routes.mediati
 /* calls */
 app.get('/calls', routes.calls_page);
 
+/* PDF bill generation stuff */
+//pdf.html_to_pdf('http://localhost:3000/mediation_page/50/3/2015-07-01/2015-07-30/all', "htm_test.pdf");
+pdf.html_to_pdf('http://localhost:3000/user_bill/50dsdd/2015-07-01/2015-07-30/', "htm_test.pdf");
+app.get('/user_bill/:acc_id/:sdate/:edate', routes.user_bill);
 
 /* system */
 //app.get('/settingspage', routes.index);

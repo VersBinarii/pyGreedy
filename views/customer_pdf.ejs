@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>PDF</title>
+    
+    <link rel='stylesheet' href='/stylesheets/bill_pdf.css' type="text/css"/>
+  </head>
+  <body>
+    <div class="header row">
+      <div class="column-left header-logo"><img src="/images/logo.png" alt="Logo"/></div>
+      <div class="column-right header-doctitle">
+        <div class="page-header">
+          <h1>Voice Bill Summary</h1>
+        </div>
+      </div>
+    </div>
+    <div class="main row">
+      <div class="row cust-detail">
+        <div class="column-left address">
+          <table>
+              <th>Customer:</th>
+            
+              <tr><td>Catdamnit</td></tr>
+              <tr><td> </td></tr>
+              <tr><td>42 Harcourt Lodge</td></tr>
+              <tr><td>Dublin 8</td></tr>
+              <tr><td>Co. Dublin</td></tr>
+           
+          </table>
+        </div>
+        <div class="column-center billing">
+          <table>
+            <tr><th>Account#</th><td>SAP01</td></tr>
+            <tr><th>Billing Period:</th><td></td></tr>
+          </table>
+        </div>
+        <div class="column-right billsummary">
+          <table>
+            <tr><th>Charges-Recurring: </th><td><p>565.87</p></td></tr>
+            <tr><th>Charges-Non-Recurring: </th><td><p>4545.0</p></td></tr>
+            <tr><th>Call Charges: </th><td><p>45464646.08</p></td></tr>
+            <tr class="markit"><th>Total(ex. VAT):</th><td><p>0.0000</p></td></tr>
+            <tr class="important"><th>Total(@23VAT)</th><td><p>43434.06</p></td></tr>
+          </table>
+        </div>
+      </div>
+      <div class="row">
+        <div class="recurring">
+          <div class="page-header">
+            <h2>Service Charges - Recurring</h2>
+          </div>
+          <table>
+            <thead>
+              <tr><th>#</th><th>Description</th><th>Details</th><th>UAN</th><th>Dates</th><th>Unit Cost</th><th>Qty</th><th>Cost</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="border">1</td><td class="border">Some stuff</td><td class="border">meh</td>
+                <td class="border">097987987987</td><td class="border">Dates</td><td class="border">Unit Cost</td>
+                <td class="border">3</td><td class="border">63.21</td>
+              </tr>
+              <tr>
+                <td class="border">2</td><td class="border">Some other stuff</td><td class="border">ljfksdbfjksdf</td>
+                <td class="border">8678768768</td><td class="border">Dates</td><td class="border">Unit Cost</td>
+                <td class="border">7</td><td class="border">63.21</td>
+              </tr>
+              <tr>
+                <td></td><td colspan="4" class="summary"></td>
+                <td colspan="2" class="summary">Total Recurring Charges</td>
+                <td class="summary">0.00</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="row">
+        <div class="nonrecurring">
+          <div class="page-header">
+            <h2>Service Charges - Non-Recurring</h2>
+          </div>
+          <table>
+            <thead>
+              <tr><th>#</th><th>Description</th><th>Details</th><th>UAN</th><th>Dates</th><th>Unit Cost</th><th>Qty</th><th>Cost</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="border">1</td><td class="border">Some stuff</td><td class="border">meh</td>
+                <td class="border">564654654654</td><td class="border">Dates</td><td class="border">Unit Cost</td>
+                <td class="border">3</td><td class="border">63.21</td>
+              </tr>
+              <tr>
+                <td class="border">2</td><td class="border">Some other stuff</td><td class="border">ljfksdbfjksdf</td>
+                <td class="border">8678768768</td><td class="border">Dates</td><td class="border">Unit Cost</td>
+                <td class="border">7</td><td class="border">63.21</td>
+              </tr>
+              <tr>
+                <td></td><td colspan="4" class="summary"></td>
+                <td colspan="2" class="summary">Total Non-Recurring Charges</td>
+                <td class="summary">0.00</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="row">
+        
+        <div class="calls">
+          <div class="page-header">
+            <h2>Call Charges</h2>
+          </div>
+          <table>
+            <thead>
+              <tr><th>#</th><th>Band</th><th>Calls</th><th>Time</th><th>Cost</th></tr>
+            </thead>
+            <tbody>
+              <tr><td class="border">1</td><td class="border">test</td><td class="border">kfnpha</td><td class="border">fgdfgdfg</td><td class="border">sdfgdfhdf</td></tr>
+              <tr><td class="border">2</td><td class="border">test2</td><td class="border">kfnphss</td><td class="border">dfgdfg</td><td class="border">sdfsdfs</td></tr>
+              <!-- summary of call charges -->
+              <tr>
+                <td></td><td class="summary">Total Calls/Time/Cost</td><td class="summary">15151</td>
+                <td class="summary">70:45:03</td><td class="summary">194.92</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="footer row">
+      <div class="container">
+        <p style="font-size:8px;">
+          This is for information only, it is not an invoice.
+          These charges will appear on your regular AirSpeed Invoice.
+          Full Call Itemisation available on request.
+        </p>
+      </div>
+    </div>
+  </body>
+</html>

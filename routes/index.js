@@ -491,3 +491,9 @@ exports.calls_page = function(req, res){
 	title: "pyGreedy - Rated Calls"
     });
 };
+
+
+/* ################# PDF stuff ############## */
+exports.user_bill = function(req, res){
+    res.render('customer_pdf');
+};
