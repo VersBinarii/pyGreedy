@@ -1,6 +1,7 @@
 """This will parse specified raw call data,
 normalize them and load them to the mongo database"""
 import sys
+import os
 from Queue import Queue
 
 import CallMediation
@@ -13,14 +14,16 @@ def main(argv):
         print "Need to specify the filename"
         return
 
-    # Main stuff starts here
     queue = Queue()
-    for i in range(20):
+    for i in range(10):
         t = CallMediation.CallMediation(queue)
         t.setDaemon(True)
         t.start()
 
-    prepare_raw_calls(argv[1], queue)
+    # Read whole directy and parse all grnti files.
+    print "Reading directory [%s]\n" % argv[1]
+    [prepare_raw_calls(''.join((argv[1], f)), queue)
+     for f in os.listdir(argv[1]) if f.startswith("grnti")]
 
     queue.join()
 if __name__ == '__main__':

@@ -40,6 +40,7 @@ CDR are put into the queue.
 def prepare_raw_calls(filename, queue):
     # Temp container for raw CDRs.
     bucket = {}
+    print "Parsing file: [%s]\n" % filename
     with open(filename, 'r') as grnti_file:
         for line in grnti_file:
             cdr = line_to_cdr(line)
