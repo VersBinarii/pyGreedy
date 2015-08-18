@@ -1,4 +1,5 @@
-var Schema = require('mongoose').Schema;
+var mongoose = require('mongoose');
+var Schema = mongoose.Schema;
 
 exports.RatesheetList = new Schema({
     name: {
@@ -21,7 +22,7 @@ exports.RatesheetList = new Schema({
 	    required: true
 	},
 	zone: {
-	    type: String,
+	    type: mongoose.Schema.Types.ObjectId, ref: 'Zone',
 	    required: true
 	},
 	rate_type: {

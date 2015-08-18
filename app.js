@@ -75,13 +75,15 @@ app.get('/mediation', routes.mediation_main)
 app.post('/mediation_show/:perpage/:numpage', routes.mediation_show)
 app.post('/mediation_update/:perpage/:numpage/:id/:sdate/:edate/:valid', routes.mediation_update)
 app.get('/mediation_page/:perpage/:numpage/:sdate/:edate/:valid', routes.mediation_page)
-/* calls */
-app.get('/calls', routes.calls_page);
+
+/* rating */
+app.get('/rating', routes.rating_mainpage);
 
 /* PDF bill generation stuff */
 //pdf.html_to_pdf('http://localhost:3000/mediation_page/50/3/2015-07-01/2015-07-30/all', "htm_test.pdf");
 pdf.html_to_pdf('http://localhost:3000/user_bill/50dsdd/2015-07-01/2015-07-30/', "htm_test.pdf");
 app.get('/user_bill/:acc_id/:sdate/:edate', routes.user_bill);
+
 
 /* system */
 //app.get('/settingspage', routes.index);

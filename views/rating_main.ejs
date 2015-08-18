@@ -1,0 +1,39 @@
+<% layout( 'layout') -%>
+
+<div class="row-fluid">
+  <div class="well">
+    <h4><b>Find rated calls</b></h4>
+  </div>
+  <div class="well">
+    <form action="/rated_show" method="post" accept-charset="utf-8" class="form-inline" role="form" id="rated-show">
+      <div class="form-group">
+	<label class="control-label col-md-3" for="sdate">Start date</label>
+	<div class="col-md-3">
+	  <input type="text" name="sdate" id="sdate" class="form-control" placeholder="YYYY-MM-DD"/>
+	</div>
+      </div>
+      <div class="form-group">
+	<label class="control-label col-md-3" for="edate">End date</label>
+	<div class="col-md-3">
+	  <input type="text" name="edate" id="edate" class="form-control" placeholder="YYYY-MM-DD"/>
+	</div>
+      </div>
+      <div class="form-group">
+	<label class="control-label col-md-3" for="account">Account</label>
+	<div class="col-md-3">
+	  <select class="form-control" name="account" id="account" form="rated-show">
+            <option value="">Select account</option>
+            <% accounts.forEach(function(acc){ %>
+            <option value="<%= acc.id %>"><%= acc.name %></option>
+            <% }); %>
+          </select>
+	</div>
+      </div>
+      <div class="form-group">
+	<div class="col-md-offset-3 col-md-3">
+	  <button type="submit" class="btn btn-default">Show rated</button>
+	</div>
+      </div>
+    </form>
+  </div><!-- well end -->
+</div><!-- row-fluid end -->

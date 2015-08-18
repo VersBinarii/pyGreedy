@@ -208,15 +208,25 @@ exports.rs_rscreate = function(req, res){
 
 /* POST to redirect to view where new destination rates can be set or deleted */
 exports.rs_rsshow = function(req, res){
-    RatesheetList.findOne({name: req.body.ratesheet },function(err, ratesheet, count){
-	res.render('ratesheetedit', {
-	    title: "pyGreedy - Ratesheet Edit",
-	    ratesheet : ratesheet
-	});
-    });
+    RatesheetList.findOne({name: req.body.ratesheet })
+        .populate({ path: 'rs'})
+        .exec(function(err, ratesheet){
+            RatesheetList.populate(ratesheet,
+                                   {path: 'rs.zone', model: 'Zone'},
+                                   function(err, ratesheet){
+                                       Zone.find({}, 'name', {sort: {name: 'asc'}}, function(err, zones){
+	                                   res.render('ratesheetedit', {
+	                                       title: "pyGreedy - Ratesheet Edit",
+	                                       ratesheet : ratesheet,
+                                               zones: zones
+                                           });
+	                               });
+                                   });
+        });
 };
 
 exports.rs_addrate = function(req, res){
+    
     var rs = {
 	cc: req.body.cc,
 	number: req.body.number,
@@ -227,29 +237,47 @@ exports.rs_addrate = function(req, res){
 	wknd: req.body.wknd,
 	flatcharge: req.body.flat
     };
-
-    RatesheetList.findByIdAndUpdate(req.params.id,
-				    {$push: {'rs': rs}},
-				    {safe: true, new: true},
-				    function(err, ratesheet){
-					res.render('ratesheetedit', {
-					    title: "pyGreedy - Ratesheet Edit",
-					    ratesheet : ratesheet
-					});
-				    });
+    
+    RatesheetList
+        .findByIdAndUpdate(req.params.id,
+			   {$push: {'rs': rs}},
+			   {safe: true, new: true},
+			   function(err, ratesheet){
+			       RatesheetList
+                                   .populate(ratesheet,
+                                             {path: 'rs.zone', model: 'Zone'},
+                                             function(err, ratesheet){
+                                                 Zone.find({}, 'name', {sort: {name: 'asc'}}, function(err, zones){
+	                                             res.render('ratesheetedit', {
+	                                                 title: "pyGreedy - Ratesheet Edit",
+	                                                 ratesheet : ratesheet,
+                                                         zones: zones
+                                                     });
+	                                         });
+                                             });
+			   });
 };
 
 exports.rs_delrate = function(req, res){
     
     var id = req.params.id.split(":");
-    RatesheetList.findByIdAndUpdate(id[0],
-				    {$pull: {'rs': {'_id': id[1]}}},
-				    {safe: true, new: true},
-				    function(err, ratesheet){
-					res.render('ratesheetedit', {
-					    title: "pyGreedy - Ratesheet Edit",
-					    ratesheet : ratesheet
-					});
+    RatesheetList
+        .findByIdAndUpdate(id[0],
+			   {$pull: {'rs': {'_id': id[1]}}},
+			   {safe: true, new: true},
+			   function(err, ratesheet){
+			       RatesheetList
+                                   .populate(ratesheet,
+                                             {path: 'rs.zone', model: 'Zone'},
+                                             function(err, ratesheet){
+                                                 Zone.find({}, 'name', {sort: {name: 'asc'}}, function(err, zones){
+	                                             res.render('ratesheetedit', {
+	                                                 title: "pyGreedy - Ratesheet Edit",
+	                                                 ratesheet : ratesheet,
+                                                         zones: zones
+                                                     });
+	                                         });
+                                             });
 				    });
 };
 
@@ -355,22 +383,16 @@ exports.mediation_main = function(req, res){
 exports.mediation_show = function(req, res){
     var numpage = req.params.numpage
     var perpage = req.params.perpage
-    var query = {}
-
+    var query = {
+        'call_date': {
+            '$gte': new Date(req.body.sdate), '$lt': new Date(req.body.edate)
+        }
+    };
+    
     if(req.body.valid != "all"){
-        query = {
-            'call_date': {
-                '$gte': new Date(req.body.sdate), '$lt': new Date(req.body.edate)
-            },
-            'valid': req.body.valid
-        }
-    }else{
-        query = {
-            'call_date': {
-                '$gte': new Date(req.body.sdate), '$lt': new Date(req.body.edate)
-            }
-        }
+        query.valid = req.body.valid;
     }
+    
     MediatedCall
         .find(query, {},
               {skip: (numpage-1)*perpage, limit: perpage, sort: {call_date: 'asc'}},
@@ -396,21 +418,14 @@ exports.mediation_update = function(req, res){
 
     var perpage = req.params.perpage
     var numpage = req.params.numpage
-    var query = {}
-
+    var query = {
+        'call_date': {
+            '$gte': new Date(req.params.sdate), '$lt': new Date(req.params.edate)
+        }
+    };
+    
     if(req.params.valid != "all"){
-        query = {
-            'call_date': {
-                '$gte': new Date(req.params.sdate), '$lt': new Date(req.params.edate)
-            },
-            'valid': req.params.valid
-        }
-    }else{
-        query = {
-            'call_date': {
-                '$gte': new Date(req.params.sdate), '$lt': new Date(req.params.edate)
-            }
-        }
+        query.valid = req.params.valid
     }
     
     MediatedCall
@@ -450,24 +465,22 @@ exports.mediation_page = function(req, res){
 
     var perpage = req.params.perpage
     var numpage = req.params.numpage
-    var query = {}
-
-    if(req.params.valid != "all"){
-        query = {
-            'call_date': {
-                '$gte': new Date(req.params.sdate), '$lt': new Date(req.params.edate)
-            },
-            'valid': req.params.valid
-        }
-    }else{
-        query = {
+    var query = {
             'call_date': {
                 '$gte': new Date(req.params.sdate), '$lt': new Date(req.params.edate)
             }
-        }
+    };
+
+    if(req.params.valid != "all"){
+        query.valid = req.params.valid
     }
+    
     MediatedCall.find(query, {},
-                      {skip: (numpage-1) * perpage, limit: perpage, sort: {call_date: 'asc'}}, function(err, mc){
+                      {
+                          skip: (numpage-1) * perpage,
+                          limit: perpage,
+                          sort: {call_date: 'asc'}
+                      }, function(err, mc){
                           if(err){
                               console.log(err)
                           }
@@ -486,9 +499,12 @@ exports.mediation_page = function(req, res){
 };
 /* ############## calls ################## */
 
-exports.calls_page = function(req, res){
-    res.render('calls', {
-	title: "pyGreedy - Rated Calls"
+exports.rating_mainpage = function(req, res){
+    Account.find({}, "name id", {sort: { name: 'asc'}}, function(err, accounts){
+        res.render('rating_main', {
+	    title: "pyGreedy - Rating",
+            accounts: accounts
+        });
     });
 };
 
