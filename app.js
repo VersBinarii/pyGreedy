@@ -1,8 +1,7 @@
 /**
  * Module dependencies.
  */
-require('./models/db');//must be called before routes
-var pdf = require('./lib/pdf.js');
+
 var express = require('express');
 var engine = require( 'ejs-locals' );
 var http = require('http');
@@ -13,9 +12,10 @@ var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
 var errorHandler = require('errorhandler');
-
 var app = express();
-var routes = require('./routes');
+var mongoose = require('mongoose');
+
+var db = mongoose.connect(require('./config/database').url);
 
 // all environments
 app.set('port', process.env.PORT || 3000);
@@ -38,55 +38,27 @@ if ('development' == app.get('env')) {
 }
 
 /* root */
-app.get('/', routes.index);
+app.get('/', function(req, res){
+    res.render('index', {
+	title: "pyGreedy"
+    });
+});
 
-/* account */
-app.get('/accountpage', routes.acc_mainpage);
-app.get('/accdestroy/:id', routes.acc_destroy);
-app.get('/accedit/:id', routes.acc_edit);
-app.post('/acccreate', routes.acc_create);
-app.post('/accupdate/:id', routes.acc_update);
+// Number handler
+require('./routes/routeNumbers')(app, { 'mongoose': mongoose, 'db': db });
+// Ratesheet
+require('./routes/routeRatesheet')(app, { 'mongoose': mongoose, 'db': db });
+// Account handler
+//has to be after Ratesheet so the Ratesheet Schema is compiled first
+require('./routes/routeAccount')(app, { 'mongoose': mongoose, 'db': db });
+// Mediation
+require('./routes/routeMediation')(app, { 'mongoose': mongoose, 'db': db });
+// Region/Zones
+require('./routes/routeRegion')(app, { 'mongoose': mongoose, 'db': db });
+require('./routes/routeZone')(app, { 'mongoose': mongoose, 'db': db });
 
-/* numbers */
-app.get('/numberpage', routes.num_mainpage);
-app.get('/numdestroy/:id/:last', routes.num_destroy);
-app.post('/numbercreate', routes.num_create);
-app.post('/numfind', routes.num_find);
-
-/* ratesheets */
-app.get('/ratesheetpage', routes.rs_mainpage);
-app.post('/rsshow', routes.rs_rsshow);
-app.post('/rscreate', routes.rs_rscreate);
-app.post('/rsaddrate/:id', routes.rs_addrate);
-app.get('/rsdelrate/:id', routes.rs_delrate);
-app.post('/rsdelratesheet', routes.rs_delratesheet);
-
-/* region/zones */
-app.get('/zoneview', routes.zone_view)
-app.post('/zonecreate', routes.zone_create)
-app.post('/zoneupdate/:id', routes.zone_update)
-app.get('/zonedestroy/:id', routes.zone_destroy)
-app.post('/regioncreate', routes.region_create)
-app.post('/regionupdate/:id', routes.region_update)
-app.get('/regiondestroy/:id', routes.region_destroy)
-
-/* mediation */
-app.get('/mediation', routes.mediation_main)
-app.post('/mediation_show/:perpage/:numpage', routes.mediation_show)
-app.post('/mediation_update/:perpage/:numpage/:id/:sdate/:edate/:valid', routes.mediation_update)
-app.get('/mediation_page/:perpage/:numpage/:sdate/:edate/:valid', routes.mediation_page)
-
-/* rating */
-app.get('/rating', routes.rating_mainpage);
-
-/* PDF bill generation stuff */
-//pdf.html_to_pdf('http://localhost:3000/mediation_page/50/3/2015-07-01/2015-07-30/all', "htm_test.pdf");
-pdf.html_to_pdf('http://localhost:3000/user_bill/50dsdd/2015-07-01/2015-07-30/', "htm_test.pdf");
-app.get('/user_bill/:acc_id/:sdate/:edate', routes.user_bill);
-
-
-/* system */
-//app.get('/settingspage', routes.index);
+// Rating
+require('./routes/routeRating')(app, { 'mongoose': mongoose, 'db': db });
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
