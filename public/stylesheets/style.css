@@ -15,3 +15,38 @@ ul.pagination > .active > a {
     background-color: #c8c8c8;
     border-color: #c8c8c8;
 }
+
+
+
+.modal-window {
+    position: fixed;
+    font-family: Arial, Helvetica, sans-serif;
+    height: auto;
+    width: auto;
+    right: 50px;
+    top: 50px;
+    z-index: 100;
+    background: rgba(0,0,0,0.8);
+    opacity: 0;
+    -webkit-transition: opacity 400ms ease-in;
+    -moz-transition: opacity 400ms ease-in;
+    transition: opacity 400ms ease-in;
+    pointer-events: none;
+    border-radius: 25px;
+    padding: 5px;
+}
+
+.modal-header{
+    height: 20%;
+    text-align: center;
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+}
+
+.modal-body{
+    height: 80%;
+    background-color: #9c9c9c;
+    border-bottom-left-radius: 25px;
+    border-bottom-right-radius: 25px;
+}
+

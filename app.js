@@ -40,15 +40,18 @@ if ('development' == app.get('env')) {
 /* root */
 app.get('/', function(req, res){
     res.render('index', {
-	title: "pyGreedy"
+	ctx: {
+            title: "pyGreedy",
+            error: null
+        }
     });
 });
 
-// Number handler
+// Numbers
 require('./routes/routeNumbers')(app, { 'mongoose': mongoose, 'db': db });
-// Ratesheet
+// Ratesheets
 require('./routes/routeRatesheet')(app, { 'mongoose': mongoose, 'db': db });
-// Account handler
+// Account
 //has to be after Ratesheet so the Ratesheet Schema is compiled first
 require('./routes/routeAccount')(app, { 'mongoose': mongoose, 'db': db });
 // Mediation
@@ -56,7 +59,6 @@ require('./routes/routeMediation')(app, { 'mongoose': mongoose, 'db': db });
 // Region/Zones
 require('./routes/routeRegion')(app, { 'mongoose': mongoose, 'db': db });
 require('./routes/routeZone')(app, { 'mongoose': mongoose, 'db': db });
-
 // Rating
 require('./routes/routeRating')(app, { 'mongoose': mongoose, 'db': db });
 

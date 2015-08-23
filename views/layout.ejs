@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= title %></title>
+    <title><%= ctx.title %></title>
     
     <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
     <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="/javascripts/safety.js"></script>
     <script type="text/javascript" src="/javascripts/paging.js"></script>
+    <script type="text/javascript" src="/javascripts/update.js"></script>
 
     <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css' />
     <link rel='stylesheet' href='/stylesheets/style.css' />
@@ -16,7 +17,7 @@
       <nav class="navbar navbar-inverse navbar-fixed-top">
 	<div class="container-fluid">
 	  <div class="navbar-header col-md-3">
-	    <a class="navbar-brand" href="/dashboard"><%= title %></a>
+	    <a class="navbar-brand" href="/dashboard"><%= ctx.title %></a>
 	  </div>
 	  
 	  <!-- Collect the nav links, forms, and other content for toggling -->
@@ -42,5 +43,18 @@
     <footer class="footer navbar-fixed-bottom">
       <div class="container"><p>CatzRulzDev &#169;</p></div>
     </footer>
+    <div class="modal-window" id="modal-window">
+      <div class="modal-header" id="modal-header">
+      </div>
+      <div class="modal-body" id="modal-body">
+      </div>
+    </div>
   </body>
+  <script>
+    $(document).ready(function(e){
+    var update = <%- JSON.stringify(ctx.update) %>;
+    render_update(update);
+    });
+    
+  </script>
 </html>

@@ -29,13 +29,13 @@
 	    </tr>
 	  </thead>
 	  <%
-	     if(numbers){
-	     numbers.forEach(function(num){
+	     if(ctx.nums){
+	     ctx.nums.forEach(function(num){
 	     %>
 	  <tr>
 	    <th><%= num.number %></th>
 	    <th><%= num.account %></th>
-	    <th><a class="btn btn-danger" href="/numdestroy/<%= num._id %>/<%= lastsearch %>">Delete</a></th>
+	    <th><a class="btn btn-danger" href="/numdestroy/<%= num._id %>">Delete</a></th>
 	  </tr>
 	  <% }); }; %>
 	</table>

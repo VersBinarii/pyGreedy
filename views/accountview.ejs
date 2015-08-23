@@ -7,7 +7,7 @@
 	<div class="page-header">
 	  <h3>Accounts<small> list</small></h3>
 	</div>
-	<% accounts.forEach(function(acc){ %>
+	<% ctx.accounts.forEach(function(acc){ %>
 	<p>
 	  <span>
 	    <a href="/accedit/<%= acc._id %>" title="Edit"><%= acc.name %></a>
@@ -51,7 +51,7 @@
 	    <div class="col-sm-5">
 	      <select class="form-control" name="ratesheet">
 		<option value="" selected >Select ratesheet</option>
-		<% ratesheets.forEach(function(rs){ %>
+		<% ctx.ratesheets.forEach(function(rs){ %>
 		<option value="<%= rs.name  %>"><%= rs.name  %></option> 
 		<% }); %>
 	      </select>
