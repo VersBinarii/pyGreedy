@@ -7,7 +7,7 @@
 	<div class="page-header">
 	  <h2>Add rate <small>for a destination</small></h2>
 	</div>
-	<form action="/rsaddrate/<%= ratesheet._id %>" method="post" accept-charset="utf-8" class="form-horizontal" role="form" id="add_rs">
+	<form action="/rsaddrate/<%= ctx.ratesheet._id %>" method="post" accept-charset="utf-8" class="form-horizontal" role="form" id="add_rs">
 	  <div class="form-group">
 	    <label class="control-label col-sm-2" for="cc">CC</label>
 	    <div class="col-sm-9">
@@ -60,7 +60,7 @@
 	    <div class="col-sm-9">
               <select class="form-control" name="zone" id="zone" form="add_rs">
                 <option value="">Select zone</option>
-                <% zones.forEach(function(zone){ %>
+                <% ctx.zones.forEach(function(zone){ %>
                 <option value="<%= zone._id %>"><%= zone.name  %></option>
                 <% }); %>
               </select>
@@ -78,7 +78,7 @@
     <div class="col-sm-9">
       <div class="wall">
 	<div class="page-header">
-	  <h2><%= ratesheet.name  %> <small><%= ratesheet.rstype %></small></h2>
+	  <h2><%= ctx.ratesheet.name  %> <small><%= ctx.ratesheet.rstype %></small></h2>
 	</div>
 	<table class="table table-condensed" style="height:100%;overflow:scroll">
 	  <thead>
@@ -95,7 +95,7 @@
 	    </tr>
 	  </thead>
 	  <tbody>
-	    <% ratesheet.rs.forEach(function(rs){ %>
+	    <% ctx.ratesheet.rs.forEach(function(rs){ %>
 	    <tr>
 	      <th><%= rs.cc %></th>
 	      <th><%= rs.number %></th>
@@ -106,7 +106,7 @@
 	      <th><%= rs.wknd %></th>
 	      <th><%= rs.zone.name %></th>
 	      <th>
-		<a href="/rsdelrate/<%= ratesheet._id %>:<%= rs._id %>" class="btn btn-danger">Delete</a>
+		<a href="/rsdelrate/<%= ctx.ratesheet._id %>/<%= rs._id %>" class="btn btn-danger">Delete</a>
 	      </th>
 	    </tr>
 	    <% }); %>

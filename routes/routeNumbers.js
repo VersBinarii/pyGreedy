@@ -1,4 +1,7 @@
+'use strict'
+
 module.exports = function(app, dbstuff){
+    var eh = require('../lib/errorHelper');
     var mongoose = dbstuff.mongoose;
     var Schema = mongoose.Schema;
     var db = dbstuff.db;
@@ -12,11 +15,8 @@ module.exports = function(app, dbstuff){
             Number.find({account: id},
                         function(err, nums){
                             if(err){
-                                req.session.update = {
-                                    type: "Warning",
-                                    message: "There was a problem querying the number collection",
-                                    raw_err: err
-                                }
+                                update = eh.set_warning("There was a problem querying the number collection",
+                                                        err);
                             }
                             res.render('numberview', {
 	                        ctx: {
@@ -39,44 +39,30 @@ module.exports = function(app, dbstuff){
     });
     
     app.get('/numdestroy/:id', function(req, res){
-        var update = req.query.update;
         Number.findById(req.params.id, function(err, num){
             if(err){
-                req.session.update = {
-                    type: "Warning",
-                    message: "Cannot find this number in db.",
-                    raw_err: err
-                }
+                req.session.update = eh.set_warning("Cannot find this number in db.",
+                                                    err);
             }
 	    num.remove(function(err, num){
                 if(err){
-                    req.session.update = {
-                        type: "Error",
-                        message: "There was a problem deleting the number",
-                        raw_err: err
-                    }
+                    req.session.update = eh.set_error("There was a problem deleting the number",
+                                                      err);
                 }else{
-                    req.session.update = {
-                        type: "Info",
-                        message: num.number + " removed!",
-                        raw_err: err
-                    }
+                    req.session.update = eh.set_info(num.number + " removed!",
+                                                     err);
                 }
                 res.redirect('/numberpage/'+num.account);
 	    });
         });
-        delete req.query.update;
     });
 
     app.post('/numbercreate', function(req, res){
         var NumberList = [];
         var number = req.body.number;
         if(/[a-z]/i.test(number)){
-            req.session.update = {
-                type: "Warning",
-                message: "There was a problem deleting the user",
-                raw_err: err
-            }
+            req.session.update = eh.set_warning("There was a problem deleting the user",
+                                                err);
             res.redirect('/numberpage/'+number.account);
         }
         if(number.indexOf("-") > -1){
@@ -105,17 +91,11 @@ module.exports = function(app, dbstuff){
         /* and bulk insert */
 	Number.collection.insert(NumberList, function(err){
 	    if(err){
-		req.session.update = {
-                    type: "Error",
-                    message: "There was a problem with inserting the range",
-                    raw_err: err
-                }
+		req.session.update = eh.set_error("There was a problem with inserting the range",
+                                                  err);
                 res.redirect('/numberpage/');
 	    }else{
-                req.session.update = {
-                    type: "Info",
-                    message: "Numbers added",
-                }
+                req.session.update = eh.set_info("Numbers added");
 	        res.redirect('/numberpage/'+req.body.account);
             }
 	});
@@ -127,11 +107,8 @@ module.exports = function(app, dbstuff){
 	    $or: [{number: new RegExp(req.body.search, "i")}, {account: req.body.search}]
         },function(err, nums){
 	    if(err){
-	        update = {
-                    type: "Warning",
-                    message: "Cannot find it",
-                    raw_err: err
-                }
+	        update = eh.set_warning("Cannot find it",
+                                        err);
 	    }
             res.render('numberview', {
 	        ctx: {

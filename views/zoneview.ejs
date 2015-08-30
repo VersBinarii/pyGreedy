@@ -27,7 +27,7 @@
 	      </tr>
 	    </theader>
 	    <tbody>
-	      <% zones.forEach(function(zone){ %>
+	      <% ctx.zones.forEach(function(zone){ %>
 	      <form action="/zoneupdate/<%= zone._id %>" method="post" accept-charset="utf-8" class="form-inline" role="form" id="zoneupdate">
 		<tr>
 		  <th class="col-sm-1"><input type="text" class="form-control" name="zoneid" value="<%= zone.zone_id %>"/></th>
@@ -67,7 +67,7 @@
 	      </tr>
 	    </theader>
 	    <tbody>
-	      <% regions.forEach(function(region){ %>
+	      <% ctx.regions.forEach(function(region){ %>
 	      <form action="/regionupdate/<%= region._id %>" method="post" accept-charset="utf-8" class="form-inline" role="form" id="regionupdate">
 		<tr>
 		  <th class="col-sm-1"><input type="text" class="form-control" name="regionid" value="<%= region.region_id %>"/></th>

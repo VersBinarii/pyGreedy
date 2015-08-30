@@ -6,17 +6,17 @@
     <div class="row-fluid">
       <div class="col-md-offset-1">
         <div class="well-sm">
-	  <form action="/mediation_show/<%= state.perpage %>/<%= state.numpage %>" method="post" accept-charset="utf-8" class="form-inline" role="form">
+	  <form action="/mediation_show/<%= ctx.state.perpage %>/<%= ctx.state.numpage %>" method="post" accept-charset="utf-8" class="form-inline" role="form">
 	    <div class="form-group">
 	      <label class="control-label col-md-3" for="sdate">Start of billing</label>
 	      <div class="col-md-3">
-	        <input type="text" name="sdate" id="sdate" class="form-control" value="<%= state.sdate %>" placeholder="YYYY-MM-DD"/>
+	        <input type="text" name="sdate" id="sdate" class="form-control" value="<%= ctx.state.sdate %>" placeholder="YYYY-MM-DD"/>
 	      </div>
 	    </div>
 	    <div class="form-group">
 	      <label class="control-label col-md-3" for="edate">End of billing</label>
 	      <div class="col-md-3">
-	        <input type="text" name="edate" id="edate" class="form-control" value="<%= state.edate %>" placeholder="YYYY-MM-DD"/>
+	        <input type="text" name="edate" id="edate" class="form-control" value="<%= ctx.state.edate %>" placeholder="YYYY-MM-DD"/>
 	      </div>
 	    </div>
             
@@ -41,7 +41,7 @@
       </div>
     </div><!-- row fluid end -->
     
-    <% if(mediatedcalls.length > 0){ %>
+    <% if(ctx.mediatedcalls.length > 0){ %>
     <div class="row-fluid">
       <div class="col-md-10">
         <table class="table table-condensed col-md-offset-1">
@@ -53,16 +53,15 @@
 	    </theader>
 	  <tbody>
 	    <%
-	       mediatedcalls.forEach(function(mc, index){
+	       ctx.mediatedcalls.forEach(function(mc, index){
 	       if(mc.valid){
 	       %>
 	    <tr class="success">
 	      <% }else{ %>
 	    <tr class="danger">
 	      <% } %>
-              <form action="/mediation_update/<%= state.perpage %>/<%= state.numpage %>/<%= mc._id %>/<%= state.sdate %>/<%= state.edate %>/<%= state.valid %>" \
-                    method="post" accept-charset="utf-8" role="form">
-	        <th><%= state.perpage *(state.numpage-1)+(index+1) %></th>
+              <form action="/mediation_update/<%= ctx.state.perpage %>/<%= ctx.state.numpage %>/<%= mc._id %>/<%= ctx.state.sdate %>/<%= ctx.state.edate %>/<%= ctx.state.valid %>" method="post" accept-charset="utf-8" role="form">
+	        <th><%= ctx.state.perpage *(ctx.state.numpage-1)+(index+1) %></th>
 	        <th><%= mc.call_date.toISOString().replace(/T/, ' ').replace(/\..+/, '') %></th>
 	        <th><%= mc.length %></th>
 	        <th><%= mc.calling_num %></th>
@@ -97,7 +96,7 @@
 </div>
 <script>
   $(document).ready(function(e){
-  var sd = <%- JSON.stringify(state) %>;
+  var sd = <%- JSON.stringify(ctx.state) %>;
   /*
   TODO: Set the upper limit on pagination
   */

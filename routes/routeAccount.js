@@ -1,4 +1,5 @@
 module.exports = function(app, dbstuff){
+    var eh = require('../lib/errorHelper');
     var mongoose = dbstuff.mongoose;
     var Schema = mongoose.Schema;
     var db = dbstuff.db;
@@ -40,24 +41,15 @@ module.exports = function(app, dbstuff){
     app.get('/accdestroy/:id', function (req, res ){
         Account.findById(req.params.id, function(err, acc){
             if(err){
-                req.session.update = {
-                    type: "Warning",
-                    message: "Cannot find this user in DB",
-                    raw_err: err
-                }
+                req.session.update = eh.set_error("Cannot find this user in DB",
+                                                  err);
             }
 	    acc.remove(function(err, acc){
                 if(err){
-                    req.session.update = {
-                        type: "Warning",
-                        message: "There was a problem deleting the user",
-                        raw_err: err
-                    }
+                    req.session.update = eh.set_err("There was a problem deleting the user",
+                                                    err);
                 }else{
-                    req.session.update = {
-                        type: "Info",
-                        message: "User successfully deleted"
-                    }
+                    req.session.update = eh.set_info("User successfully deleted");
                 }
 	        res.redirect('/accountpage');
 	    });
@@ -118,16 +110,11 @@ module.exports = function(app, dbstuff){
 	    updated : Date.now()
         }).save(function(err){
             if(err){
-                req.session.update = {
-                    type: "Error",
-                    message: "There was a problem adding account"
-                }
+                req.session.update = eh.set_error("There was a problem adding account",
+                                                  err);
             }
             else{
-                req.session.update = {
-                    type: "Info",
-                    message: "Account added"
-                }
+                req.session.update = eh.set_info("Account added");
             }
 	    res.redirect('/accountpage');
         });
@@ -136,10 +123,8 @@ module.exports = function(app, dbstuff){
     app.post('/accupdate/:id', function(req, res){
         Account.findById(req.params.id, function(err, acc){
             if(err){
-                req.session.update = {
-                    type: "Error",
-                    message: "There was a problem accessing the account data"
-                }
+                req.session.update = eh.set_error("There was a problem accessing the account data",
+                                                  err);
             }
             
 	    acc.name = req.body.name;
@@ -148,17 +133,12 @@ module.exports = function(app, dbstuff){
 	    acc.ratesheet = req.body.ratesheet;
 	    acc.discount = req.body.discount;
 	    acc.updated = Date.now();
-	    acc.save(function(err, acc){
+	    acc.save(function(err){
                 if(err){
-                    req.session.update = {
-                        type: "Error",
-                        message: "There was a problem updating account"
-                    }
+                    req.session.update = eh.set_error("There was a problem updating account",
+                                                      err);
                 }else{
-                    req.session.update = {
-                        type: "Info",
-                        message: "Account updated"
-                    }
+                    req.session.update = eh.set_info("Account updated");
                 }
 	        res.redirect('/accedit/'+acc._id);
 	    });

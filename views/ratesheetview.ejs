@@ -13,8 +13,8 @@
 	    <div class="col-sm-9">
 	      <select class="form-control" name="ratesheet" id="ratesheet" form="rsshow">
 		<option value="">Select ratesheet</option>
-		<% ratesheets.forEach(function(rs){ %>
-		<option value="<%= rs.name  %>"><%= rs.name  %></option> 
+		<% ctx.ratesheets.forEach(function(rs){ %>
+		<option value="<%= rs._id  %>"><%= rs.name  %></option> 
 		<% }); %>
 	      </select>
 	    </div>
@@ -68,7 +68,7 @@
 	    <div class="col-sm-9">
 	      <select class="form-control" name="rsid" id="rsid" form="delratesheet">
 		<option value="">Select ratesheet</option>
-		<% ratesheets.forEach(function(rs){ %>
+		<% ctx.ratesheets.forEach(function(rs){ %>
 		<option value="<%= rs._id  %>"><%= rs.name  %></option> 
 		<% }); %>
 	      </select>

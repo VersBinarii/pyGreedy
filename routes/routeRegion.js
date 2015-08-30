@@ -9,7 +9,12 @@ module.exports = function(app, dbstuff){
         new Region({
 	    region_id: req.body.regionid,
 	    name: req.body.regionname,
-        }).save(function(err, region){
+        }).save(function(err){
+            if(err){
+                req.session.update = eh.set_error("Failed to create region", err);
+            }else{
+                req.session.update = eh.set_info("Region updated");
+            }
 	    res.redirect('/zoneview');
         });
     });
@@ -18,7 +23,12 @@ module.exports = function(app, dbstuff){
         Region.findById(req.params.id,function(err, region){
 	    region.region_id = req.body.regionid;
 	    region.name = req.body.regionname;
-	    region.save(function(err, region){
+	    region.save(function(err){
+                if(err){
+                    req.session.update = eh.set_error("Failed to update region", err);
+                }else{
+                    req.session.update = eh.set_info("Region updated");
+                }
 	        res.redirect('/zoneview');
 	    });
         });
@@ -27,6 +37,11 @@ module.exports = function(app, dbstuff){
     app.get('/regiondestroy/:id', function(req, res){
         Region.findById(req.params.id,function(err, region){
 	    region.remove(function(err, reg){
+                if(err){
+                    req.session.update = eh.set_error("Failed to delete region", err);
+                }else{
+                    req.session.update = eh.set_info("Region deleted");
+                }
 	        res.redirect('/zoneview');
 	    });
         });
