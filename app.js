@@ -61,6 +61,8 @@ require('./routes/routeAccount')(app, { 'mongoose': mongoose, 'db': db });
 require('./routes/routeMediation')(app, { 'mongoose': mongoose, 'db': db });
 // Rating
 require('./routes/routeRating')(app, { 'mongoose': mongoose, 'db': db });
+//Actions
+require('./routes/routeActions')(app, { 'mongoose': mongoose, 'db': db });
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));

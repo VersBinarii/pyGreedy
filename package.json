@@ -16,6 +16,7 @@
 	"method-override":"*",
 	"cookie-parser": "*",
 	"errorhandler": "*",
-        "phantom": "*"
+        "phantom": "*",
+        "multer": "*"
     }
 }

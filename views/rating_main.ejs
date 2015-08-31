@@ -23,7 +23,7 @@
 	<div class="col-md-3">
 	  <select class="form-control" name="account" id="account" form="rated-show">
             <option value="">Select account</option>
-            <% accounts.forEach(function(acc){ %>
+            <% ctx.accounts.forEach(function(acc){ %>
             <option value="<%= acc.id %>"><%= acc.name %></option>
             <% }); %>
           </select>
