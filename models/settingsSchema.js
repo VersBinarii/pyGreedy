@@ -3,16 +3,30 @@ module.exports = function(db){
 }
 
 
-SettingsSchema(){
+function SettingsSchema(){
     var Schema = require('mongoose').Schema;
     
     return new Schema({
-        mediation: {
-            cdr_dir: String
+        billing_process: {
+            running: Boolean,
+            pdf_dir: {
+                type: String, default: "./pdf_out"
+            },
+            csv_dir: {
+                type: String, default: "./csv_out"
+            }
         },
-        bills: {
-            pdf_dir: String,
-            csv_dir: String
+        mediation_process: {
+            running: Boolean,
+            cdr_dir: {
+                type: String, default: "./cdr_in"
+            },
+            frequency: {
+                type: Number, default: "24"
+            },
+        },
+        rating_process: {
+            running: Boolean
         }
     });
 }

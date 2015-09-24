@@ -26,5 +26,5 @@ var render_update = function(update){
     modal_body.innerHTML = update.message
     modal.style.opacity = 100;
 
-    setTimeout(function(){ modal.style.opacity = 0; }, 3000);
+    setTimeout(function(){ modal.style.opacity = 0; }, 3500);
 }
