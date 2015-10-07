@@ -1,52 +1,38 @@
 <% layout( 'layout') -%>
 
 <div class="row-fluid">
-  <div class="col-md-offset-2 col-md-9">
+  <div class="col-md-offset-2 col-md-7">
+
     <div class="well">
-      <h3>Settings</h3>
-      
-      <!-- display settings -->
-      <form action="update_settings" method="post" accept-charset="utf-8" role="form" id="settingsupdate" class="form-inline">
-        <div class="row">
-          <h4>Billing</h4>
-          <div class="col-md-offset-1 col-md-7">
-            <div class="form-group">
-	      <label class="control-label col-md-4" for="settingsupdate">PDF output directory</label>
-	      <div class="col-md-2">
-	        <input type="text" name="bill_pdf_dir" class="form-control" value="<%= ctx.settings.billing_process.pdf_dir %>"/>
-	      </div>
-	    </div>
-            <div class="form-group">
-	      <label class="control-label col-md-4" for="settingsupdate">CSV output directory</label>
-	      <div class="col-md-2">
-	        <input type="text" name="bill_csv_dir" class="form-control" value="<%= ctx.settings.billing_process.csv_dir %>"/>
-	      </div>
-	    </div>
-          </div> <!-- column -->
-        </div><!-- row 1 -->
-        
-        <div class="row">
-          <h4>Mediation</h4>
-          <div class="col-md-offset-1 col-md-7">
-            <div class="form-group">
-	      <label class="control-label col-md-4" for="settingsupdate">CDR input directory</label>
-	      <div class="col-md-2">
-	        <input type="text" name="mediation_cdr_dir" class="form-control" value="<%= ctx.settings.mediation_process.cdr_dir %>"/>
-	      </div>
-	    </div>
-            <div class="form-group">
-	      <label class="control-label col-md-4" for="settingsupdate">CDR scanning frequency</label>
-	      <div class="col-md-2">
-	        <input type="text" name="mediation_frequency" class="form-control" value="<%= ctx.settings.mediation_process.frequency %>"/>
-	      </div>
-	    </div>
-          </div><!-- row 2 -->
-          
-          <div class="row">
-            <h4>Rating</h4>
-            
-          </div><!-- row 3 -->
+      <% ctx.BP.forEach(function(bp){ %>
+      <form action='/update_billing_proc/bp._id' method='post' accept-charset='utf-8' role='form' id='' class=''>
+        <input type="text" class="" name="b_pdf_dir" value="<%= bp.pdf_dir %>"/>
+        <input type="text" class="" name="b_csv_dir" value="<%= bp.csv_dir %>"/>
+        <input type="text" class="" name="b_log_dir" value="<%= bp.log_dir %>"/>
+        <input type="submit" class="btn" value="Edit"/>
       </form>
-      </div>
+      <% }) %>
     </div>
+
+    <div class="well">
+      <% ctx.MP.forEach(function(mp){ %>
+      <form action='/update_mediation_proc/mp._id' method='post' accept-charset='utf-8' role='form' id='' class=''>
+        <input type="text" class="" name="m_cdr_dir" value="<%= mp.cdr_dir %>"/>
+        <input type="text" class="" name="m_frequency" value="<%= mp.frequency %>"/>
+        <input type="text" class="" name="m_log_dir" value="<%= mp.log_dir %>"/>
+        <input type="submit" class="btn" value="Edit"/>
+      </form>
+      <% }) %>
+    </div>
+    
+    <div class="well">
+      <% ctx.RP.forEach(function(rp){ %>
+      <form action='/update_rating_proc/rp._id' method='post' accept-charset='utf-8' role='form' id='' class=''>
+        <input type="text" class="" name="r_log_dir" value="<%= rp.log_dir %>"/>
+        <input type="submit" class="btn" value="Edit"/>
+      </form>
+      <% }) %>
+    </div>
+    
+  </div>
 </div>
