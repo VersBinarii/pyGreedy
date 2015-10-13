@@ -16,7 +16,7 @@ function AccountSchema(){
 	    type: String,
 	    required: true,
         },
-        trunk : {
+        identifier : {
 	    type: String,
 	    required: true,
         },
@@ -28,6 +28,10 @@ function AccountSchema(){
 	    type: String,
 	    required: false,
 	    default: ""
+        },
+        parent_company: {
+            type: String,
+            required: false
         },
         created : Date,
         updated : Date

@@ -1,8 +1,9 @@
 from datetime import datetime, date, time
-
+from gLogger import setLogger
 '''
 Takes raw line from cdr and return a parsed CDR object
 '''
+
 def line_to_cdr(l):
     line = l.rstrip("\n").split(" ")
 
@@ -38,9 +39,15 @@ Reads given file, parsees it and resulted
 CDR are put into the queue.
 '''
 def prepare_raw_calls(filename, queue):
+
+    # Lets start from logger
+    logger = setLogger(logfile="mediation_proc.log")
+
     # Temp container for raw CDRs.
     bucket = {}
-    print "Parsing file: [%s]\n" % filename
+
+    logger.info( "Parsing file: [%s]\n" % filename)
+    
     with open(filename, 'r') as grnti_file:
         for line in grnti_file:
             cdr = line_to_cdr(line)

@@ -1,22 +1,27 @@
 {
-    "name": "application-name",
-    "version": "0.0.1",
-    "private": true,
-    "scripts": {
-	"start": "node app.js"
-    },
-    "dependencies": {
-	"express": "4.13.2",
-	"express-session": "*",
-	"ejs": "*",
-	"ejs-locals": "*",
-	"mongoose": "*",
-	"morgan": "*",
-	"body-parser": "*",
-	"method-override":"*",
-	"cookie-parser": "*",
-	"errorhandler": "*",
-        "phantom": "*",
-        "multer": "*"
-    }
+  "name": "application-name",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "express": "4.13.2",
+    "express-session": "*",
+    "ejs": "*",
+    "ejs-locals": "*",
+    "mongoose": "*",
+    "morgan": "*",
+    "body-parser": "*",
+    "method-override": "*",
+    "cookie-parser": "*",
+    "errorhandler": "*",
+    "phantom": "*",
+    "multer": "*"
+  },
+  "devDependencies": {
+    "mocha": "^2.3.3",
+    "should": "^7.1.0",
+    "supertest": "^1.1.0"
+  }
 }

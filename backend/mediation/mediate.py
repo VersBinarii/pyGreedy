@@ -6,12 +6,17 @@ from Queue import Queue
 
 import CallMediation
 from grnti_parser import prepare_raw_calls
+from gLogger import setLogger
 
 
 def main(argv):
     """Main entry point for the script."""
+
+    # Lets start from logger
+    logger = setLogger(logfile="mediation_proc.log")
+    
     if len(argv) < 2:
-        print "Need to specify the filename"
+        logger.error("Not enough arguments. Dying...")
         return
 
     queue = Queue()
@@ -21,7 +26,7 @@ def main(argv):
         t.start()
 
     # Read whole directy and parse all grnti files.
-    print "Reading directory [%s]\n" % argv[1]
+    logger.info( "Reading directory [%s]\n" % argv[1])
     [prepare_raw_calls(''.join((argv[1], f)), queue)
      for f in os.listdir(argv[1]) if f.startswith("grnti")]
 

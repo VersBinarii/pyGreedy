@@ -8,9 +8,10 @@ module.exports = function(app, dbstuff){
     
     app.get('/accountpage', function (req, res){
         var update = req.session.update;
-        Account.find(function(err, accounts){
+        Account.find({}, {}, {sort: 'name'}, function(err, accounts){
             if(err){
-                res.render('/errors/500', {
+                res.render('errors/error500', {
+                    title: "Error 500",
                     message: "There was a problem querying Account collection",
                     error: err
                 });
@@ -18,7 +19,8 @@ module.exports = function(app, dbstuff){
             }
 	    RatesheetList.find({}, 'name', function (err, ratesheets){
                 if(err){
-                    res.render('/errors/500', {
+                    res.render('errors/error500', {
+                        title: "Error 500",
                         message: "There was a problem querying Ratesheet collection",
                         error: err
                     });
@@ -60,7 +62,8 @@ module.exports = function(app, dbstuff){
         var update = req.session.update;
         Account.findById(req.params.id, function(err, acc){
             if(err){
-                res.render('/errors/500', {
+                res.render('errors/error500', {
+                    title: "Error 500",
                     message: "There was a problem querying Account collection",
                     error: err
                 });
@@ -68,7 +71,8 @@ module.exports = function(app, dbstuff){
             }
 	    RatesheetList.find({rstype: 'ratesheet'},function (err, ratesheets){
                 if(err){
-                    res.render('/errors/500', {
+                    res.render('errors/error500', {
+                        title: "Error 500",
                         message: "There was a problem querying Ratesheet collection",
                         error: err
                     });
@@ -76,7 +80,8 @@ module.exports = function(app, dbstuff){
                 }
 	        RatesheetList.find({rstype: 'discount'}, function (err, discounts){
                     if(err){
-                        res.render('/errors/500', {
+                        res.render('errors/error500', {
+                            title: "Error 500",
                             message: "There was a problem querying for discounts",
                             error: err
                         });
@@ -103,7 +108,7 @@ module.exports = function(app, dbstuff){
 	    id : req.body.id,
 	    name : req.body.name,
 	    sapid : req.body.sapid,
-	    trunk : req.body.trunk,
+	    identifier : req.body.identifier,
 	    ratesheet : req.body.ratesheet,
 	    discount: "",
 	    created : Date.now(),
@@ -129,7 +134,7 @@ module.exports = function(app, dbstuff){
             
 	    acc.name = req.body.name;
 	    acc.sapid = req.body.sapid;
-	    acc.trunk = req.body.trunk;
+	    acc.identifier = req.body.identifier;
 	    acc.ratesheet = req.body.ratesheet;
 	    acc.discount = req.body.discount;
 	    acc.updated = Date.now();

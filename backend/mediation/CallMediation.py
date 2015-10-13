@@ -1,6 +1,7 @@
 import threading
-
 import db_handler
+from gLogger import setLogger
+
 '''
 Takes call tuple (TR, Gx) and finds the type of the call.
 Tuple can be (TR, Gx), (None, Gx) or (TR, None)
@@ -18,6 +19,8 @@ class CallMediation(threading.Thread):
         self.mediatedcalls = self.db.db_get_collection(self.database)
         self.numbers = self.db.db_get_collection(self.database, 'numbers')
         self.accounts = self.db.db_get_collection(self.database, 'accounts')
+        # Lets start from logger
+        logger = setLogger(logfile="mediation_proc.log")
 
     def run(self):
         t_run = True

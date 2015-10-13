@@ -1,3 +1,5 @@
+'use strict'
+
 module.exports = function(db){
     return db.model('Zone', ZoneSchema());
 }
@@ -22,4 +24,3 @@ function ZoneSchema(){
         }
     });
 }
-

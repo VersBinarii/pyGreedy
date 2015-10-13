@@ -3,19 +3,28 @@
 <div class="row">
   <div class="col-sm-12">
     <div class="well">
-      Mediation
-      <form method="post" action="grnti_upload" enctype="multipart/form-data">
-        <div class="form-group">
-          <input type="file" name="grnti_files" multiple>
-          <input type="submit" value="Upload">
-        </div>
-      </form>
+      <div class="page-header">
+        <h3>Mediation control</h3>
+        <a href="/do_mediation" class="btn btn-danger">Start Mediation</a>
+      </div>
     </div>
     <div class="well">
-      Rating
+      <div class="page-header">
+        <h3>Rating control</h3>
+        <a href="/do_rating" class="btn btn-danger">Start Rating</a>
+      </div>
     </div>
     <div class="well">
-      Billing
+      <div class="page-header">
+        <h3>Billing control</h3>
+        <a href="/do_billing" class="btn btn-danger">Start Billing</a>
+      </div>
+    </div>
+    <div class="well">
+      <div class="page-header">
+        <h3>Logging</h3>
+        <a href="/do_logs" class="btn btn-danger">View status</a>
+      </div>
     </div>
   </div>
 </div>

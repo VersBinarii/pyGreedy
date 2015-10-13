@@ -9,8 +9,11 @@ function MediationProcSchema(){
     return new Schema({
 	
         running: Boolean,
+        binary_dir: {
+            type: String, default: "~/pyGreedy/bin/mediation.py"
+        },
         cdr_dir: {
-            type: String, default: "./cdr_in"
+            type: String, default: "~/pyGreedy/cdr_in"
         },
         frequency: {
             type: Number, default: "24"

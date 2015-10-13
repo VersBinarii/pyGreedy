@@ -9,11 +9,14 @@ function BillingProcSchema(){
     return new Schema({
         
         running: Boolean,
+        binary_dir: {
+            type: String, default: "~/pyGreedy/bin/billing.py"
+        },
         pdf_dir: {
-            type: String, default: "./pdf_out"
+            type: String, default: "~/pyGreedy/pdf_out"
         },
         csv_dir: {
-            type: String, default: "./csv_out"
+            type: String, default: "~/pyGreedy/csv_out"
         },
         log_dir: {
             type: String,

@@ -9,6 +9,9 @@ function RatingProcSchema(){
     return new Schema({
        
         running: Boolean,
+        binary_dir: {
+            type: String, default: "~/pyGreedy/bin/rating.py"
+        },
         log_dir: {
             type: String,
             default: "/var/log/pyGreedy/rating.log"

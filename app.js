@@ -15,8 +15,6 @@ var errorHandler = require('errorhandler');
 var app = express();
 var mongoose = require('mongoose');
 
-var db = mongoose.connect(require('./config/database').url);
-
 // all environments
 app.set('port', process.env.PORT || 3000);
 app.engine('ejs', engine);
@@ -32,9 +30,18 @@ app.use(session({secret: 'superdupersecretstuffnobodycancrack',
 		 resave: true}));
 app.use(express.static(path.join(__dirname, '/public')));
 
+var db;
+
+/* use test db during testing */
+if ('tests' == app.get('env')){
+    db = mongoose.connect(require('./config/database').test_db);
+}else{
+    db = mongoose.connect(require('./config/database').production_db);
+}
+
 // development only
 if ('development' == app.get('env')) {
-  app.use(errorHandler());
+    app.use(errorHandler());
 }
 
 /* root */
@@ -66,6 +73,9 @@ require('./routes/routeActions')(app, { 'mongoose': mongoose, 'db': db });
 //Settings
 require('./routes/routeSettings')(app, { 'mongoose': mongoose, 'db': db });
 
-http.createServer(app).listen(app.get('port'), function(){
+var server = http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
 });
+
+/* Needed for unit testing */
+module.exports = server;
