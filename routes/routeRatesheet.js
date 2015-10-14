@@ -27,9 +27,9 @@ module.exports = function(app, dbstuff){
         delete req.session.update;
     });
 
-    app.post('/rsshow', function(req, res){
+    app.get('/ratesheetedit/:rsid', function(req, res){
         RatesheetList
-            .findById(req.body.ratesheet)
+            .findById(req.params.rsid)
             .populate({ path: 'rs'})
             .exec(function(err, ratesheet){
                 if(err){
@@ -37,31 +37,34 @@ module.exports = function(app, dbstuff){
                                                       err);
                 }
                 RatesheetList
-                    .populate(
-                        ratesheet,
-                        {path: 'rs.zone', model: 'Zone'},
-                        function(err, ratesheet){
-                            if(err){
-                                req.session.update = eh.set_error("Problem accessing mongodb",
-                                                                  err);
-                            }
-                            Zone.find({}, 'name', {sort: {name: 'asc'}}, function(err, zones){
-                                if(err){
-                                    req.session.update = eh.set_error("Problem accessing mongodb",
-                                                                      err);
-                                }
-                                res.render('ratesheetedit', {
-                                    ctx: {
-                                        title: "pyGreedy - Ratesheet Edit",
-                                        ratesheet : ratesheet,
-                                        zones: zones,
-                                        update: req.session.update
-                                    }
-                                });
-                            });
-                        });
+                    .populate(ratesheet, {path: 'rs.zone', model: 'Zone'},
+                              function(err, ratesheet){
+                                  if(err){
+                                      req.session.update = eh.set_error("Problem accessing mongodb",
+                                                                        err);
+                                  }
+                                  Zone.find({}, 'name', {sort: {name: 'asc'}}, function(err, zones){
+                                      if(err){
+                                          req.session.update = eh.set_error("Problem accessing mongodb",
+                                                                            err);
+                                      }
+                                      res.render('ratesheetedit', {
+                                          ctx: {
+                                              title: "pyGreedy - Ratesheet Edit",
+                                              ratesheet : ratesheet,
+                                              zones: zones,
+                                              update: req.session.update
+                                          }
+                                      });
+                                  });
+                              });
             });
     });
+
+    app.post('/rsedit', function(req, res){
+        res.redirect('/ratesheetedit/'+req.body.ratesheet);
+    });
+    
     app.post('/rscreate', function(req, res){
         new RatesheetList({
             name : req.body.rsname,
@@ -78,7 +81,7 @@ module.exports = function(app, dbstuff){
         });
     });
     
-    app.post('/rsaddrate/:id', function(req, res){
+    app.post('/rsaddrate/:rsid', function(req, res){
 
         var rs = {
             cc: req.body.cc,
@@ -93,41 +96,20 @@ module.exports = function(app, dbstuff){
 
         RatesheetList
             .findByIdAndUpdate(
-                req.params.id,
+                req.params.rsid,
                 {$push: {'rs': rs}},
                 {safe: true, new: true},
-                function(err, ratesheet){
+                function(err){
                     if(err){
                         req.session.update = eh.set_error("Failed to query Ratesheetlist",
                                                       err);
+                    }else{
+                        //success
                     }
-                    RatesheetList
-                        .populate(
-                            ratesheet,
-                            {path: 'rs.zone', model: 'Zone'},
-                            function(err, ratesheet){
-                                if(err){
-                                    req.session.update = eh.set_error("Failed to query Ratesheetlist",
-                                                                      err);
-                                }
-                                Zone.find({}, 'name', {sort: {name: 'asc'}}, function(err, zones){
-                                    if(err){
-                                        req.session.update = eh.set_error("Failed to query Zone collection.",
-                                                                          err);
-                                    }else{
-                                        req.session.update = eh.set_info("Rate added");
-                                    }
-                                    res.render('ratesheetedit', {
-                                        ctx: {
-                                            title: "pyGreedy - Ratesheet Edit",
-                                            ratesheet : ratesheet,
-                                            zones: zones
-                                        }
-                                    });
-                                });
-                            });
+                    res.redirect('/ratesheetedit/'+req.params.rsid);           
                 });
     });
+    
     app.get('/rsdelrate/:rsid/:rid', function(req, res){
         RatesheetList
             .findByIdAndUpdate(
@@ -138,34 +120,13 @@ module.exports = function(app, dbstuff){
                     if(err){
                         req.session.update = eh.set_error("Failed to query Ratesheet collection",
                                                           err);
+                    }else{
+                        //succes
                     }
-                    RatesheetList
-                        .populate(ratesheet,
-                                  {path: 'rs.zone', model: 'Zone'},
-                                  function(err, ratesheet){
-                                      if(err){
-                                          req.session.update = eh.set_error("Failed to query Ratesheet collection",
-                                                                            err);
-                                      }
-                                      Zone.find({}, 'name', {sort: {name: 'asc'}}, function(err, zones){
-                                          if(err){
-                                              req.session.update = eh.set_error("Failed to query Zones collection",
-                                                                                err);
-                                          }else{
-                                              req.session.update = eh.set_info("Rate removed");
-                                          }
-                                          res.render('ratesheetedit', {
-                                              ctx:{
-                                                  title: "pyGreedy - Ratesheet Edit",
-                                                  ratesheet : ratesheet,
-                                                  zones: zones,
-                                                  update: req.session.update
-                                              }
-                                          });
-                                      });
-                                  });
+                    res.redirect('/ratesheetedit/'+req.params.rsid);                    
                 });
     });
+    
     app.post('/rsdelratesheet', function(req, res){
         RatesheetList.findById(req.body.rsid, function(err, rsl){
             if(err){

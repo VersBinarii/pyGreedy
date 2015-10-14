@@ -69,3 +69,66 @@ describe("Accounts page handling", function(){
     });
 });
 
+/*
+  Now the Ratesheet stuff
+*/
+
+describe("Ratesheet page handling", function(){
+    var server;
+    
+    beforeEach(function(){
+        server = require('../app');
+    });
+    
+    afterEach(function(){
+        server.close();
+    });
+
+    it("Main page", function(){
+        request(server)
+            .get('/ratesheetpage')
+            .expect(200)
+            .expect(function(res){
+                should.exits(res);
+                res.should.have.property('title');
+                res.should.have.property('ratesheets');
+                res.should.have.property('update');
+            })
+            .end(function(err){
+                should.not.exists(err);
+                done();
+            });
+    });
+});
+
+/*
+  Now the Ratesheet stuff
+*/
+
+describe("Ratesheet page handling", function(){
+    var server;
+    
+    beforeEach(function(){
+        server = require('../app');
+    });
+    
+    afterEach(function(){
+        server.close();
+    });
+
+    it("Main page", function(){
+        request(server)
+            .get('/ratesheetpage')
+            .expect(200)
+            .expect(function(res){
+                should.exits(res);
+                res.should.have.property('title');
+                res.should.have.property('ratesheets');
+                res.should.have.property('update');
+            })
+            .end(function(err){
+                should.not.exists(err);
+                done();
+            });
+    });
+});
