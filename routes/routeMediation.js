@@ -20,7 +20,6 @@ module.exports = function(app, dbstuff){
         
         /* if session exists use it */
         if(req.session.state){
-            console.log("Session exists");
             _state = req.session.state;
         }
         
@@ -30,6 +29,7 @@ module.exports = function(app, dbstuff){
                 '$gte': new Date(_state.sdate), '$lt': new Date(_state.edate)
             }
         };
+        
         if(_state.valid != "all"){
             query.valid = _state.valid;
         }

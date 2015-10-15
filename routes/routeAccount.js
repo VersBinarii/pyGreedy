@@ -10,12 +10,12 @@ module.exports = function(app, dbstuff){
         var update = req.session.update;
         Account.find({}, {}, {sort: 'name'}, function(err, accounts){
             if(err){
-                req.session.update = eh.set_err("There was a problem accesing user db",
+                req.session.update = eh.set_error("There was a problem accesing user db",
                                                     err);
             }
 	    RatesheetList.find({}, 'name', function (err, ratesheets){
                 if(err){
-                    req.session.update = eh.set_err("There was a problem accesing ratesheet db",
+                    req.session.update = eh.set_error("There was a problem accesing ratesheet db",
                                                     err);
                 }
                 res.render('accountview', {
@@ -40,7 +40,7 @@ module.exports = function(app, dbstuff){
             }
 	    acc.remove(function(err, acc){
                 if(err){
-                    req.session.update = eh.set_err("There was a problem deleting the user",
+                    req.session.update = eh.set_error("There was a problem deleting the user",
                                                     err);
                 }else{
                     req.session.update = eh.set_info("User successfully deleted");
@@ -54,17 +54,17 @@ module.exports = function(app, dbstuff){
         var update = req.session.update;
         Account.findById(req.params.id, function(err, acc){
             if(err){
-                req.session.update = eh.set_err("There was a problem accessing user db",
+                req.session.update = eh.set_error("There was a problem accessing user db",
                                                     err);
             }
 	    RatesheetList.find({rstype: 'ratesheet'},function (err, ratesheets){
                 if(err){
-                    req.session.update = eh.set_err("There was a problem accessing ratesheet db",
+                    req.session.update = eh.set_error("There was a problem accessing ratesheet db",
                                                     err);
                 }
 	        RatesheetList.find({rstype: 'discount'}, function (err, discounts){
                     if(err){
-                        req.session.update = eh.set_err("There was a problem accessing ratesheet db",
+                        req.session.update = eh.set_error("There was a problem accessing ratesheet db",
                                                     err);
                     }
 		    res.render('accedit', {

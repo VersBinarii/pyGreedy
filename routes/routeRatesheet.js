@@ -103,8 +103,6 @@ module.exports = function(app, dbstuff){
                     if(err){
                         req.session.update = eh.set_error("Failed to query Ratesheetlist",
                                                       err);
-                    }else{
-                        //success
                     }
                     res.redirect('/ratesheetedit/'+req.params.rsid);           
                 });
@@ -121,7 +119,7 @@ module.exports = function(app, dbstuff){
                         req.session.update = eh.set_error("Failed to query Ratesheet collection",
                                                           err);
                     }else{
-                        //succes
+                        req.session.update = eh.set_info("Rate succesfully removed");
                     }
                     res.redirect('/ratesheetedit/'+req.params.rsid);                    
                 });
