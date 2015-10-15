@@ -33,8 +33,6 @@ module.exports = function(app, dbstuff){
         if(_state.valid != "all"){
             query.valid = _state.valid;
         }
-
-        console.log(query);
         
         MediatedCall
             .find(query, {},

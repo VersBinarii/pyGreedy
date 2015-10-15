@@ -10,21 +10,13 @@ module.exports = function(app, dbstuff){
         var update = req.session.update;
         Account.find({}, {}, {sort: 'name'}, function(err, accounts){
             if(err){
-                res.render('errors/error500', {
-                    title: "Error 500",
-                    message: "There was a problem querying Account collection",
-                    error: err
-                });
-                return;
+                req.session.update = eh.set_err("There was a problem accesing user db",
+                                                    err);
             }
 	    RatesheetList.find({}, 'name', function (err, ratesheets){
                 if(err){
-                    res.render('errors/error500', {
-                        title: "Error 500",
-                        message: "There was a problem querying Ratesheet collection",
-                        error: err
-                    });
-                    return;
+                    req.session.update = eh.set_err("There was a problem accesing ratesheet db",
+                                                    err);
                 }
                 res.render('accountview', {
                     ctx: {
@@ -62,30 +54,18 @@ module.exports = function(app, dbstuff){
         var update = req.session.update;
         Account.findById(req.params.id, function(err, acc){
             if(err){
-                res.render('errors/error500', {
-                    title: "Error 500",
-                    message: "There was a problem querying Account collection",
-                    error: err
-                });
-                return;
+                req.session.update = eh.set_err("There was a problem accessing user db",
+                                                    err);
             }
 	    RatesheetList.find({rstype: 'ratesheet'},function (err, ratesheets){
                 if(err){
-                    res.render('errors/error500', {
-                        title: "Error 500",
-                        message: "There was a problem querying Ratesheet collection",
-                        error: err
-                    });
-                    return;
+                    req.session.update = eh.set_err("There was a problem accessing ratesheet db",
+                                                    err);
                 }
 	        RatesheetList.find({rstype: 'discount'}, function (err, discounts){
                     if(err){
-                        res.render('errors/error500', {
-                            title: "Error 500",
-                            message: "There was a problem querying for discounts",
-                            error: err
-                        });
-                        return;
+                        req.session.update = eh.set_err("There was a problem accessing ratesheet db",
+                                                    err);
                     }
 		    res.render('accedit', {
 		        ctx: {

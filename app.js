@@ -33,7 +33,8 @@ app.use(express.static(path.join(__dirname, '/public')));
 var db;
 
 /* use test db during testing */
-if ('tests' == app.get('env')){
+if ('test' == app.get('env')){
+    console.log("Running test db");
     db = mongoose.connect(require('./config/database').test_db);
 }else{
     db = mongoose.connect(require('./config/database').production_db);
@@ -49,7 +50,7 @@ app.get('/', function(req, res){
     res.render('index', {
 	ctx: {
             title: "pyGreedy",
-            error: null
+            update: null
         }
     });
 });

@@ -51,19 +51,15 @@ describe("Accounts page handling", function(){
         server.close();
     });
 
-    it("Main page", function(){
+    it("Accounts Main page", function(done){
         request(server)
             .get('/accountpage')
             .expect(200)
             .expect(function(res){
-                should.exits(res);
-                res.should.have.property('title');
-                res.should.have.property('accounts');
-                res.should.have.property('ratesheets');
-                res.should.have.property('update');
+                should.exist(res);
             })
-            .end(function(err){
-                should.not.exists(err);
+            .end(function(err, res){
+                if (err) return done(err);
                 done();
             });
     });
@@ -84,15 +80,12 @@ describe("Ratesheet page handling", function(){
         server.close();
     });
 
-    it("Main page", function(){
+    it("Ratesheet Main page", function(done){
         request(server)
             .get('/ratesheetpage')
             .expect(200)
             .expect(function(res){
-                should.exits(res);
-                res.should.have.property('title');
-                res.should.have.property('ratesheets');
-                res.should.have.property('update');
+                should.exist(res);
             })
             .end(function(err){
                 should.not.exists(err);
@@ -102,10 +95,10 @@ describe("Ratesheet page handling", function(){
 });
 
 /*
-  Now the Ratesheet stuff
+  Now the Mediation stuff
 */
 
-describe("Ratesheet page handling", function(){
+describe("Mediation page handling", function(){
     var server;
     
     beforeEach(function(){
@@ -116,15 +109,12 @@ describe("Ratesheet page handling", function(){
         server.close();
     });
 
-    it("Main page", function(){
+    it("Mediation Main page", function(done){
         request(server)
-            .get('/ratesheetpage')
+            .get('/mediation')
             .expect(200)
             .expect(function(res){
-                should.exits(res);
-                res.should.have.property('title');
-                res.should.have.property('ratesheets');
-                res.should.have.property('update');
+                should.exist(res);
             })
             .end(function(err){
                 should.not.exists(err);
@@ -132,3 +122,5 @@ describe("Ratesheet page handling", function(){
             });
     });
 });
+
+
