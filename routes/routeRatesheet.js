@@ -9,16 +9,16 @@ module.exports = function(app, dbstuff){
     var RatesheetList = require('../models/ratesheetSchema')(db);
     var Zone = mongoose.model('Zone');
 
-    app.get('/ratesheetpage', function(req, res){
+    app.get('/ratesheets', function(req, res){
         var update = req.session.update;
         RatesheetList.find({}, 'name', {sort: {name: -1}}, function (err, ratesheets){
             if(err){
                 req.session.update = eh.set_error("Problem accessing mongodb",
                                                   err);
             }
-            res.render('ratesheetview', {
+            res.render('ratesheets', {
                 ctx: {
-                    title: "pyGreedy - Ratesheet",
+                    title: "pyGreedy - Ratesheets",
                     ratesheets: ratesheets,
                     update: update
                 }
@@ -48,9 +48,9 @@ module.exports = function(app, dbstuff){
                                           req.session.update = eh.set_error("Problem accessing mongodb",
                                                                             err);
                                       }
-                                      res.render('ratesheetedit', {
+                                      res.render('ratesheet', {
                                           ctx: {
-                                              title: "pyGreedy - Ratesheet Edit",
+                                              title: "pyGreedy - "+ratesheet.name,
                                               ratesheet : ratesheet,
                                               zones: zones,
                                               update: req.session.update
@@ -61,11 +61,11 @@ module.exports = function(app, dbstuff){
             });
     });
 
-    app.post('/rsedit', function(req, res){
+    app.post('/ratesheetedit', function(req, res){
         res.redirect('/ratesheetedit/'+req.body.ratesheet);
     });
     
-    app.post('/rscreate', function(req, res){
+    app.post('/ratesheetcreate', function(req, res){
         new RatesheetList({
             name : req.body.rsname,
             rstype: req.body.ratesheettype,
@@ -77,11 +77,11 @@ module.exports = function(app, dbstuff){
             }else{
                 req.session.update = eh.set_info("Ratesheet \""+rsl.name+"\" created");
             }
-            res.redirect('/ratesheetpage');
+            res.redirect('/ratesheets');
         });
     });
     
-    app.post('/rsaddrate/:rsid', function(req, res){
+    app.post('/ratesheetaddrate/:rsid', function(req, res){
 
         var rs = {
             cc: req.body.cc,
@@ -108,7 +108,7 @@ module.exports = function(app, dbstuff){
                 });
     });
     
-    app.get('/rsdelrate/:rsid/:rid', function(req, res){
+    app.get('/ratesheetdelrate/:rsid/:rid', function(req, res){
         RatesheetList
             .findByIdAndUpdate(
                 req.params.rsid,
@@ -125,7 +125,7 @@ module.exports = function(app, dbstuff){
                 });
     });
     
-    app.post('/rsdelratesheet', function(req, res){
+    app.post('/ratesheetdelete', function(req, res){
         RatesheetList.findById(req.body.rsid, function(err, rsl){
             if(err){
                 req.session.update = eh.set_error("Could not find ratesheet",
@@ -139,7 +139,7 @@ module.exports = function(app, dbstuff){
                 }else{
                     req.session.update = eh.set_info("Ratesheet \""+rsl.name+"\" deleted succesfully");
                 }
-                res.redirect('/ratesheetpage');
+                res.redirect('/ratesheets');
             });
         });
     });

@@ -6,7 +6,7 @@ module.exports = function(app, dbstuff){
     var Account = require('../models/accountSchema')(db);
     var RatesheetList = mongoose.model('RatesheetList');
     
-    app.get('/accountpage', function (req, res){
+    app.get('/accounts', function (req, res){
         var update = req.session.update;
         Account.find({}, {}, {sort: 'name'}, function(err, accounts){
             if(err){
@@ -18,9 +18,9 @@ module.exports = function(app, dbstuff){
                     req.session.update = eh.set_error("There was a problem accesing ratesheet db",
                                                     err);
                 }
-                res.render('accountview', {
+                res.render('accounts', {
                     ctx: {
-                        title: "pyGreedy - Account",
+                        title: "pyGreedy - Accounts",
 		        accounts: accounts,
 		        ratesheets: ratesheets,
                         update: update
@@ -28,11 +28,11 @@ module.exports = function(app, dbstuff){
 	        });
 	    });
         });
-        // then clear the update so its isplayed only once
+        // then clear the update so its displayed only once
         delete req.session.update;
     });
  
-    app.get('/accdestroy/:id', function (req, res ){
+    app.get('/accountdestroy/:id', function (req, res ){
         Account.findById(req.params.id, function(err, acc){
             if(err){
                 req.session.update = eh.set_error("Cannot find this user in DB",
@@ -45,12 +45,12 @@ module.exports = function(app, dbstuff){
                 }else{
                     req.session.update = eh.set_info("User successfully deleted");
                 }
-	        res.redirect('/accountpage');
+	        res.redirect('/accounts');
 	    });
         });
     });
 
-    app.get('/accedit/:id', function(req, res){
+    app.get('/accountedit/:id', function(req, res){
         var update = req.session.update;
         Account.findById(req.params.id, function(err, acc){
             if(err){
@@ -67,7 +67,7 @@ module.exports = function(app, dbstuff){
                         req.session.update = eh.set_error("There was a problem accessing ratesheet db",
                                                     err);
                     }
-		    res.render('accedit', {
+		    res.render('accountedit', {
 		        ctx: {
                             title: 'pyGreedy - Account Edit',
 		            acc : acc,
@@ -83,7 +83,7 @@ module.exports = function(app, dbstuff){
         delete req.session.update;
     });
     
-    app.post('/acccreate', function(req, res){
+    app.post('/accountcreate', function(req, res){
         new Account({
 	    id : req.body.id,
 	    name : req.body.name,
@@ -101,11 +101,11 @@ module.exports = function(app, dbstuff){
             else{
                 req.session.update = eh.set_info("Account added");
             }
-	    res.redirect('/accountpage');
+	    res.redirect('/accounts');
         });
     });
     
-    app.post('/accupdate/:id', function(req, res){
+    app.post('/accountupdate/:id', function(req, res){
         Account.findById(req.params.id, function(err, acc){
             if(err){
                 req.session.update = eh.set_error("There was a problem accessing the account data",
@@ -125,7 +125,7 @@ module.exports = function(app, dbstuff){
                 }else{
                     req.session.update = eh.set_info("Account updated");
                 }
-	        res.redirect('/accedit/'+acc._id);
+	        res.redirect('/accountedit/'+acc._id);
 	    });
         });
     });

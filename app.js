@@ -47,9 +47,9 @@ if ('development' == app.get('env')) {
 
 /* root */
 app.get('/', function(req, res){
-    res.render('index', {
+    res.render('dashboard', {
 	ctx: {
-            title: "pyGreedy",
+            title: "pyGreedy - Dashboard",
             update: null
         }
     });

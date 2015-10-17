@@ -9,7 +9,7 @@ module.exports = function(app, dbstuff){
     var Zone = require('../models/zoneSchema')(db);
     var Region = mongoose.model('Region');
     
-    app.get('/zoneview', function(req, res){
+    app.get('/regions', function(req, res){
         var update = req.session.update;
         console.log(update);
         Zone.find({}, function(err, zones){
@@ -20,7 +20,7 @@ module.exports = function(app, dbstuff){
                 if(err){
                     update = eh.set_error("Could not query Region collection", err);
                 }
-                res.render('zoneview', {
+                res.render('regions', {
 		    ctx:{
                         title: "pyGreedy - Regions/Zones",
 		        zones: zones,

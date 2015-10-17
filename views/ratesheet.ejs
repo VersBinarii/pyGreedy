@@ -7,7 +7,7 @@
 	<div class="page-header">
 	  <h2>Add rate <small>for a destination</small></h2>
 	</div>
-	<form action="/rsaddrate/<%= ctx.ratesheet._id %>" method="post" accept-charset="utf-8" class="form-horizontal" role="form" id="add_rs">
+	<form action="/ratesheetaddrate/<%= ctx.ratesheet._id %>" method="post" accept-charset="utf-8" class="form-horizontal" role="form" id="add_rs">
 	  <div class="form-group">
 	    <label class="control-label col-sm-2" for="cc">CC</label>
 	    <div class="col-sm-9">
@@ -106,7 +106,7 @@
 	      <th><%= rs.wknd %></th>
 	      <th><%= rs.zone.name %></th>
 	      <th>
-		<a href="/rsdelrate/<%= ctx.ratesheet._id %>/<%= rs._id %>" class="btn btn-danger">Delete</a>
+		<a href="/ratesheetdelrate/<%= ctx.ratesheet._id %>/<%= rs._id %>" class="btn btn-danger">Delete</a>
 	      </th>
 	    </tr>
 	    <% }); %>

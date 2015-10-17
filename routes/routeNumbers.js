@@ -8,7 +8,7 @@ module.exports = function(app, dbstuff){
 
     var Number = require('../models/numberSchema')(db);
     
-    app.get('/numberpage/:id?', function(req, res){
+    app.get('/numbers/:id?', function(req, res){
         var update = req.session.update;
         var id = req.params.id;
         if(id){
@@ -18,7 +18,7 @@ module.exports = function(app, dbstuff){
                                 update = eh.set_warning("There was a problem querying the number collection",
                                                         err);
                             }
-                            res.render('numberview', {
+                            res.render('numbers', {
 	                        ctx: {
                                     title: "pyGreedy - Numbers",
 	                            nums: nums,
@@ -28,7 +28,7 @@ module.exports = function(app, dbstuff){
                         });
             return;
         }
-        res.render('numberview', {
+        res.render('numbers', {
 	    ctx: {
                 title: "pyGreedy - Numbers",
 	        nums: null,
@@ -38,7 +38,7 @@ module.exports = function(app, dbstuff){
         delete req.session.update;
     });
     
-    app.get('/numdestroy/:id', function(req, res){
+    app.get('/numberdestroy/:id', function(req, res){
         Number.findById(req.params.id, function(err, num){
             if(err){
                 req.session.update = eh.set_warning("Cannot find this number in db.",
@@ -52,7 +52,7 @@ module.exports = function(app, dbstuff){
                     req.session.update = eh.set_info(num.number + " removed!",
                                                      err);
                 }
-                res.redirect('/numberpage/'+num.account);
+                res.redirect('/numbers/'+num.account);
 	    });
         });
     });
@@ -63,7 +63,7 @@ module.exports = function(app, dbstuff){
         if(/[a-z]/i.test(number)){
             req.session.update = eh.set_warning("There was a problem deleting the user",
                                                 err);
-            res.redirect('/numberpage/'+number.account);
+            res.redirect('/numbers/'+number.account);
         }
         if(number.indexOf("-") > -1){
 	    number = number.split("-");
@@ -93,15 +93,15 @@ module.exports = function(app, dbstuff){
 	    if(err){
 		req.session.update = eh.set_error("There was a problem with inserting the range",
                                                   err);
-                res.redirect('/numberpage/');
+                res.redirect('/numbers/');
 	    }else{
                 req.session.update = eh.set_info("Numbers added");
-	        res.redirect('/numberpage/'+req.body.account);
+	        res.redirect('/numbers/'+req.body.account);
             }
 	});
     });
     
-    app.post('/numfind', function(req, res){
+    app.post('/numberfind', function(req, res){
         var update = null;
         Number.find({
 	    $or: [{number: new RegExp(req.body.search, "i")}, {account: req.body.search}]
@@ -110,7 +110,7 @@ module.exports = function(app, dbstuff){
 	        update = eh.set_warning("Cannot find it",
                                         err);
 	    }
-            res.render('numberview', {
+            res.render('numbers', {
 	        ctx: {
                     title: "pyGreedy - Numbers",
 	            nums: nums,

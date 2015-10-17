@@ -8,7 +8,7 @@
 	<div class="page-header">
 	  <h3>Danger<small> zone</small></h3>
 	</div>
-	<a class="btn btn-danger disabled" id="acc_delete_btn" href="/accdestroy/<%= ctx.acc._id %>" role="button">Delete Account</a>
+	<a class="btn btn-danger disabled" id="acc_delete_btn" href="/accountdestroy/<%= ctx.acc._id %>" role="button">Delete Account</a>
 	<input type="checkbox" id="confirm_account_delete"> Trust me
       </div>
     </div>
@@ -17,7 +17,7 @@
 	<div class="page-header">
 	  <h3>Account<small> edit</small></h3>
 	</div>
-	<form action="/accupdate/<%= ctx.acc._id %>" method="post" accept-charset="utf-8" class="form-horizontal" role="form" id="accupdate">
+	<form action="/accountupdate/<%= ctx.acc._id %>" method="post" accept-charset="utf-8" class="form-horizontal" role="form" id="accupdate">
 	  <div class="form-group">
 	    <label class="control-label col-sm-2" for="id">Id</label>
 	    <div class="col-sm-9">

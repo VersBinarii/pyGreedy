@@ -10,7 +10,7 @@
 	<% ctx.accounts.forEach(function(acc){ %>
 	<p>
 	  <span>
-	    <a href="/accedit/<%= acc._id %>" title="Edit"><%= acc.name %></a>
+	    <a href="/accountedit/<%= acc._id %>" title="Edit"><%= acc.name %></a>
 	  </span>
 	</p>
 	<% }); %>
@@ -21,7 +21,7 @@
 	<div class="page-header">
 	  <h3>Account<small> create</small></h3>
 	</div>
-	<form action="/acccreate" method="post" accept-charset="utf-8" class="form-horizontal" role="form">
+	<form action="/accountcreate" method="post" accept-charset="utf-8" class="form-horizontal" role="form">
 	  <div class="form-group">
 	    <label class="control-label col-sm-2" for="id">Id</label>
 	    <div class="col-sm-5">
