@@ -4,7 +4,7 @@ module.exports = function(app, dbstuff){
     var Schema = mongoose.Schema;
     var db = dbstuff.db;
     var multer  = require('multer')
-    var upload = multer({ dest: './public/' });
+    var upload = multer({ dest: './uploads/' });
     var linereader = require('line-reader');
     
     app.get('/imports', function(req, res){

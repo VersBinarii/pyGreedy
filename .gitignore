@@ -3,3 +3,4 @@ node_modules
 *.pdf
 pyGreedy_dump
 *.log
+uploads/*
