@@ -6,14 +6,14 @@ module.exports = function(app, dbstuff){
     var Schema = mongoose.Schema;
     var db = dbstuff.db;
 
-    var RatesheetList = require('../models/ratesheetSchema')(db);
+    var Ratesheet = require('../models/ratesheetSchema')(db);
     var Zone = mongoose.model('Zone');
 
     app.get('/ratesheets', function(req, res){
         var update = req.session.update;
-        RatesheetList.find({}, 'name', {sort: {name: -1}}, function (err, ratesheets){
+        Ratesheet.find({}, 'name', {sort: {name: -1}}, function (err, ratesheets){
             if(err){
-                req.session.update = eh.set_error("Problem accessing mongodb",
+                update = eh.set_error("Problem accessing mongodb",
                                                   err);
             }
             res.render('ratesheets', {
@@ -28,7 +28,7 @@ module.exports = function(app, dbstuff){
     });
 
     app.get('/ratesheetedit/:rsid', function(req, res){
-        RatesheetList
+        Ratesheet
             .findById(req.params.rsid)
             .populate({ path: 'rs'})
             .exec(function(err, ratesheet){
@@ -36,7 +36,7 @@ module.exports = function(app, dbstuff){
                     req.session.update = eh.set_error("Problem accessing mongodb",
                                                       err);
                 }
-                RatesheetList
+                Ratesheet
                     .populate(ratesheet, {path: 'rs.zone', model: 'Zone'},
                               function(err, ratesheet){
                                   if(err){
@@ -66,7 +66,7 @@ module.exports = function(app, dbstuff){
     });
     
     app.post('/ratesheetcreate', function(req, res){
-        new RatesheetList({
+        new Ratesheet({
             name : req.body.rsname,
             rstype: req.body.ratesheettype,
             rs: []
@@ -94,7 +94,7 @@ module.exports = function(app, dbstuff){
             flatcharge: req.body.flat
         };
 
-        RatesheetList
+        Ratesheet
             .findByIdAndUpdate(
                 req.params.rsid,
                 {$push: {'rs': rs}},
@@ -109,7 +109,7 @@ module.exports = function(app, dbstuff){
     });
     
     app.get('/ratesheetdelrate/:rsid/:rid', function(req, res){
-        RatesheetList
+        Ratesheet
             .findByIdAndUpdate(
                 req.params.rsid,
                 {$pull: {'rs': {'_id': req.params.rid}}},
@@ -126,7 +126,7 @@ module.exports = function(app, dbstuff){
     });
     
     app.post('/ratesheetdelete', function(req, res){
-        RatesheetList.findById(req.body.rsid, function(err, rsl){
+        Ratesheet.findById(req.body.rsid, function(err, rsl){
             if(err){
                 req.session.update = eh.set_error("Could not find ratesheet",
                                                   err);

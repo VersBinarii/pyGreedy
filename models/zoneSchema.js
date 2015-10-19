@@ -10,7 +10,7 @@ function ZoneSchema(){
         
     return new Schema({
         zone_id: {
-	    type: String,
+	    type: Number,
 	    unique: true,
 	    required: true
         },

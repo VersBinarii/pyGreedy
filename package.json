@@ -1,23 +1,25 @@
 {
-  "name": "application-name",
-  "version": "0.0.1",
+  "name": "Mokosh",
+  "version": "0.0.3",
   "private": true,
   "scripts": {
     "start": "node app.js"
   },
   "dependencies": {
-    "express": "4.13.2",
-    "express-session": "*",
-    "ejs": "*",
-    "ejs-locals": "*",
-    "mongoose": "*",
-    "morgan": "*",
     "body-parser": "*",
-    "method-override": "*",
     "cookie-parser": "*",
+    "ejs": "^2.3.4",
+    "ejs-locals": "*",
     "errorhandler": "*",
-    "phantom": "*",
-    "multer": "*"
+    "express": "4.13.2",
+    "express-session": "^1.11.3",
+    "line-reader": "^0.3.0",
+    "method-override": "*",
+    "mongoose": "^4.1.12",
+    "morgan": "*",
+    "multer": "^1.0.6",
+    "phantom": "^0.8.0",
+    "socket.io": "^1.3.7"
   },
   "devDependencies": {
     "mocha": "^2.3.3",

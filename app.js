@@ -14,6 +14,8 @@ var session = require('express-session');
 var errorHandler = require('errorhandler');
 var app = express();
 var mongoose = require('mongoose');
+var server = http.createServer(app);
+var io = require('socket.io')(server);
 
 // all environments
 app.set('port', process.env.PORT || 3000);
@@ -25,9 +27,9 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(methodOverride());
 app.use(cookieParser('your secret here'));
-app.use(session({secret: 'superdupersecretstuffnobodycancrack',
-		 saveUninitialized: true,
-		 resave: true}));
+app.use(session({
+    resave: false, saveUninitialized: true,
+    secret: 'SOMERANDOMSECRETHERE', cookie: { maxAge: 60000 }}));
 app.use(express.static(path.join(__dirname, '/public')));
 
 var db;
@@ -69,14 +71,21 @@ require('./routes/routeAccount')(app, { 'mongoose': mongoose, 'db': db });
 require('./routes/routeMediation')(app, { 'mongoose': mongoose, 'db': db });
 // Rating
 require('./routes/routeRating')(app, { 'mongoose': mongoose, 'db': db });
+/* leave room for billing */
+
 //Actions
 require('./routes/routeActions')(app, { 'mongoose': mongoose, 'db': db });
 //Settings
 require('./routes/routeSettings')(app, { 'mongoose': mongoose, 'db': db });
+//Imports
+require('./routes/routeImport')(app, { 'mongoose': mongoose, 'db': db });
 
-var server = http.createServer(app).listen(app.get('port'), function(){
+
+server.listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
 });
+
+
 
 /* Needed for unit testing */
 module.exports = server;

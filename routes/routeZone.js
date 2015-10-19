@@ -64,7 +64,7 @@ module.exports = function(app, dbstuff){
                     console.log("saved");
                     req.session.update = eh.set_info("Zone updated");
                 }
-	        res.redirect('/zoneview');
+	        res.redirect('/regions');
 	    });
         });
     });
@@ -77,7 +77,7 @@ module.exports = function(app, dbstuff){
                 }else{
                     req.session.update = eh.set_info("Zone created");
                 }
-	        res.redirect('/zoneview');
+	        res.redirect('/regions');
 	    });
         });
     });

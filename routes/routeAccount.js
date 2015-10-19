@@ -4,7 +4,7 @@ module.exports = function(app, dbstuff){
     var Schema = mongoose.Schema;
     var db = dbstuff.db;
     var Account = require('../models/accountSchema')(db);
-    var RatesheetList = mongoose.model('RatesheetList');
+    var Ratesheet = mongoose.model('Ratesheet');
     
     app.get('/accounts', function (req, res){
         var update = req.session.update;
@@ -13,7 +13,7 @@ module.exports = function(app, dbstuff){
                 req.session.update = eh.set_error("There was a problem accesing user db",
                                                     err);
             }
-	    RatesheetList.find({}, 'name', function (err, ratesheets){
+	    Ratesheet.find({}, 'name', function (err, ratesheets){
                 if(err){
                     req.session.update = eh.set_error("There was a problem accesing ratesheet db",
                                                     err);
@@ -57,12 +57,12 @@ module.exports = function(app, dbstuff){
                 req.session.update = eh.set_error("There was a problem accessing user db",
                                                     err);
             }
-	    RatesheetList.find({rstype: 'ratesheet'},function (err, ratesheets){
+	    Ratesheet.find({rstype: 'ratesheet'},function (err, ratesheets){
                 if(err){
                     req.session.update = eh.set_error("There was a problem accessing ratesheet db",
                                                     err);
                 }
-	        RatesheetList.find({rstype: 'discount'}, function (err, discounts){
+	        Ratesheet.find({rstype: 'discount'}, function (err, discounts){
                     if(err){
                         req.session.update = eh.set_error("There was a problem accessing ratesheet db",
                                                     err);
@@ -122,6 +122,7 @@ module.exports = function(app, dbstuff){
                 if(err){
                     req.session.update = eh.set_error("There was a problem updating account",
                                                       err);
+                    console.log(err);
                 }else{
                     req.session.update = eh.set_info("Account updated");
                 }

@@ -1,5 +1,5 @@
 module.exports = function(db){
-    return db.model('RatesheetList', RatesheetSchema());
+    return db.model('Ratesheet', RatesheetSchema());
 }
 
 function RatesheetSchema(){
@@ -25,11 +25,7 @@ function RatesheetSchema(){
 	        type: String,
 	        required: true
 	    },
-	    zone: {
-	        type: Schema.Types.ObjectId, ref: 'Zone',
-	        required: true
-	    },
-	    rate_type: {
+	    flatcharge: {
 	        type: String,
 	        required: true
 	    },
@@ -45,8 +41,12 @@ function RatesheetSchema(){
 	        type: String,
 	        required: true
 	    },
-	    flatcharge: {
+            rate_type: {
 	        type: String,
+	        required: true
+	    },
+            zone: {
+	        type: Schema.Types.ObjectId, ref: 'Zone',
 	        required: true
 	    }
         }]
