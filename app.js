@@ -28,7 +28,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(methodOverride());
 app.use(cookieParser('your secret here'));
 app.use(session({
-    resave: false, saveUninitialized: true,
+    resave: true, saveUninitialized: true,
     secret: 'SOMERANDOMSECRETHERE', cookie: { maxAge: 60000 }}));
 app.use(express.static(path.join(__dirname, '/public')));
 

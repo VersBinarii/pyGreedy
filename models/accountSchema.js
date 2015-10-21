@@ -17,7 +17,7 @@ function AccountSchema(){
 	    type: String, required: true
         },
         ratesheet : {
-	    type: String, required: true
+	    type: String, required: false
         },
         discount: {
 	    type: String, required: false, default: ""

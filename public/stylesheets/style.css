@@ -50,3 +50,6 @@ ul.pagination > .active > a {
     border-bottom-right-radius: 25px;
 }
 
+.import-rs-type{
+    display: none;
+}

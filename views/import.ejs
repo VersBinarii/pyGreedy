@@ -12,16 +12,19 @@
     <div class="form-group">
       <input type="file" name="csv_file">
       <input type="checkbox" id="with_header" name="header">Header?
-      <select class="form-control" name="import">
+      <select class="form-control" name="import" id="import-type">
         <option value="">Select data to import</option>
         <option value="account">Account</option>
         <option value="numbers">Numbers</option>
         <option value="ratesheet">Ratesheet</option>
       </select>
-      <select class="form-control" name="rstype">
-        <option value="ratesheet">Ratesheet</option>
-        <option value="discount">Discount</option>
-      </select>
+      <div class="import-rs-type" id="import-rs-type">
+        <select class="form-control" name="rstype">
+          <option value="ratesheet">Ratesheet</option>
+          <option value="discount">Discount</option>
+        </select>
+      </div>
+      
       <input type="submit" value="Import">
     </div>
   </form>
@@ -32,3 +35,9 @@
     </div>
   </div>
 </div>
+
+<script>
+  $(document).ready(function(e){
+  import_rs_show_type();
+  });
+</script>
