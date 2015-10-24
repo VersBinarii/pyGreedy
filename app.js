@@ -57,28 +57,34 @@ app.get('/', function(req, res){
     });
 });
 
+var stuff = {
+    'mongoose': mongoose,
+    'db': db,
+    'io': io
+};
+
 // Numbers
-require('./routes/routeNumbers')(app, { 'mongoose': mongoose, 'db': db });
+require('./routes/routeNumbers')(app, stuff);
 // Region/Zones
-require('./routes/routeRegion')(app, { 'mongoose': mongoose, 'db': db });
-require('./routes/routeZone')(app, { 'mongoose': mongoose, 'db': db });
+require('./routes/routeRegion')(app, stuff);
+require('./routes/routeZone')(app, stuff);
 // Ratesheets
-require('./routes/routeRatesheet')(app, { 'mongoose': mongoose, 'db': db });
+require('./routes/routeRatesheet')(app, stuff);
 // Account
 //has to be after Ratesheet so the Ratesheet Schema is compiled first
-require('./routes/routeAccount')(app, { 'mongoose': mongoose, 'db': db });
+require('./routes/routeAccount')(app, stuff);
 // Mediation
-require('./routes/routeMediation')(app, { 'mongoose': mongoose, 'db': db });
+require('./routes/routeMediation')(app, stuff);
 // Rating
-require('./routes/routeRating')(app, { 'mongoose': mongoose, 'db': db });
+require('./routes/routeRating')(app, stuff);
 /* leave room for billing */
 
 //Actions
-require('./routes/routeActions')(app, { 'mongoose': mongoose, 'db': db });
+require('./routes/routeActions')(app, stuff);
 //Settings
-require('./routes/routeSettings')(app, { 'mongoose': mongoose, 'db': db });
+require('./routes/routeSettings')(app, stuff);
 //Imports
-require('./routes/routeImport')(app, { 'mongoose': mongoose, 'db': db });
+require('./routes/routeImport')(app, stuff);
 
 
 server.listen(app.get('port'), function(){

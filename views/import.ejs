@@ -33,11 +33,16 @@
     <div class="page-header">
       <h2>Output<h2>
     </div>
+    <div class="sock-update" id="sock-update">
+      
+    </div>
   </div>
 </div>
 
 <script>
   $(document).ready(function(e){
   import_rs_show_type();
+  socket_update($('#sock-update'));
+  submit_import($('form'));
   });
 </script>

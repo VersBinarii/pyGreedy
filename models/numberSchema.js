@@ -8,12 +8,11 @@ function NumberSchema(){
     
     return new Schema({
         number: {
-	    type: String,
-	    required: true
+	    type: String, required: true, unique: true, index: true
+            
         },
         account: {
-	    type: String,
-	    required: true
+	    type: String, required: true
         }
     });
 }
