@@ -38,10 +38,7 @@ module.exports = function(app, dbstuff){
                         return;
                     }
                     ratingProc = checkAndInit(_rp, new RatingProc());
-
-                    console.log(ratingProc);
-                    console.log(mediationProc);
-                    console.log(billingProc);
+                    
                     res.render('settings', {
                         ctx: {
                             title: "pyGreedy - Settings",

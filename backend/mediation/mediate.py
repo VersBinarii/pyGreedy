@@ -1,0 +1,63 @@
+"""This will parse specified raw call data,
+normalize them and load them to the mongo database"""
+
+import os
+import argparse
+import logging
+from Queue import Queue
+
+from Mediation import Mediation
+from raw_grnti import prepare_raw_calls
+import dbhandler as db
+
+def main():
+    """Main entry point for the script."""
+
+    parser = argparse.ArgumentParser(description="Cirpack/Airspeed CDR mediation script")
+    parser.add_argument("-i", help="Directory containing all the CDRs", required=True);
+    parser.add_argument("-l", help="Log file directory");
+    args = parser.parse_args()
+    
+    # Lets start from logger
+    LOG = setLogger(logfile=args.l)
+
+    # Tell mongoDB that we are running.
+    dbase = db.connect()
+    db.collection_update(dbase['mediationprocs'],
+                         {'name': "Mediation Process"},
+                         {'$set': {'running': True}})
+    
+    queue = Queue()
+    for i in range(10):
+        t = Mediation(queue, dbase)
+        t.setDaemon(True)
+        t.start()
+
+    # Read whole directy and parse all grnti files.
+    LOG.info( "Reading directory [%s]\n" % args.i)
+    [prepare_raw_calls(''.join((args.i, f)), queue)
+     for f in os.listdir(args.i) if f.startswith("grnti")]
+
+    queue.join()
+
+    db.collection_update(dbase['mediationprocs'],
+                         {'name': "Mediation Process"},
+                         {'$set': {'running': False}})
+    LOG.info("Mediation finished");
+
+def setLogger(logfile="~/pyGreedy/log/mediation.log", progname="pyGreedy"):
+
+    g_logger = logging.getLogger(progname)
+    g_logger.setLevel(logging.INFO)
+
+    # add handler
+    file_handler = logging.FileHandler(logfile)
+    file_handler.setLevel(logging.INFO)
+    
+    g_logger.addHandler(file_handler)
+
+    return g_logger
+    
+
+if __name__ == '__main__':
+    main()

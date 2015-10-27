@@ -9,6 +9,9 @@ function MediationProcSchema(){
     return new Schema({
 	
         running: Boolean,
+        name: {
+            type: String, unique: true, default: "Mediation Process"
+        },
         binary_dir: {
             type: String, default: "~/pyGreedy/bin/mediation.py"
         },

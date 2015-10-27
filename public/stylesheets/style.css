@@ -4,6 +4,10 @@ body {
     font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
+.main-body{
+    min-height: 750px;
+}
+
 a {
   color: #00B7FF;
 }
@@ -45,7 +49,6 @@ ul.pagination > .active > a {
 
 .modal-body{
     height: 80%;
-    background-color: #9c9c9c;
     border-bottom-left-radius: 25px;
     border-bottom-right-radius: 25px;
 }
@@ -53,3 +56,18 @@ ul.pagination > .active > a {
 .import-rs-type{
     display: none;
 }
+
+div#sock-update{
+    display: none;
+    height: 300px;
+    overflow-y: auto;
+}
+
+.page-header{
+    margin: 5px 0px 5px;
+}
+
+.page-header > h2{
+    margin: 0px;
+}
+

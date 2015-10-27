@@ -8,12 +8,33 @@
         <h3>Billing</h3>
       </div>
       <% ctx.BP.forEach(function(bp){ %>
-      <form action='/update_billing_proc/<%= bp._id %>' method='post' accept-charset='utf-8' role='form' id='' class=''>
-        <input type="text" class="" name="b_bin_dir" value="<%= bp.binary_dir %>"/>
-        <input type="text" class="" name="b_pdf_dir" value="<%= bp.pdf_dir %>"/>
-        <input type="text" class="" name="b_csv_dir" value="<%= bp.csv_dir %>"/>
-        <input type="text" class="" name="b_log_dir" value="<%= bp.log_dir %>"/>
-        <input type="submit" class="btn" value="Edit"/>
+      <form action='/update_billing_proc/<%= bp._id %>' method='post' accept-charset='utf-8' role='form' id='' class='form-horizontal'>
+
+        <div class="form-group">
+          <label class="col-md-2 control-label">Bin location</label>
+          <div class="col-md-4">
+          <input type="text" class="form-control" name="b_bin_dir" value="<%= bp.binary_dir %>"/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-md-2 control-label">PDF output location</label>
+          <div class="col-md-4">
+          <input type="text" class="form-control" name="b_pdf_dir" value="<%= bp.pdf_dir %>"/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-md-2 control-label">CSV output location</label>
+          <div class="col-md-4">
+          <input type="text" class="form-control" name="b_csv_dir" value="<%= bp.csv_dir %>"/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-md-2 control-label">Log file location</label>
+          <div class="col-md-4">
+            <input type="text" class="form-control" name="b_log_dir" value="<%= bp.log_dir %>"/>
+          </div>
+        </div>
+        <input type="submit" class="btn btn-default" value="Edit"/>
       </form>
       <% }) %>
     </div>
@@ -23,12 +44,38 @@
         <h3>Mediation</h3>
       </div>
       <% ctx.MP.forEach(function(mp){ %>
-      <form action='/update_mediation_proc/<%= mp._id %>' method='post' accept-charset='utf-8' role='form' id='' class=''>
-        <input type="text" class="" name="m_bin_dir" value="<%= mp.binary_dir %>"/>
-        <input type="text" class="" name="m_cdr_dir" value="<%= mp.cdr_dir %>"/>
-        <input type="text" class="" name="m_frequency" value="<%= mp.frequency %>"/>
-        <input type="text" class="" name="m_log_dir" value="<%= mp.log_dir %>"/>
-        <input type="submit" class="btn" value="Edit"/>
+      <form action='/update_mediation_proc/<%= mp._id %>' method='post' accept-charset='utf-8' role='form' id='' class='form-horizontal'>
+        <div class="form-group">
+          <label class="col-md-2 control-label">Name</label>
+          <div class="col-md-4">
+          <input type="text" class="form-control" name="m_name" value="<%= mp.name %>"/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-md-2 control-label">Bin location</label>
+          <div class="col-md-4">
+          <input type="text" class="form-control" name="m_bin_dir" value="<%= mp.binary_dir %>"/>
+          </div>
+          </div>
+        <div class="form-group">
+          <label class="col-md-2 control-label">CDR location</label>
+          <div class="col-md-4">
+          <input type="text" class="form-control" name="m_cdr_dir" value="<%= mp.cdr_dir %>"/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-md-2 control-label">Process frequency</label>
+          <div class="col-md-4">
+          <input type="text" class="form-control" name="m_frequency" value="<%= mp.frequency %>"/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-md-2 control-label">Log file location</label>
+          <div class="col-md-4">
+          <input type="text" class="form-control" name="m_log_dir" value="<%= mp.log_dir %>"/>
+          </div>
+        </div>
+        <input type="submit" class="btn btn-default" value="Edit"/>
       </form>
       <% }) %>
     </div>
@@ -38,10 +85,20 @@
         <h3>Rating</h3>
       </div>
       <% ctx.RP.forEach(function(rp){ %>
-      <form action='/update_rating_proc/<%= rp._id %>' method='post' accept-charset='utf-8' role='form' id='' class=''>
-        <input type="text" class="" name="r_bin_dir" value="<%= rp.binary_dir %>"/>
-        <input type="text" class="" name="r_log_dir" value="<%= rp.log_dir %>"/>
-        <input type="submit" class="btn" value="Edit"/>
+      <form action='/update_rating_proc/<%= rp._id %>' method='post' accept-charset='utf-8' role='form' id='' class='form-horizontal'>
+        <div class="form-group">
+          <label class="col-md-2 control-label">Bin location</label>
+          <div class="col-md-4">
+            <input type="text" class="form-control" name="r_bin_dir" value="<%= rp.binary_dir %>"/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-md-2 control-label">Log location</label>
+          <div class="col-md-4">
+            <input type="text" class="form-control" name="r_log_dir" value="<%= rp.log_dir %>"/>
+          </div>
+        </div>
+        <input type="submit" class="btn btn-default" value="Edit"/>
       </form>
       <% }) %>
     </div>

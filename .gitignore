@@ -4,3 +4,6 @@ node_modules
 pyGreedy_dump
 *.log
 uploads/*
+logs/*
+cdr_in/*
+*.log

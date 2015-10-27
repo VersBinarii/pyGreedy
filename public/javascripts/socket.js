@@ -1,17 +1,24 @@
 var socket_update = function(div){
     var sock = io.connect('localhost:3000');
+    var shown = false;
     
     sock.on('connect', function(data){
         sock.emit('join', "Client connected");
-        
-        div.text("Client connected");
     });
 
     sock.on('message.update', function(update){
-        div.append('<p>'+update+'</p>');
+        if(!shown){
+            div.show('slow');
+            shown = true;
+        }
+        div.append('<p style="color:green;">'+update+'</p>');
     });
 
     sock.on('message.error', function(update){
+        if(!shown){
+            div.show('slow');
+            shown = true;
+        }
         div.append('<p style="color:red;">'+update+'</p>');
     });
 }

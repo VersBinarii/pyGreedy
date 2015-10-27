@@ -1,12 +1,15 @@
 from datetime import datetime, date, time
-from gLogger import setLogger
+import logging
+
+LOG = logging.getLogger('pyGreedy')
+
 '''
 Takes raw line from cdr and return a parsed CDR object
 '''
 
 def line_to_cdr(l):
     line = l.rstrip("\n").split(" ")
-
+    
     # Extract interesting bits from line.
     d = date(int(line[4][:4]), int(line[4][4:6]), int(line[4][6:]))
     t = time(int(line[5][:2]), int(line[5][2:4]), int(line[5][4:]))
@@ -40,13 +43,8 @@ CDR are put into the queue.
 '''
 def prepare_raw_calls(filename, queue):
 
-    # Lets start from logger
-    logger = setLogger(logfile="mediation_proc.log")
-
     # Temp container for raw CDRs.
     bucket = {}
-
-    logger.info( "Parsing file: [%s]\n" % filename)
     
     with open(filename, 'r') as grnti_file:
         for line in grnti_file:

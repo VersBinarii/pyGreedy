@@ -79,10 +79,12 @@ require('./routes/routeMediation')(app, stuff);
 require('./routes/routeRating')(app, stuff);
 /* leave room for billing */
 
-//Actions
-require('./routes/routeActions')(app, stuff);
 //Settings
 require('./routes/routeSettings')(app, stuff);
+
+//Actions
+require('./routes/routeActions')(app, stuff);
+
 //Imports
 require('./routes/routeImport')(app, stuff);
 

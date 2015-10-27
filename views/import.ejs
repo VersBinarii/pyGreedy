@@ -8,33 +8,43 @@
       If importing the ratesheet it will be named like the import .csv file
     </p>
   </div>
-  <form method="post" action="/import_csv" enctype="multipart/form-data">
+  <form method="post" action="/import_csv" enctype="multipart/form-data" class="form-horizontal">
     <div class="form-group">
-      <input type="file" name="csv_file">
-      <input type="checkbox" id="with_header" name="header">Header?
-      <select class="form-control" name="import" id="import-type">
-        <option value="">Select data to import</option>
-        <option value="account">Account</option>
-        <option value="numbers">Numbers</option>
-        <option value="ratesheet">Ratesheet</option>
-      </select>
-      <div class="import-rs-type" id="import-rs-type">
-        <select class="form-control" name="rstype">
-          <option value="ratesheet">Ratesheet</option>
-          <option value="discount">Discount</option>
-        </select>
+      <div class="col-md-12">
+        <div class="btn btn-file btn-default">
+          <input type="file" name="csv_file">
+        </div>
+        <div class="checkbox-inline">
+          <label><input type="checkbox" id="with_header" name="header">With header?</label>
+        </div>
       </div>
-      
-      <input type="submit" value="Import">
+    </div>
+    <div class="col-md-3">
+      <div class="form-group">
+        <select class="form-control selectpicker" name="import" id="import-type">
+          <option value="">Select data to import</option>
+          <option value="account">Account</option>
+          <option value="numbers">Numbers</option>
+          <option value="ratesheet">Ratesheet</option>
+        </select>
+        <div class="import-rs-type selectpicker" id="import-rs-type">
+          <select class="form-control" name="rstype">
+            <option value="ratesheet">Ratesheet</option>
+            <option value="discount">Discount</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="col-md-offset-1 col-md-8">
+        <input type="submit" value="Import" class="btn btn-default">
+      </div>
     </div>
   </form>
-
-  <div class="well">
-    <div class="page-header">
+  
+  <div class="well sock-update" id="sock-update">
+    <div class="page-header" id="page-header-ovr">
       <h2>Output<h2>
-    </div>
-    <div class="sock-update" id="sock-update">
-      
     </div>
   </div>
 </div>
