@@ -12,13 +12,11 @@ LOG = logging.getLogger('pyGreedy')
 
 class Mediation(threading.Thread):
 
-    def __init__(self, queue, dbase):
+    def __init__(self, queue, database):
         threading.Thread.__init__(self)
         self.queue = queue
-        self.mediatedcalls = dbase['mediatedcalls']
-        self.accounts = dbase['accounts']
-        self.numbers = dbase['numbers']
-
+        self.mdb = database
+        
     def run(self):
         t_run = True
         while t_run:
@@ -60,7 +58,7 @@ class Mediation(threading.Thread):
                 call['valid'] = False
                 call['note'] = "Cannot find call type"
             # Have call so load to db.
-            db.collection_insert(self.mediatedcalls, call)
+            db.coll_save(self.mdb.medcalls, call)
 
         # Only a transit ticket.
         if cdr1 is not None and cdr2 is None:
@@ -73,7 +71,7 @@ class Mediation(threading.Thread):
             }
             # Check for account by trunkname
             trunkname = cdr1['in_trunk'].replace("loop[", "")[:-1]
-            account = db.collection_find(self.accounts,
+            account = db.coll_find(self.mdb.accounts,
                             {'trunk': {'$regex': '*'+trunkname+'*'}})
             if account:
                 call['account_id'] = account
@@ -84,7 +82,7 @@ class Mediation(threading.Thread):
                 call['calltype'] = "?"
                 call['direction'] = "?"
                 call['note'] = "Cannot find account"
-                db.collection_insert(self.mediatedcalls, call)
+                db.coll_save(self.mdb.medcalls, call)
                 return
 
             if cdr1['operator_id'].startswith("WTR_"):
@@ -106,7 +104,7 @@ class Mediation(threading.Thread):
                 call['valid'] = False
                 call['note'] = 'Could not recognize call'
             # Have call so load to db.
-            db.collection_insert(self.mediatedcalls, call)
+            db.coll_save(self.mdb.medcalls, call)
 
         if cdr1 is not None and cdr2 is not None:
             if cdr1['operator_id'].startswith("WLR_") or\
@@ -119,7 +117,7 @@ class Mediation(threading.Thread):
                     'called_num': cdr1['called_num_2'], 'calltype': "WLR"
                 }
                 # Do number lookup to find account.
-                account = db.collection_find(self.numbers,
+                account = db.coll_find(self.mdb.numbers,
                             {"number": cdr1['calling_num_1']})
                 if account:
                     call['account_id'] = account
@@ -130,7 +128,7 @@ class Mediation(threading.Thread):
                     call['valid'] = False
                     call['note'] = 'Cannot find the accout'
                     # Unknown or not we have call so load to db.
-                    db.collection_insert(self.mediatedcalls, call)
+                    db.coll_save(self.mdb.medcalls, call)
                     return
 
             if "IN_18xx" in cdr1['operator_id']:
@@ -163,8 +161,8 @@ class Mediation(threading.Thread):
                 call_carrier['valid'] = True
                 call_carrier['note'] = '18xx Inbound call'
                 # Finally both to db.
-                db.collection_insert(self.mediatedcalls, call_carrier)
-                db.collection_insert(self.mediatedcalls, call_customer)
+                db.coll_save(self.mdb.medcalls, call_carrier)
+                db.coll_save(self.mdb.medcalls, call_customer)
             else:
                 # Dunno what it is so just save to db.
                 # TODO: try find account be calling_number
@@ -176,7 +174,7 @@ class Mediation(threading.Thread):
                     'account_id': "?", 'valid': False,
                     'note': "Cannot identify call type"
                 }
-                db.collection_insert(self.mediatedcalls, call)
+                db.coll_save(self.mdb.medcalls, call)
 
     def is_number_mobile(self, num):
         return num.startswith("83")\

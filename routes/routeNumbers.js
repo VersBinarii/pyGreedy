@@ -3,10 +3,7 @@
 module.exports = function(app, dbstuff){
     var eh = require('../lib/errorHelper');
     var mongoose = dbstuff.mongoose;
-    var Schema = mongoose.Schema;
-    var db = dbstuff.db;
-
-    var Number = require('../models/numberSchema')(db);
+    var Number = mongoose.model('Number');
     
     app.get('/numbers/:id?', function(req, res){
         var update = req.session.update;

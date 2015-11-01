@@ -2,17 +2,20 @@
 
 <div class="row-fluid">
   <div class="col-md-10">
+    
     <div class="col-md-3">
       <!-- danger zone -->
       <div class="well">
 	<div class="page-header">
 	  <h3>Danger<small> zone</small></h3>
 	</div>
-	<a class="btn btn-danger disabled" id="acc_delete_btn" href="/accountdestroy/<%= ctx.acc._id %>" role="button">Delete Account</a>
-	<input type="checkbox" id="confirm_account_delete"> Trust me
+        <input type="checkbox" id="confirm_account_delete"> Trust me
+        <a class="btn btn-danger disabled" id="acc_delete_btn" href="/accountdestroy/<%= ctx.acc._id %>" role="button">Delete Account</a>
       </div>
     </div>
-    <div class="col-md-7">
+    <!-- end of danger zone -->
+
+    <div class="col-md-offset-0 col-md-6">
       <div class="well">
 	<div class="page-header">
 	  <h3>Account<small> edit</small></h3>
@@ -71,21 +74,93 @@
 	      </select>
 	    </div>
 	  </div>
-	  <div class="form-group">
+
+          <div class="form-group">
+	    <label class="control-label col-sm-2">Parent Company</label>
+	    <div class="col-sm-9">
+	      <input type="text" name="parentcompany" class="form-control"
+                     value="<%= ctx.acc.parent_company %>"/>
+	    </div>
+	  </div>
+
+          <div class="form-group">
+	    <label class="control-label col-sm-2">VAT</label>
+	    <div class="col-sm-9">
+	      <input type="text" name="vat" class="form-control"
+                     value="<%= ctx.acc.vat %>"/>
+	    </div>
+	  </div>
+
+          <div class="page-header text-center" id="address-btn">
+            <p class="btn btn-default"><b>Address</b></p>
+          </div>
+          <div class="well" id="address-hide">
+            <div class="form-group">
+	      <label class="control-label col-sm-2">Address 1</label>
+	      <div class="col-sm-9">
+	        <input type="text" name="address1" class="form-control"
+                       value="<%= ctx.acc.address1 %>"/>
+	      </div>
+	    </div>
+            <div class="form-group">
+	      <label class="control-label col-sm-2">Address 2</label>
+	      <div class="col-sm-9">
+	        <input type="text" name="address2" class="form-control"
+                       value="<%= ctx.acc.address2 %>"/>
+	      </div>
+	    </div>
+            <div class="form-group">
+	      <label class="control-label col-sm-2">Address 3</label>
+	      <div class="col-sm-9">
+	        <input type="text" name="address3" class="form-control"
+                       value="<%= ctx.acc.address3 %>"/>
+	      </div>
+	    </div>
+            <div class="form-group">
+	      <label class="control-label col-sm-2">Address 4</label>
+	      <div class="col-sm-9">
+	        <input type="text" name="address4" class="form-control"
+                     value="<%= ctx.acc.address4 %>"/>
+	      </div>
+	    </div>
+            <div class="form-group">
+	      <label class="control-label col-sm-2">Address 5</label>
+	      <div class="col-sm-9">
+	        <input type="text" name="address5" class="form-control"
+                       value="<%= ctx.acc.address5 %>"/>
+	      </div>
+	    </div>
+          </div>
+          <div class="form-group">
 	    <div class="col-sm-offset-2 col-sm-10">
-	      <button type="submit" class="btn btn-default">Edit</button>
+	      <button type="submit" class="btn btn-default">Update</button>
 	    </div>
 	  </div>
 	</form>
       </div><!-- well div -->
     </div>
-  </div> 
+
+    <div class="col-md-offset-0 col-md-3">
+      <div class="well">
+        <div class="page-header">
+          <h3>Account<small> settings</small></h3>
+        </div>
+        <p>
+          <a href="/extracharges/<%= ctx.acc._id %>" class="btn btn-default">Extra Charges</a>
+        </p>
+      </div>
+    </div>
+
+    
+  </div>
 </div><!-- end of row -->
+
 
 <script>
   $(document).ready(function(e){
   
   safe_del_button($('#confirm_account_delete'), $('#acc_delete_btn'));
+  hide_address($('#address-hide'), $('#address-btn'));
   
   });
 </script>

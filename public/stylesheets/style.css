@@ -71,3 +71,6 @@ div#sock-update{
     margin: 0px;
 }
 
+#address-hide{
+    display: none;
+}

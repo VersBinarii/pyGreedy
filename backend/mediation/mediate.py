@@ -13,17 +13,27 @@ import dbhandler as db
 def main():
     """Main entry point for the script."""
 
+    # Setup the argument parser
     parser = argparse.ArgumentParser(description="Cirpack/Airspeed CDR mediation script")
     parser.add_argument("-i", help="Directory containing all the CDRs", required=True);
     parser.add_argument("-l", help="Log file directory");
     args = parser.parse_args()
     
-    # Lets start from logger
+    # Lets start the logger
     LOG = setLogger(logfile=args.l)
 
+    # Connect to Mongodb and reqister the collection we will be using
+    database = db.connect()
+    mongo = {
+        'dbase' : database,
+        'medproc': database['mediationprocs'],
+        'medcalls' : database['mediatedcalls'],
+        'accounts' : database['accounts'],
+        'numbers' : database['numbers']
+    }
     # Tell mongoDB that we are running.
-    dbase = db.connect()
-    db.collection_update(dbase['mediationprocs'],
+    
+    db.coll_update(mongo.medproc,
                          {'name': "Mediation Process"},
                          {'$set': {'running': True}})
     
@@ -40,7 +50,7 @@ def main():
 
     queue.join()
 
-    db.collection_update(dbase['mediationprocs'],
+    db.coll_update(dbase['mediationprocs'],
                          {'name': "Mediation Process"},
                          {'$set': {'running': False}})
     LOG.info("Mediation finished");

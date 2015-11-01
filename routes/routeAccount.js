@@ -1,9 +1,9 @@
+'use strict';
+
 module.exports = function(app, dbstuff){
     var eh = require('../lib/errorHelper');
     var mongoose = dbstuff.mongoose;
-    var Schema = mongoose.Schema;
-    var db = dbstuff.db;
-    var Account = require('../models/accountSchema')(db);
+    var Account = mongoose.model('Account');
     var Ratesheet = mongoose.model('Ratesheet');
     
     app.get('/accounts', function (req, res){
@@ -90,13 +90,13 @@ module.exports = function(app, dbstuff){
 	    sapid : req.body.sapid,
 	    identifier : req.body.identifier,
 	    ratesheet : req.body.ratesheet,
-	    discount: "",
 	    created : Date.now(),
 	    updated : Date.now()
         }).save(function(err){
             if(err){
-                req.session.update = eh.set_error("There was a problem adding account",
+                req.session.update = eh.set_error(err.message,
                                                   err);
+                console.log(err);
             }
             else{
                 req.session.update = eh.set_info("Account added");
@@ -117,6 +117,13 @@ module.exports = function(app, dbstuff){
 	    acc.identifier = req.body.identifier;
 	    acc.ratesheet = req.body.ratesheet;
 	    acc.discount = req.body.discount;
+            acc.parent_company = req.body.parentcompany;
+            acc.vat = req.body.vat;
+            acc.address1 = req.body.address1;
+            acc.address2 = req.body.address2;
+            acc.address3 = req.body.address3;
+            acc.address4 = req.body.address4;
+            acc.address5 = req.body.address5;
 	    acc.updated = Date.now();
 	    acc.save(function(err){
                 if(err){

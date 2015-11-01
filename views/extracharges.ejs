@@ -1,0 +1,118 @@
+<% layout('layout') -%>
+
+<div class="row">
+  <div class="col-md-offset-1 col-md-9">
+    <div class="well well-main">
+      <div class="page-header">
+        <h2 class="text-center">
+          Back to: 
+          <a href="/accountedit/<%= ctx.account._id %>">
+            <%= ctx.account.name %>
+          </a>
+        </h2>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-offset-1 col-md-9">
+    <div class="well">
+      <div class="text-center">
+        <form action="/extrachargeadd" method="post" accept-charset='utf-8' role="form"
+              id="" class="form-inline">
+          <input type="hidden" value="<%= ctx.account._id %>" name="account">
+          <div class="form-group">
+            <input type="text" size="12" class="form-control" name="description" placeholder="Description">
+          </div>
+          <div class="form-group">
+            <input type="text" size="12" class="form-control" name="details" placeholder="Details">
+          </div>
+          <div class="form-group">
+            <input type="text" size="10" class="form-control" name="code" placeholder="Code">
+          </div>
+          <div class="form-group">
+            <input type="text" size="4" class="form-control" name="qty" placeholder="qty">
+          </div>
+          <div class="form-group">
+            <input type="text" size="8" class="form-control" name="charge" placeholder="Charge">
+          </div>
+          
+          <div class="form-group">
+            <select class="form-control" name="recurring">
+              <option value="">Reccuring?</option>
+              <option value="true">Yes</option>
+              <option vlaue="false">No</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <input type="submit" size="8" value="Add charge" class="btn btn-default">
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="row">
+  <div class="col-md-offset-1 col-md-9">
+    <div class="well">
+      <% if(ctx.account.extracharge.length > 0){ %>
+      <table class="table table-condensed">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Description</th>
+            <th>Details</th>
+            <th>Code</th>
+            <th>Reccuring</th>
+            <th>Qty</th>
+            <th>Charge</th>
+            <th>Total</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <%
+            var sum = 0;
+            ctx.account.extracharge.forEach(function(ech, idx){
+            var tot = (ech.qty * ech.charge); 
+            sum += tot;
+            %>
+          <tr>
+            <td><%= idx+1 %></td>
+            <td><%= ech.description %></td>
+            <td><%= ech.details %></td>
+            <td><%= ech.code %></td>
+            <td><%= ech.recurring %></td>
+            <td><%= ech.qty %></td>
+            <td><%= ech.charge %></td>
+            <td>€<%= tot.toFixed(2) %></td>
+            <td>
+              <a href="/extrachargedelete/<%= ech._id %>/<%= ctx.account._id %>" class="btn btn-danger">
+                Delete
+              </a>
+            </td>
+          </tr>
+          <% }); %>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td colspan="2"><b>Total</b></td>
+            <td><b>€<%= sum.toFixed(2) %></b></td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+      <% }else{ %>
+
+      No extra charges
+      <% } %>
+    </div>
+  </div>
+</div>

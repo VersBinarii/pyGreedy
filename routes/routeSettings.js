@@ -1,11 +1,11 @@
+'use strict';
+
 module.exports = function(app, dbstuff){
     var eh = require('../lib/errorHelper');
     var mongoose = dbstuff.mongoose;
-    var Schema = mongoose.Schema;
-    var db = dbstuff.db;
-    var BillingProc = require('../models/BillingProcSchema')(db);
-    var MediationProc = require('../models/MediationProcSchema')(db);
-    var RatingProc = require('../models/RatingProcSchema')(db);
+    var BillingProc = mongoose.model('BillingProc');
+    var MediationProc = mongoose.model('MediationProc');
+    var RatingProc = mongoose.model('RatingProc');
 
     app.get('/settings', function(req, res){
 

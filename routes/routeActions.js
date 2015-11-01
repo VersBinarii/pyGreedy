@@ -1,11 +1,15 @@
+'use strict';
+
 module.exports = function(app, dbstuff){
     var mongoose = dbstuff.mongoose;
-    var Schema = mongoose.Schema;
     var io = dbstuff.io;
     var CMD = require("../lib/CMD");
     var eh = require('../lib/errorHelper');
     var MediationProc = mongoose.model('MediationProc');
-    
+
+    /*
+      Main Mediation control page
+     */
     app.get('/mediation_control', function(req, res){
         MediationProc.find({}, function(err, med_proc){
             if(err){
@@ -22,7 +26,9 @@ module.exports = function(app, dbstuff){
         });
     });
 
-    
+    /*
+      Starts the mediation python process
+     */
     app.post('/mediation_start/:id', function(req, res){
         
         MediationProc.findById(req.params.id, function(err, mp){
@@ -63,8 +69,9 @@ module.exports = function(app, dbstuff){
         
     });
 
-
-    
+    /*
+      Updates the webpage about the running status
+     */
     app.post('/mediation_status_check/:id', function(req, res){
         MediationProc.findById(req.params.id, function(err, mp){
             console.log(req.params.id);

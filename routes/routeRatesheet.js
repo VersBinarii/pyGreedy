@@ -1,12 +1,9 @@
-'use strict'
+'use strict';
 
 module.exports = function(app, dbstuff){
     var eh = require('../lib/errorHelper');
     var mongoose = dbstuff.mongoose;
-    var Schema = mongoose.Schema;
-    var db = dbstuff.db;
-
-    var Ratesheet = require('../models/ratesheetSchema')(db);
+    var Ratesheet = mongoose.model('Ratesheet');
     var Zone = mongoose.model('Zone');
 
     app.get('/ratesheets', function(req, res){

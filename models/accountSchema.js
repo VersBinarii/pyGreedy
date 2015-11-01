@@ -23,7 +23,7 @@ function AccountSchema(){
 	    type: String, required: false, default: ""
         },
         parent_company: {
-            type: String, required: false
+            type: String, required: false, default: this.name
         },
         vat: {
             type: Number, required: false, default: 23
@@ -33,6 +33,12 @@ function AccountSchema(){
         address3 : { type: String },
         address4 : { type: String },
         address5 : { type: String },
+
+
+        extracharge: [{
+            type: Schema.Types.ObjectId, ref: 'Extracharge'
+        }],
+        
         created : Date,
         updated : Date
     });

@@ -1,10 +1,9 @@
+'use strict';
+
 module.exports = function(app, dbstuff){
     var eh = require('../lib/errorHelper');
     var mongoose = dbstuff.mongoose;
-    var Schema = mongoose.Schema;
-    var db = dbstuff.db;
-
-    var MediatedCall = require('../models/mediationSchema')(db);
+    var MediatedCall = mongoose.model('MediatedCall');
     
     app.get('/mediation', function(req, res){
         var _update = req.session.update;

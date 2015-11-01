@@ -63,6 +63,9 @@ var stuff = {
     'io': io
 };
 
+/* register all the models */
+register_models();
+
 // Numbers
 require('./routes/routeNumbers')(app, stuff);
 // Region/Zones
@@ -73,6 +76,9 @@ require('./routes/routeRatesheet')(app, stuff);
 // Account
 //has to be after Ratesheet so the Ratesheet Schema is compiled first
 require('./routes/routeAccount')(app, stuff);
+
+require('./routes/routeExtraCharges')(app, stuff);
+
 // Mediation
 require('./routes/routeMediation')(app, stuff);
 // Rating
@@ -94,6 +100,20 @@ server.listen(app.get('port'), function(){
 });
 
 
+function register_models(){
+    require('./models/accountSchema')(db);
+    require('./models/ratesheetSchema')(db);
+    require('./models/ExtraChargesSchema')(db);
+    require('./models/regionSchema')(db);
+    require('./models/mediationSchema')(db);
+    require('./models/BillingProcSchema')(db);
+    require('./models/MediationProcSchema')(db);
+    require('./models/RatingProcSchema')(db);
+    require('./models/numberSchema')(db);
+    require('./models/zoneSchema')(db)
+    require('./models/CDRSchema')(db)
+    require('./models/billingPeriodSchema')(db)
+}
 
 /* Needed for unit testing */
 module.exports = server;
