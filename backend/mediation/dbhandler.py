@@ -11,7 +11,7 @@ def connect(url='mongodb://localhost:27017/', db_name='pyGreedy'):
     return client[db_name]
 
 
-def coll_insert(collection, obj):
+def coll_save(collection, obj):
     return collection.insert_one(obj).inserted_id
 
 

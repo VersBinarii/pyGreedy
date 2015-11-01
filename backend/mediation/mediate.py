@@ -15,8 +15,8 @@ def main():
 
     # Setup the argument parser
     parser = argparse.ArgumentParser(description="Cirpack/Airspeed CDR mediation script")
-    parser.add_argument("-i", help="Directory containing all the CDRs", required=True);
-    parser.add_argument("-l", help="Log file directory");
+    parser.add_argument("-i", help="Directory containing all the CDRs", required=True)
+    parser.add_argument("-l", help="Log file directory", required=True)
     args = parser.parse_args()
     
     # Lets start the logger
@@ -33,7 +33,7 @@ def main():
     }
     # Tell mongoDB that we are running.
     
-    db.coll_update(mongo.medproc,
+    db.coll_update(mongo['medproc'],
                          {'name': "Mediation Process"},
                          {'$set': {'running': True}})
     
@@ -50,7 +50,7 @@ def main():
 
     queue.join()
 
-    db.coll_update(dbase['mediationprocs'],
+    db.coll_update(mongo['medproc'],
                          {'name': "Mediation Process"},
                          {'$set': {'running': False}})
     LOG.info("Mediation finished");
