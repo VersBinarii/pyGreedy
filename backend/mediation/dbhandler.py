@@ -1,13 +1,20 @@
 from pymongo import MongoClient
+import logging
 
 '''
 Set of handlers to open db connection and
 write stuff
 '''
 
+LOG = logging.getLogger('pyGreedy')
 
 def connect(url='mongodb://localhost:27017/', db_name='pyGreedy'):
-    client = MongoClient(url)
+    try:
+        client = MongoClient(url)
+    except:
+        LOG.error("Could not connect to MongoDB server")
+        return None
+    
     return client[db_name]
 
 

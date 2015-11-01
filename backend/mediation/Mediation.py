@@ -9,7 +9,6 @@ Tuple can be (TR, Gx), (None, Gx) or (TR, None)
 
 LOG = logging.getLogger('pyGreedy')
 
-
 class Mediation(threading.Thread):
 
     def __init__(self, queue, database):

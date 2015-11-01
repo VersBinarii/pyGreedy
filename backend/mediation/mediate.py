@@ -4,6 +4,7 @@ normalize them and load them to the mongo database"""
 import os
 import argparse
 import logging
+import logging.handlers
 from Queue import Queue
 
 from Mediation import Mediation
@@ -16,7 +17,7 @@ def main():
     # Setup the argument parser
     parser = argparse.ArgumentParser(description="Cirpack/Airspeed CDR mediation script")
     parser.add_argument("-i", help="Directory containing all the CDRs", required=True)
-    parser.add_argument("-l", help="Log file directory", required=True)
+    parser.add_argument("-l", help="Log file directory")
     args = parser.parse_args()
     
     # Lets start the logger
@@ -24,6 +25,10 @@ def main():
 
     # Connect to Mongodb and reqister the collection we will be using
     database = db.connect()
+    if database is None:
+        LOG.error("Check if MongoDB is running. Exiting for now")
+        return
+
     mongo = {
         'dbase' : database,
         'medproc': database['mediationprocs'],
@@ -31,11 +36,12 @@ def main():
         'accounts' : database['accounts'],
         'numbers' : database['numbers']
     }
+    
     # Tell mongoDB that we are running.
     
     db.coll_update(mongo['medproc'],
-                         {'name': "Mediation Process"},
-                         {'$set': {'running': True}})
+                   {'name': "Mediation Process"},
+                   {'$set': {'running': True}})
     
     queue = Queue()
     for i in range(10):
@@ -51,8 +57,9 @@ def main():
     queue.join()
 
     db.coll_update(mongo['medproc'],
-                         {'name': "Mediation Process"},
-                         {'$set': {'running': False}})
+                   {'name': "Mediation Process"},
+                   {'$set': {'running': False}})
+
     LOG.info("Mediation finished");
 
 def setLogger(logfile="~/pyGreedy/log/mediation.log", progname="pyGreedy"):
@@ -61,9 +68,10 @@ def setLogger(logfile="~/pyGreedy/log/mediation.log", progname="pyGreedy"):
     g_logger.setLevel(logging.INFO)
 
     # add handler
-    file_handler = logging.FileHandler(logfile)
+    file_handler = logging.handlers.RotatingFileHandler(logfile, maxBytes=10240, backupCount=5)
     file_handler.setLevel(logging.INFO)
-    
+    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    file_handler.setFormatter(formatter)
     g_logger.addHandler(file_handler)
 
     return g_logger
