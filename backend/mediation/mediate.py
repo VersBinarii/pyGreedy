@@ -39,13 +39,13 @@ def main():
     
     queue = Queue()
     for i in range(10):
-        t = Mediation(queue, dbase)
+        t = Mediation(queue, mongo)
         t.setDaemon(True)
         t.start()
 
     # Read whole directy and parse all grnti files.
     LOG.info( "Reading directory [%s]\n" % args.i)
-    [prepare_raw_calls(''.join((args.i, f)), queue)
+    [prepare_raw_calls(''.join((args.i, f)), queue, mongo)
      for f in os.listdir(args.i) if f.startswith("grnti")]
 
     queue.join()

@@ -41,7 +41,7 @@ def line_to_cdr(l):
 Reads given file, parsees it and resulted
 CDR are put into the queue.
 '''
-def prepare_raw_calls(filename, queue):
+def prepare_raw_calls(filename, queue, database):
 
     # Temp container for raw CDRs.
     bucket = {}
