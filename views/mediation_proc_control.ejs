@@ -9,7 +9,7 @@
       </div>
 
       <% ctx.med_proc.forEach(function(mp){ %>
-      <form action="/mediation_start/<%= mp._id %>" method="post" accept-charset="utf-8"
+      <form action="/mediation_restart/<%= mp._id %>" method="post" accept-charset="utf-8"
             role="form" id="mediation-start" class='form-horizontal'>
         <div class="row-fluid">
           <div class="form-group">
@@ -36,7 +36,7 @@
             <label>Process is <span id="running_state" >
                 <%= mp.running?"running":"not running" %></span></label>
           </div>
-          <input type="submit" class="btn btn-default" value="Start">
+          <input type="submit" class="btn btn-default" value="Reload Mediation Process">
         </div>
       </form>
       

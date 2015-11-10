@@ -34,8 +34,8 @@
 	     %>
 	  <tr>
 	    <th><%= num.number %></th>
-	    <th><%= num.account %></th>
-	    <th><a class="btn btn-danger" href="/numberdestroy/<%= num._id %>">Delete</a></th>
+	    <th><%= num.accid %></th>
+	    <th><a class="btn btn-danger" href="/numberdestroy/<%= num.number %>/<%= num.accid %>">Delete</a></th>
 	  </tr>
 	  <% }); }; %>
 	</table>

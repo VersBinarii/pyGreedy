@@ -11,7 +11,7 @@
 	<% ctx.accounts.forEach(function(acc, idx){ %>
 	<p>
           <span>
-            <a href="/accountedit/<%= acc._id %>"><%= idx+1 %>. <%= acc.name %> </a>
+            <a href="/accountedit/<%= acc.accid %>"><%= idx+1 %>. <%= acc.name %> </a>
           </span>
         </p>
 	<% }); %>

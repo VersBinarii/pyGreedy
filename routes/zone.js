@@ -2,9 +2,6 @@
 
 module.exports = function(app, dbstuff){
     var eh = require('../lib/errorHelper');
-    var mongoose = dbstuff.mongoose;    
-    var Zone = mongoose.model('Zone');
-    var Region = mongoose.model('Region');
     
     app.get('/regions', function(req, res){
         var update = req.session.update;

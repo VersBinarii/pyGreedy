@@ -1,9 +1,7 @@
 'use strict';
 
 module.exports = function(app, dbstuff){
-    var mongoose = dbstuff.mongoose;
-    var Region = mongoose.model('Region');
-
+    
     app.post('/regioncreate', function(req, res){
         new Region({
 	    region_id: req.body.regionid,

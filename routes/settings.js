@@ -2,10 +2,6 @@
 
 module.exports = function(app, dbstuff){
     var eh = require('../lib/errorHelper');
-    var mongoose = dbstuff.mongoose;
-    var BillingProc = mongoose.model('BillingProc');
-    var MediationProc = mongoose.model('MediationProc');
-    var RatingProc = mongoose.model('RatingProc');
 
     app.get('/settings', function(req, res){
 
@@ -64,8 +60,10 @@ module.exports = function(app, dbstuff){
             }
             med_proc.binary_dir = req.body.m_bin_dir;
             med_proc.cdr_dir = req.body.m_cdr_dir;
-            med_proc.frequency = req.body.m_frequency;
+            med_proc.cdr_file_prefix = req.body.m_cdr_file_pfx;
             med_proc.log_dir = req.body.m_log_dir;
+            med_proc.thread_num = req.body.m_thread_num;
+            
             med_proc.save(function(err){
                 if(err){
                     req.session.update = eh.set_error("Error updating MediationProcess",

@@ -1,11 +1,9 @@
 'use strict';
 
 module.exports = function(app, dbstuff){
-    var mongoose = dbstuff.mongoose;
     var io = dbstuff.io;
     var CMD = require("../lib/CMD");
     var eh = require('../lib/errorHelper');
-    var MediationProc = mongoose.model('MediationProc');
 
     /*
       Main Mediation control page
@@ -29,16 +27,17 @@ module.exports = function(app, dbstuff){
     /*
       Starts the mediation python process
      */
-    app.post('/mediation_start/:id', function(req, res){
+    app.post('/mediation_restart/:id', function(req, res){
         
         MediationProc.findById(req.params.id, function(err, mp){
-            if(!mp.running){
+            if(mp && !mp.running){
 
                 var cmd = new CMD('/usr/bin/python',
                                   [mp.binary_dir,                 //the binary
                                    '-i', mp.cdr_dir,              //cdr directory
-                                   '-l', mp.log_dir,]);           //logfile directory
-                var tail = new CMD('tail', ['-f', mp.log_dir]);
+                                   '-l', mp.log_dir,              //log file directory
+                                   '-p', mp.cdr_file_prefix       //file prefix
+                                  ]);
 
                 cmd.cmd_run();
                        
@@ -52,8 +51,9 @@ module.exports = function(app, dbstuff){
               if its running then just
               start tailing its logfile
             */
-            io.emit('message.warning', "Looks like the process is running");
-            io.emit('message.warning', "Lets try tail the log file");
+            var tail = new CMD('tail', ['-n', '0', '-f', mp.log_dir]);
+            io.emit('message.update', "Looks like the process is running");
+            io.emit('message.update', "Lets try tail the log file");
             tail.cmd_run();
 
             tail.on('cmd_data', function(data){

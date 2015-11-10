@@ -3,79 +3,82 @@ normalize them and load them to the mongo database"""
 
 import os
 import argparse
-import logging
-import logging.handlers
 from Queue import Queue
+from daemon import runner
+from threading import Timer
 
+from glogging import gLogging
 from Mediation import Mediation
 from raw_grnti import prepare_raw_calls
 import dbhandler as db
 
-def main():
-    """Main entry point for the script."""
 
-    # Setup the argument parser
-    parser = argparse.ArgumentParser(description="Cirpack/Airspeed CDR mediation script")
-    parser.add_argument("-i", help="Directory containing all the CDRs", required=True)
-    parser.add_argument("-l", help="Log file directory")
-    args = parser.parse_args()
+class MediationD():
+
+    def __init__(self):
+        self.stdin_path = '/dev/null'
+        self.stdout_path = '/dev/tty'
+        self.stderr_path = '/dev/tty'
+        self.pidfile_path =  '/var/run/MediationD/mediationd.pid'
+        self.pidfile_timeout = 5
+        
+        # Setup the argument parser
+        parser = argparse.ArgumentParser(description="Cirpack/Airspeed CDR mediation script")
+        parser.add_argument("-i", help="Directory containing all the CDRs", required=True)
+        parser.add_argument("-l", help="Log file directory")
+        parser.add_argument("-p", help="CDR file prefix", default="")
+        self.args = parser.parse_args()
     
-    # Lets start the logger
-    LOG = setLogger(logfile=args.l)
+        # Connect to Mongodb and reqister the collection we will be using
+        database = db.connect()
+        if database is None:
+            LOG.error("Check if MongoDB is running. Exiting for now")
+            return
 
-    # Connect to Mongodb and reqister the collection we will be using
-    database = db.connect()
-    if database is None:
-        LOG.error("Check if MongoDB is running. Exiting for now")
-        return
+        # Initialize needed db collections
+        self.mongo = {
+            'dbase' : database,
+            'medproc': database['mediationprocs'],
+            'medcalls' : database['mediatedcalls'],
+            'accounts' : database['accounts'],
+            'numbers' : database['numbers']
+        }
 
-    mongo = {
-        'dbase' : database,
-        'medproc': database['mediationprocs'],
-        'medcalls' : database['mediatedcalls'],
-        'accounts' : database['accounts'],
-        'numbers' : database['numbers']
-    }
-    
-    # Tell mongoDB that we are running.
-    
-    db.coll_update(mongo['medproc'],
-                   {'name': "Mediation Process"},
-                   {'$set': {'running': True}})
-    
-    queue = Queue()
-    for i in range(10):
-        t = Mediation(queue, mongo)
-        t.setDaemon(True)
-        t.start()
+        #TODO:  Queue size will be eventualy equal to the thread pool size
+        self.queue = Queue()
+        
+    def run(self):
+        
+        # Tell mongoDB that we are running.
+        db.coll_update(self.mongo['medproc'],
+                       {'name': "Mediation Process"},
+                       {'$set': {'running': True}})
+        
+        
+        for i in range(10):
+            t = Mediation(self.queue, self.mongo)
+            t.start()
 
-    # Read whole directy and parse all grnti files.
-    LOG.info( "Reading directory [%s]\n" % args.i)
-    [prepare_raw_calls(''.join((args.i, f)), queue, mongo)
-     for f in os.listdir(args.i) if f.startswith("grnti")]
 
-    queue.join()
+        while True:
+            for f in os.listdir(args.i):
+                if f.startswith(args.p):
+                    LOG.info( "Parsing file {}".format(args.i))
+                    prepare_raw_calls(''.join((args.i, f)), self.queue, self.mongo)
+            
+        queue.join()
+            
+        db.coll_update(self.mongo['medproc'],
+                       {'name': "Mediation Process"},
+                       {'$set': {'running': False}})
+        
+            
+mediationd = MediationD()
 
-    db.coll_update(mongo['medproc'],
-                   {'name': "Mediation Process"},
-                   {'$set': {'running': False}})
+# Lets start the logger
+LOG = gLogging().setLogger(logfile=args.l)
 
-    LOG.info("Mediation finished");
-
-def setLogger(logfile="~/pyGreedy/log/mediation.log", progname="pyGreedy"):
-
-    g_logger = logging.getLogger(progname)
-    g_logger.setLevel(logging.INFO)
-
-    # add handler
-    file_handler = logging.handlers.RotatingFileHandler(logfile, maxBytes=10240, backupCount=5)
-    file_handler.setLevel(logging.INFO)
-    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-    file_handler.setFormatter(formatter)
-    g_logger.addHandler(file_handler)
-
-    return g_logger
-    
-
-if __name__ == '__main__':
-    main()
+daemon_runner = runner.DaemonRunner(mediationd)
+#This ensures that the logger file handle does not get closed during daemonization
+daemon_runner.daemon_context.files_preserve=[handler.stream]
+daemon_runner.do_action()

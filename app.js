@@ -4,7 +4,6 @@
 
 var express = require('express');
 var engine = require( 'ejs-locals' );
-var http = require('http');
 var path = require('path');
 var logger = require('morgan');
 var methodOverride = require('method-override');
@@ -13,12 +12,8 @@ var cookieParser = require('cookie-parser');
 var session = require('express-session');
 var errorHandler = require('errorhandler');
 var app = express();
-var mongoose = require('mongoose');
-var server = http.createServer(app);
-var io = require('socket.io')(server);
 
 // all environments
-app.set('port', process.env.PORT || 3000);
 app.engine('ejs', engine);
 app.set('views', path.join(__dirname, '/views'));
 app.set('view engine', 'ejs');
@@ -32,88 +27,29 @@ app.use(session({
     secret: 'SOMERANDOMSECRETHERE', cookie: { maxAge: 60000 }}));
 app.use(express.static(path.join(__dirname, '/public')));
 
-var db;
-
-/* use test db during testing */
-if ('test' == app.get('env')){
-    console.log("Running test db");
-    db = mongoose.connect(require('./config/database').test_db);
-}else{
-    db = mongoose.connect(require('./config/database').production_db);
-}
-
 // development only
 if ('development' == app.get('env')) {
     app.use(errorHandler());
 }
 
-/* root */
-app.get('/', function(req, res){
-    res.render('dashboard', {
-	ctx: {
-            title: "pyGreedy - Dashboard",
-            update: null
-        }
-    });
-});
-
-var stuff = {
-    'mongoose': mongoose,
-    'db': db,
-    'io': io
-};
-
-/* register all the models */
-register_models();
-
-// Numbers
-require('./routes/routeNumbers')(app, stuff);
-// Region/Zones
-require('./routes/routeRegion')(app, stuff);
-require('./routes/routeZone')(app, stuff);
-// Ratesheets
-require('./routes/routeRatesheet')(app, stuff);
-// Account
-//has to be after Ratesheet so the Ratesheet Schema is compiled first
-require('./routes/routeAccount')(app, stuff);
-
-require('./routes/routeExtraCharges')(app, stuff);
-
-// Mediation
-require('./routes/routeMediation')(app, stuff);
-// Rating
-require('./routes/routeRating')(app, stuff);
-/* leave room for billing */
-
-//Settings
-require('./routes/routeSettings')(app, stuff);
-
-//Actions
-require('./routes/routeActions')(app, stuff);
-
-//Imports
-require('./routes/routeImport')(app, stuff);
-
-
-server.listen(app.get('port'), function(){
-  console.log('Express server listening on port ' + app.get('port'));
-});
-
-
-function register_models(){
-    require('./models/accountSchema')(db);
-    require('./models/ratesheetSchema')(db);
-    require('./models/ExtraChargesSchema')(db);
-    require('./models/regionSchema')(db);
-    require('./models/mediationSchema')(db);
-    require('./models/BillingProcSchema')(db);
-    require('./models/MediationProcSchema')(db);
-    require('./models/RatingProcSchema')(db);
-    require('./models/numberSchema')(db);
-    require('./models/zoneSchema')(db)
-    require('./models/CDRSchema')(db)
-    require('./models/billingPeriodSchema')(db)
-}
 
 /* Needed for unit testing */
-module.exports = server;
+module.exports = function(){
+    var http = require('http');
+    var server = http.createServer(app);
+    //Using postgres primise library
+    var bb = require('bluebird');
+    var pgp = require('pg-promise')({promiseLib: bb});
+    var db = pgp(require('./config/database').pg_db_url);
+    var io = require('socket.io')(server);
+    var routes = require('./routes');
+    
+    var comms = {
+        'db': db,
+        'io': io
+    };
+
+    routes(app, comms);
+    
+    return server;
+};

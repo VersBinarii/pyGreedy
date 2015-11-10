@@ -2,9 +2,6 @@
 
 module.exports = function(app, dbstuff){
     var eh = require('../lib/errorHelper');
-    var mongoose = dbstuff.mongoose;
-    var ExtraCharge = mongoose.model('Extracharge');
-    var Account = mongoose.model('Account');
     
     app.get('/extracharges/:accid', function(req, res){
 

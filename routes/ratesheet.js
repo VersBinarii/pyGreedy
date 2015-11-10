@@ -2,9 +2,6 @@
 
 module.exports = function(app, dbstuff){
     var eh = require('../lib/errorHelper');
-    var mongoose = dbstuff.mongoose;
-    var Ratesheet = mongoose.model('Ratesheet');
-    var Zone = mongoose.model('Zone');
 
     app.get('/ratesheets', function(req, res){
         var update = req.session.update;
@@ -34,7 +31,9 @@ module.exports = function(app, dbstuff){
                                                       err);
                 }
                 Ratesheet
-                    .populate(ratesheet, {path: 'rs.zone', model: 'Zone'},
+                    .populate(ratesheet,
+                              {path: 'rs.zone', model: 'Zone'},
+                              { sort: 'number'},
                               function(err, ratesheet){
                                   if(err){
                                       req.session.update = eh.set_error("Problem accessing mongodb",
