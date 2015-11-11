@@ -7,15 +7,22 @@
       <div class="well">
 	<p><b>Add new zone</b></p>
 	<form action="/zonecreate" method="post" accept-charset="utf-8" class="form-inline" role="form" id="zonecreate">
-	  <input type="text" class="form-control" name="zoneid" placeholder="Zone ID"/>
-	  <input type="text" class="form-control" name="zonename" placeholder="Zone name"/>
-	  <input type="text" class="form-control" name="regionid" placeholder="Region ID"/>  
+	  <input type="text" class="form-control" name="zoneid"
+                 placeholder="<%= ctx.max_zone %>"
+                 value="<%= ctx.max_zone %>"/>
+	  <input type="text" class="form-control" name="name" placeholder="Zone name"/>
+          <select class="form-control" name="regionid">
+            <option value="">Region</option>
+            <% ctx.regions.forEach(function(region){ %>
+            <option value="<%= region.regionid %>"><%= region.name %></option>
+            <% }) %>
+          </select>
 	  <input type="submit" class="btn btn-default" value="Add"/>
 	</form>
       </div>
       <div class="well">
 	<div class="">
-	  <h3>Zone</h3>
+	  <h4>Zone</h4>
 	</div>
 	  <table class="table table-condensed" style="height:100%;overflow:scroll">
 	    <theader>
@@ -28,14 +35,18 @@
 	    </theader>
 	    <tbody>
 	      <% ctx.zones.forEach(function(zone){ %>
-	      <form action="/zoneupdate/<%= zone._id %>" method="post" accept-charset="utf-8" class="form-inline" role="form" id="zoneupdate">
+	      <form action="/zoneupdate" method="post" accept-charset="utf-8"
+                    class="form-inline" role="form" id="zoneupdate">
 		<tr>
-		  <th class="col-sm-1"><input type="text" class="form-control" name="zoneid" value="<%= zone.zone_id %>"/></th>
-		  <th class="col-sm-3"><input type="text" class="form-control" name="zonename" value="<%= zone.name %>"/></th>
-		  <th class="col-sm-1"><input type="text" class="form-control" name="regionid" value="<%= zone.region %>"/></th>
+		  <th class="col-sm-1"><input type="text" class="form-control"
+                                              name="zoneid" value="<%= zone.zoneid %>" readonly/></th>
+		  <th class="col-sm-3"><input type="text" class="form-control"
+                                              name="name" value="<%= zone.name %>"/></th>
+		  <th class="col-sm-1"><input type="text" class="form-control"
+                                              name="regionid" value="<%= zone.regionid %>"/></th>
 		  <th class="col-sm-2">
 		    <input type="submit" class="btn btn-default" value="Update"/>
-		    <a href="/zonedestroy/<%= zone._id %>" class="btn btn-danger">Delete</a>
+		    <a href="/zonedestroy/<%= zone.zoneid %>" class="btn btn-danger">Delete</a>
 		  </th>
 		</tr>
 	      </form>
@@ -48,15 +59,18 @@
     <div class="col-sm-5">
       <div class="well">
 	<p><b>Add new region</b></p>
-	<form action="/regioncreate" method="post" accept-charset="utf-8" class="form-inline" role="form" id="regioncreate">
-	  <input type="text" class="form-control" name="regionid" placeholder="Region ID"/>
-	  <input type="text" class="form-control" name="regionname" placeholder="Region name"/>
+	<form action="/regioncreate" method="post" accept-charset="utf-8" class="form-inline"
+              role="form" id="regioncreate">
+	  <input type="text" class="form-control" name="regionid"
+                 placeholder="<%= ctx.max_region %>"
+                 value="<%= ctx.max_region %>"/>
+	  <input type="text" class="form-control" name="name" placeholder="Region name"/>
 	  <input type="submit" class="btn btn-default" value="Add"/>
 	</form>
       </div>
       <div class="well">
 	<div class="">
-	  <h3>Region</h3>
+	  <h4>Region</h4>
 	</div>
 	<table class="table table-condensed" style="height:100%;overflow:scroll">
 	    <theader>
@@ -68,13 +82,19 @@
 	    </theader>
 	    <tbody>
 	      <% ctx.regions.forEach(function(region){ %>
-	      <form action="/regionupdate/<%= region._id %>" method="post" accept-charset="utf-8" class="form-inline" role="form" id="regionupdate">
+	      <form action="/regionupdate" method="post" accept-charset="utf-8" class="form-inline"
+                    role="form" id="regionupdate">
 		<tr>
-		  <th class="col-sm-1"><input type="text" class="form-control" name="regionid" value="<%= region.region_id %>"/></th>
-		  <th class="col-sm-2"><input type="text" class="form-control" name="regionname" value="<%= region.name %>"/></th>
+		  <th class="col-sm-1">
+                    <input type="text" class="form-control" name="regionid"
+                           value="<%= region.regionid %>" readonly/>
+                  </th>
+		  <th class="col-sm-2">
+                    <input type="text" class="form-control" name="name" value="<%= region.name %>"/>
+                  </th>
 		  <th class="col-sm-2">
 		    <input type="submit" class="btn btn-default" value="Update"/>
-		    <a href="/regiondestroy/<%= region._id %>" class="btn btn-danger">Delete</a>
+		    <a href="/regiondestroy/<%= region.regionid %>" class="btn btn-danger">Delete</a>
 		  </th>
 		</tr>
 	      </form>

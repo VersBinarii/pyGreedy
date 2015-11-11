@@ -1,78 +1,102 @@
 'use strict'
 
-module.exports = function(app, dbstuff){
-    var eh = require('../lib/errorHelper');
+var eh = require('../lib/errorHelper');
+
+module.exports = function(app, comms){    
+    var db = comms.db
     
     app.get('/regions', function(req, res){
-        var update = req.session.update;
-        console.log(update);
-        Zone.find({}, function(err, zones){
-            if(err){
-                update = eh.set_error("Could not query Zone collection", err);
-            }
-	    Region.find({}, function(err, regions){
-                if(err){
-                    update = eh.set_error("Could not query Region collection", err);
+        var update = req.session.update
+        
+        db.tx(function(){
+            var zones = this.manyOrNone("SELECT * FROM zone ORDER BY zoneid ASC;");
+            var regions = this.manyOrNone("SELECT * FROM region ORDER BY regionid ASC;");
+            
+            return this.batch([zones, regions])
+        })
+            .then(function(result){
+                var max_zone,
+                    max_region = max_zone = 1;
+
+                if(result[0].length != 0){ 
+                    max_zone = result[0][result[0].length-1].zoneid+1
+                }
+                if(result[1].length != 0){
+                    max_region = result[1][result[1].length-1].regionid+1
                 }
                 res.render('regions', {
-		    ctx:{
+	            ctx:{
                         title: "pyGreedy - Regions/Zones",
-		        zones: zones,
-		        regions: regions,
+		        zones: result[0],
+		        regions: result[1],
+                        max_zone: max_zone,
+                        max_region: max_region,
                         update: update
                     }
-	        });
-	    }); 
-        });
-        delete req.session.update;
+	        })
+            })
+            .catch(handleError);
+        
+        delete req.session.update
     });
 
+    app.post('/regioncreate', function(req, res){
+
+        db.none("INSERT INTO region(regionid, name) VALUES($1,$2);",
+                [req.body.regionid, req.body.name])
+            .then(function(){
+                res.redirect('/regions');
+            })
+            .catch(handleError);
+    });
+    
+    app.post('/regionupdate', function(req, res){
+                
+        db.none("UPDATE region SET name=$2 WHERE regionid=$1",
+                [req.body.regionid, req.body.name])
+            .then(function(){
+                res.redirect('/regions')
+            })
+            .catch(handleError)
+    });
+        
+    app.get('/regiondestroy/:id', function(req, res){
+        db.none("DELETE FROM region WHERE regionid=$1", req.params.id)
+            .then(function(){
+                res.redirect('/regions')
+            })
+            .catch(handleError)
+    });
+    
     app.post('/zonecreate', function(req, res){
-        new Zone({
-	    zone_id: req.body.zoneid,
-	    name: req.body.zonename,
-	    region: req.body.regionid
-        }).save(function(err, zone){
-            if(err){
-                req.session.update = eh.set_error("Failed to create new zone", err);
-            }else{
-                req.session.update = eh.set_info("Zone created");
-            }
-	    res.redirect('/zoneview');
-        });
+
+        db.none("INSERT INTO zone(zoneid, name, regionid) VALUES($1,$2,$3);",
+                [req.body.zoneid, req.body.name, req.body.regionid])
+            .then(function(){
+                res.redirect('/regions');
+            })
+            .catch(handleError);
     });
 
-    app.post('/zoneupdate/:id', function(req, res){
-        Zone.findById(req.params.id, function(err, zone){
-            if(err){
-                req.session.update = eh.set_error("Failed to update zone", err);
-                return res.redirect('/zoneview');
-            }
-	    zone.zone_id = req.body.zoneid;
-	    zone.name = req.body.zonename;
-	    zone.region = req.body.regionid;
-	    zone.save(function(err, zone){
-                if(err){
-                    req.session.update = eh.set_error("Failed to update zone", err);
-                }else{
-                    console.log("saved");
-                    req.session.update = eh.set_info("Zone updated");
-                }
-	        res.redirect('/regions');
-	    });
-        });
+    app.post('/zoneupdate', function(req, res){
+
+        db.none("UPDATE zone SET name=$1, regionid=$2 WHERE zoneid=$3",
+                [req.body.name, req.body.regionid, req.body.zoneid])
+            .then(function(){
+                res.redirect('/regions');
+            })
+            .catch(handleError)
     });
     
     app.get('/zonedestroy/:id', function(req, res){
-        Zone.findById(req.params.id,function(err, zone){
-	    zone.remove(function(err){
-                if(err){
-                    req.session.update = eh.set_error("Failed to create zone", err);
-                }else{
-                    req.session.update = eh.set_info("Zone created");
-                }
-	        res.redirect('/regions');
-	    });
-        });
+        db.none("DELETE FROM zone WHERE zoneid=$1", req.params.id)
+            .then(function(){
+                res.redirect('/regions')
+            })
+            .catch(handleError)
     });
+}
+
+function handleError(err){
+    console.log(err);
 }
