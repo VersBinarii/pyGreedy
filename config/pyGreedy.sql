@@ -114,11 +114,11 @@ CREATE TABLE public."zone"
 (
  zoneid integer NOT NULL,
  name text NOT NULL,
- regionid integer NOT NULL,
+ regionid integer NOT NULL DEFAULT 0,
  CONSTRAINT "Zone_pkey" PRIMARY KEY (zoneid),
  CONSTRAINT "Zone_regionid_fkey" FOREIGN KEY (regionid)
             REFERENCES public."region" (regionid) MATCH SIMPLE
-            ON UPDATE NO ACTION ON DELETE SET NULL
+            ON UPDATE NO ACTION ON DELETE SET DEFAULT
 )
 WITH (
   OIDS=FALSE
@@ -178,7 +178,7 @@ CREATE TABLE public."rate"
  offpeak numeric NOT NULL,
  weekend numeric NOT NULL,
  ratetype character NOT NULL,
- zoneid integer NOT NULL,
+ zoneid integer,
  ratesheetid integer NOT NULL,
  CONSTRAINT "Rate_pkey" PRIMARY KEY (rateid),
  CONSTRAINT "Rate_zoneid_fkey" FOREIGN KEY (zoneid)
