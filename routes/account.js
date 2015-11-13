@@ -11,7 +11,7 @@ module.exports = function(app, comms){
 
         db.tx(function(){
             return this.batch([
-                this.many("SELECT * FROM account;"),
+                this.many("SELECT * FROM account ORDER BY name;"),
                 this.many("SELECT name FROM ratesheet;")
             ]);
         }).then(function(result){

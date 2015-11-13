@@ -14,7 +14,7 @@
 	      <select class="form-control" name="ratesheet" id="ratesheet" form="rsshow">
 		<option value="">Select ratesheet</option>
 		<% ctx.ratesheets.forEach(function(rs){ %>
-		<option value="<%= rs._id  %>"><%= rs.name  %></option> 
+		<option value="<%= rs.ratesheetid  %>"><%= rs.name  %></option> 
 		<% }); %>
 	      </select>
 	    </div>
@@ -43,8 +43,8 @@
 	    <label class="control-label col-sm-3" for="search">Ratesheet type</label>
 	    <div class="col-sm-9">
 	      <select class="form-control" name="ratesheettype" id="ratesheettype" form="rscreate">
-		<option value="ratesheet">Ratesheet</option>
-		<option value="discount">Discount</option>
+		<option value="R">Ratesheet</option>
+		<option value="D">Discount</option>
 	      </select>
 	    </div>
 	  </div>
@@ -69,7 +69,7 @@
 	      <select class="form-control" name="rsid" id="rsid" form="delratesheet">
 		<option value="">Select ratesheet</option>
 		<% ctx.ratesheets.forEach(function(rs){ %>
-		<option value="<%= rs._id  %>"><%= rs.name  %></option> 
+		<option value="<%= rs.ratesheetid  %>"><%= rs.name  %></option> 
 		<% }); %>
 	      </select>
 	    </div>
